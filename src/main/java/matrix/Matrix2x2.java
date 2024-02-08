@@ -1,7 +1,9 @@
+package matrix;
+
 import vectors.Vector2D;
 
 /**
- * Class representing a 2x2 matrix. Has a method to multiply a 2D vector by the matrix.
+ * Class representing a 2x2 matrix. Has the functionality to multiply a 2D vector with a 2x2-matrix.
  */
 public class Matrix2x2 {
 
@@ -30,7 +32,7 @@ public class Matrix2x2 {
    * @param vector The 2D vector to multiply the matrix by
    * @return The result of the multiplication
    */
-  private Vector2D multiply(Vector2D vector){
+  public Vector2D multiply(Vector2D vector){
     return new Vector2D(a00 * vector.getX0() + a01 * vector.getX1(), a10 * vector.getX0() + a11 * vector.getX1());
   }
 
