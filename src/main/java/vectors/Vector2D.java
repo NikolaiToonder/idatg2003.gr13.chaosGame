@@ -1,3 +1,5 @@
+package vectors;
+
 /**
  * A 2D vector class. Functionality includes addition and subtraction of vectors.
  * Requires x and y coordinate.
@@ -7,7 +9,7 @@ public class Vector2D {
   private double x1;
 
   /**
-   * Constructor for Vector2D, takes two doubles as parameters.
+   * Constructor for vectors.Vector2D, takes two doubles as parameters.
    * @param x0 x-coordinate
    * @param x1 y-coordinate
    */
