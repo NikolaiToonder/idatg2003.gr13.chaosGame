@@ -20,7 +20,7 @@ class Vector2DTest {
     Vector2D v2 = new Vector2D(6, 4);
     Vector2D v3 = v1.add(v2);
     assertNotEquals(4, v3.getX0());
-    assertNotEquals(6, v3.getX1());
+    assertNotEquals(9, v3.getX1());
 
   }
 

@@ -3,7 +3,8 @@ package matrix;
 import vectors.Vector2D;
 
 /**
- * Class representing a 2x2 matrix. Has the functionality to multiply a 2D vector with a 2x2-matrix.
+ * Class representing a 2x2 matrix. Has the functionality to multiply a 2D vector with a
+ * 2x2-matrix.
  */
 public class Matrix2x2 {
 
@@ -15,6 +16,7 @@ public class Matrix2x2 {
 
   /**
    * Constructor for the 2x2 matrix. The matrix is represented as follows:
+   *
    * @param a00 The value in the first row and first column
    * @param a01 The value in the first row and second column
    * @param a10 The value in the second row and first column
@@ -29,13 +31,14 @@ public class Matrix2x2 {
 
   /**
    * Multiplies the 2x2-matrix by a 2x1 vector. The vector is brought from the Vector2D class.
+   *
    * @param vector The 2D vector to multiply the matrix by
    * @return The result of the multiplication
    */
-  public Vector2D multiply(Vector2D vector){
-    return new Vector2D(a00 * vector.getX0() + a01 * vector.getX1(), a10 * vector.getX0() + a11 * vector.getX1());
+  public Vector2D multiply(Vector2D vector) {
+    return new Vector2D(a00 * vector.getX0() + a01 * vector.getX1(),
+        a10 * vector.getX0() + a11 * vector.getX1());
   }
-
 
 
 }
