@@ -14,6 +14,8 @@ public class Complex extends Vector2D {
   }
 
   public Complex sqrt(){
-
+    double r = Math.sqrt(Math.sqrt(getX0()*getX0() + getX1()*getX1()));
+    double theta = Math.atan2(getX1(), getX0());
+    return new Complex(r*Math.cos(theta/2), r*Math.sin(theta/2));
   }
 }
