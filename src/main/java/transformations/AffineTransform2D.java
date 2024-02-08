@@ -1,3 +1,5 @@
+package transformations;
+
 import matrix.Matrix2x2;
 import vectors.Vector2D;
 
@@ -12,7 +14,7 @@ public class AffineTransform2D {
   Vector2D vector;
 
   /**
-   * Constructor for the AffineTransform2D class. The transformation is represented by a 2x2 matrix
+   * Constructor for the transformations.AffineTransform2D class. The transformation is represented by a 2x2 matrix
    *
    * @param matrix The 2x2 matrix
    * @param vector The 2D vector

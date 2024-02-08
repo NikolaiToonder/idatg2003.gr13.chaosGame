@@ -13,6 +13,10 @@ public class Complex extends Vector2D {
     super(realPart, imaginaryPart);
   }
 
+  /**
+   * Calculates the square root of a complex number.
+   * @return new complex number that's the square root of the original
+   */
   public Complex sqrt() {
     double x0 = getX0();
     double x1 = getX1();
@@ -20,7 +24,9 @@ public class Complex extends Vector2D {
     return new Complex(Math.sqrt(0.5 * (sqrtr + x0)), Math.signum(x1)
         * Math.sqrt(0.5 * (sqrtr - x0)));
   }
-
+  public Complex add(Complex other) {
+    return new Complex(getX0() + other.getX0(), getX1() + other.getX1());
+  }
   public Complex subtract(Complex other) {
     return new Complex(getX0() - other.getX0(), getX1() - other.getX1());
   }
