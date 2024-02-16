@@ -7,6 +7,12 @@ public class JuliaTransform implements Transform2D{
   private Complex point;
   private int sign;
 
+  /**
+   * Constructor for the transformations.JuliaTransform class.
+   * The transformation is represented by a complex number and a sign.
+   * @param point The complex number
+   * @param sign The sign
+   */
   public JuliaTransform(Complex point, int sign) {
     this.point = point;
     setSign(sign);
@@ -23,6 +29,12 @@ public class JuliaTransform implements Transform2D{
       this.sign = sign;
     }
   }
+
+  /**
+   * Transforms a Complex vector using the Julia transformation.
+   * @param vector
+   * @return
+   */
   public Vector2D transform(Vector2D vector) {
     Complex complexSubtraction = (Complex) vector.subtract(this.point);
     Complex complexSqrt = complexSubtraction.sqrt();
