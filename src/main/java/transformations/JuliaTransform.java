@@ -4,7 +4,7 @@ import vectors.Complex;
 import vectors.Vector2D;
 
 public class JuliaTransform implements Transform2D{
-  private Complex point;
+  private final Complex point;
   private int sign;
 
   /**

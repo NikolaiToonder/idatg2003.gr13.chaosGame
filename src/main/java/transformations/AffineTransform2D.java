@@ -10,8 +10,8 @@ import vectors.Vector2D;
 
 public class AffineTransform2D implements Transform2D{
 
-  private Matrix2x2 matrix;
-  private Vector2D vector;
+  private final Matrix2x2 matrix;
+  private final Vector2D vector;
 
   /**
    * Constructor for the transformations.AffineTransform2D class. The transformation is represented by a 2x2 matrix
