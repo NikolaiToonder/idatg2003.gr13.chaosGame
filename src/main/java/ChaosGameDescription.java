@@ -23,19 +23,17 @@ public class ChaosGameDescription {
     return maxCoords;
   }
 
-  public Iterator<Transform2D> getTransforms() {
-    return transforms.iterator();
+  public List<Transform2D> getTransforms() {
+    return transforms;
   }
 
   public void setMaxCoords(Vector2D maxCoords) {
-    if (maxCoords.getX0() > 0 || maxCoords.getX1() > 0) {
       this.maxCoords = maxCoords;
-    }
+
   }
   public void setMinCoords(Vector2D minCoords) {
-    if (minCoords.getX0() > 0 || minCoords.getX1() > 0) {
       this.minCoords = minCoords;
-    }
+
   }
   public void setTransforms(List<Transform2D> transforms) {
     this.transforms = transforms;
