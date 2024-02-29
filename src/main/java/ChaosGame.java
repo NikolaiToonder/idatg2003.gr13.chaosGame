@@ -1,7 +1,5 @@
 public class ChaosGame {
   private ChaosGameDescription description;
-
-
   public ChaosGame(ChaosGameDescription description) {
     setDescription(description);
   }

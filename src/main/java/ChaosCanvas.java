@@ -1,4 +1,5 @@
 import javafx.scene.transform.Affine;
+import transformations.AffineTransform2D;
 import vectors.Vector2D;
 
 public class ChaosCanvas {
@@ -8,7 +9,7 @@ private int width;
 private int height;
 private Vector2D minCoords;
 private Vector2D maxCoords;
-private Affine transformCoordsToIndices;
+private AffineTransform2D transformCoordsToIndices;
 
 public ChaosCanvas(int width, int height, Vector2D minCoords, Vector2D maxCoords) {
 
@@ -17,19 +18,13 @@ public ChaosCanvas(int width, int height, Vector2D minCoords, Vector2D maxCoords
   this.minCoords = minCoords;
   this.maxCoords = maxCoords;
 }
-  /*
-  this.transformCoordsToIndices = new Affine();
-  this.transformCoordsToIndices.appendScale(width / (maxCoords.getX0() - minCoords.getX0()),
-      height / (maxCoords.getX1() - minCoords.getX1()));
-  this.transformCoordsToIndices.appendTranslation(-minCoords.getX0(), -minCoords.getX1());
-  */
 
 private int getPixel(Vector2D point) {
-
+  return canvas[(int) point.getX0()][(int) point.getX1()];
 }
 
 private void putPixel(Vector2D point) {
-
+  canvas[(int) point.getX0()][(int) point.getX1()] = 1;
 }
 
 private int[][] getCanvasArray() {
