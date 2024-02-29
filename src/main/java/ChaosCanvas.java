@@ -15,7 +15,7 @@ private int width;
 private int height;
 private Vector2D minCoords;
 private Vector2D maxCoords;
-private AffineTransform2D transformCoordsToIndices;
+public AffineTransform2D transformCoordsToIndices;
 
 public ChaosCanvas(int width, int height, Vector2D minCoords, Vector2D maxCoords) {
 
@@ -23,15 +23,23 @@ public ChaosCanvas(int width, int height, Vector2D minCoords, Vector2D maxCoords
   this.height = height;
   this.minCoords = minCoords;
   this.maxCoords = maxCoords;
-  setTransformCoordsToIndices();
+  this.canvas = new int[width][height];
 }
 
 public int getPixel(Vector2D point) {
-  return canvas[(int) point.getX0()][(int) point.getX1()];
+  Vector2D transformed = setTransformCoordsToIndices(point);
+  return canvas[(int) transformed.getX0()][(int) transformed.getX1()];
 }
 
 public void putPixel(Vector2D point) {
-  canvas[(int) point.getX0()][(int) point.getX1()] = 1;
+  Vector2D transformed = setTransformCoordsToIndices(point);
+  canvas[(int) transformed.getX0()][(int) transformed.getX1()] = 1;
+}
+public int getWidth() {
+  return width;
+}
+public int getHeight() {
+  return height;
 }
 
 public int[][] getCanvasArray() {
@@ -41,16 +49,32 @@ public int[][] getCanvasArray() {
 public void clear() {
   canvas = new int[width][height];
 }
+/*
+public Vector2D setTransformCoordsToIndices(Vector2D point) {
+  Matrix2x2 a = new Matrix2x2(0,
+      (height - 1) / (minCoords.getX1() - maxCoords.getX1()),
+  (width - 1) / (maxCoords.getX0() - minCoords.getX0()),
+      0);
+  Vector2D b = new Vector2D(((height-1)*maxCoords.getX1())/(maxCoords.getX1()-minCoords.getX1()),
+      ((width-1)*minCoords.getX0())/(minCoords.getX0()-maxCoords.getX0()));
 
-public void setTransformCoordsToIndices() {
-  double[][] a = {
-      {0, (width - 1) / (minCoords.getX1() - maxCoords.getX1())},
-      {(height - 1) / (maxCoords.getX0() - minCoords.getX0()), 0}
-  };
-  Vector2D b = new Vector2D((width-1)*maxCoords.getX1()/(maxCoords.getX1()-minCoords.getX1()),
-      (height-1)*minCoords.getX0()/(minCoords.getX0()-maxCoords.getX0()));
+  transformCoordsToIndices = new AffineTransform2D(a,b);
+  return transformCoordsToIndices.transform(point);
+  }*/
 
-  transformCoordsToIndices = new AffineTransform2D(new Matrix2x2(a[0][0], a[0][1], a[1][0], a[1][1])
-      ,b);
-}
+  public Vector2D setTransformCoordsToIndices(Vector2D point) {
+    double a11 = 0;
+    double a12 = (width - 1) / (minCoords.getX1() - maxCoords.getX1());
+    double a21 = (height - 1) / (maxCoords.getX0() - minCoords.getX0());
+    double a22 = 0;
+
+    Matrix2x2 a = new Matrix2x2(a11, a12, a21, a22);
+    Vector2D b = new Vector2D((width - 1) * maxCoords.getX1() / (minCoords.getX1() - maxCoords.getX1()),
+        (height - 1) * minCoords.getX0() / (maxCoords.getX0() - minCoords.getX0()));
+
+    transformCoordsToIndices = new AffineTransform2D(a, b);
+    return transformCoordsToIndices.transform(point);
+  }
+
+
 }
