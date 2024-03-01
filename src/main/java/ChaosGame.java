@@ -8,10 +8,10 @@ public class ChaosGame {
   private Vector2D currentPoint;
   private Random random;
 
-  public ChaosGame(ChaosGameDescription description, int width, int height) {
+  public ChaosGame(ChaosGameDescription description, int width, int height, Vector2D currentPoint) {
     setDescription(description);
     this.random = new Random();
-    this.currentPoint = description.getMinCoords();
+    this.currentPoint = currentPoint;
     setCanvas(new ChaosCanvas(width, height,
         description.getMinCoords(), description.getMaxCoords()));
   }
@@ -25,23 +25,28 @@ public class ChaosGame {
     return this.canvas;
   }
   public void runSteps(int steps) {
+    // Perform the specified number of steps of the Chaos Game
     for (int i = 0; i < steps; i++) {
-      int random = this.random.nextInt(description.getTransforms().size());
-      Transform2D transform = description.getTransforms().get(random);
+      // Select a random transformation
+      int randomIndex = this.random.nextInt(description.getTransforms().size());
+      Transform2D transform = description.getTransforms().get(randomIndex);
+      // Apply the transformation to the current point
       this.currentPoint = transform.transform(this.currentPoint);
+      System.out.println(this.currentPoint.getX0() + " " + this.currentPoint.getX1());
+      // Plot the new point on the canvas
       this.canvas.putPixel(currentPoint);
     }
-    ChaosCanvas canvas = getCanvas();
-    for (int i = 0; i < canvas.getWidth()-1; i++) {
-      for (int j = 0; j < canvas.getHeight()-1; j++) {
-        if (canvas.getPixel(new Vector2D(i, j)) == 1) {
+
+    // Print the results of the Chaos Game
+    for (int i = 0; i < canvas.getWidth(); i++) {
+      for (int j = 0; j < canvas.getHeight(); j++) {
+        if (canvas.getPixel(i, j) == 1) {
           System.out.print("*");
         } else {
           System.out.print(" ");
         }
-      }
-      System.out.println();
     }
+      System.out.println();
   }
 
-}
+  }}
