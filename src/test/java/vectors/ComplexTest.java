@@ -6,6 +6,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test class for the Complex class.
+ * TODO: Add negative and positive tests for the methods in the Complex class.
+ */
+
 class ComplexTest {
 
   @BeforeEach
@@ -16,6 +21,11 @@ class ComplexTest {
   void tearDown() {
   }
 
+  /**
+   * Test the sqrt method of the Complex class.
+   * The method should return a new complex number that's the square root of the original.
+   */
+
   @Test
   void sqrt() {
     double x0 = 0.3;
@@ -23,9 +33,15 @@ class ComplexTest {
     double sqrtr = Math.sqrt(x0 * x0 + x1 * x1);
     Complex complexTest = new Complex(x0, x1);
     Complex result = complexTest.sqrt();
+    System.out.println(result.getX0() + " " + result.getX1());
     assertEquals(Math.sqrt(0.5 * (sqrtr + x0)), result.getX0());
 
   }
+
+  /**
+   * Test the add method of the Complex class.
+   * The method should return a new complex number that's the sum of the original and the parameter.
+   */
 
   @Test
   void add() {
@@ -36,6 +52,11 @@ class ComplexTest {
     assertEquals(x0 + x0, result.getX0());
 
   }
+
+  /**
+   * Test the subtract method of the Complex class.
+   * The method should return a new complex number that's the difference of the original and the parameter.
+   */
 
   @Test
   void subtract() {

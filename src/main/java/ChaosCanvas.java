@@ -3,6 +3,11 @@ import matrix.Matrix2x2;
 import transformations.AffineTransform2D;
 import vectors.Vector2D;
 
+/**
+ * Class responsible for making a canvas for the chaos game.
+ * The canvas is a 2D array of integers, where 1 represents a pixel and 0 represents no pixel.
+ */
+
 public class ChaosCanvas {
 
   private int[][] canvas;
