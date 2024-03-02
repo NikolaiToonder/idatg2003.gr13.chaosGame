@@ -1,13 +1,28 @@
 import java.util.Random;
-import transformations.AffineTransform2D;
 import transformations.Transform2D;
 import vectors.Vector2D;
+
+/**
+ * Class responsible for running the chaos game.
+ *
+ * @version 1.0
+ */
 public class ChaosGame {
+
   private ChaosCanvas canvas;
   private ChaosGameDescription description;
   private Vector2D currentPoint;
-  private Random random;
+  private final Random random;
 
+  /**
+   * Constructor for the ChaosGame class.
+   *
+   * @param description  The description of the chaos game
+   * @param width        The width of the canvas
+   * @param height       The height of the canvas
+   * @param currentPoint The starting point & the current point for the chaos game (will be updated
+   *                     as the game iterates)
+   */
   public ChaosGame(ChaosGameDescription description, int width, int height, Vector2D currentPoint) {
     setDescription(description);
     this.random = new Random();
@@ -15,38 +30,59 @@ public class ChaosGame {
     setCanvas(new ChaosCanvas(width, height,
         description.getMinCoords(), description.getMaxCoords()));
   }
+
+  /**
+   * Sets the description of the chaos game.
+   *
+   * @param description The description of the chaos game
+   */
   public void setDescription(ChaosGameDescription description) {
     this.description = description;
   }
+
+  /**
+   * Sets the canvas for the chaos game.
+   *
+   * @param canvas The canvas for the chaos game
+   */
   public void setCanvas(ChaosCanvas canvas) {
     this.canvas = canvas;
   }
+
+  /**
+   * Gets the canvas for the chaos game.
+   *
+   * @return The canvas for the chaos game
+   */
   public ChaosCanvas getCanvas() {
     return this.canvas;
   }
+
+  /**
+   * Runs the chaos game for a given number of steps.
+   *
+   * @param steps The number of steps to run the chaos game
+   */
   public void runSteps(int steps) {
-    // Perform the specified number of steps of the Chaos Game
     for (int i = 0; i < steps; i++) {
-      // Select a random transformation
       int randomIndex = this.random.nextInt(description.getTransforms().size());
       Transform2D transform = description.getTransforms().get(randomIndex);
-      // Apply the transformation to the current point
       this.currentPoint = transform.transform(this.currentPoint);
-      System.out.println(this.currentPoint.getX0() + " " + this.currentPoint.getX1());
-      // Plot the new point on the canvas
+      System.out.println(currentPoint.getX0() + " " + currentPoint.getX1());
       this.canvas.putPixel(currentPoint);
     }
 
     // Print the results of the Chaos Game
-    for (int i = 0; i < canvas.getWidth(); i++) {
+    //MOVE THIS TO PRINTER CLASS
+    for (int i = 0; i < canvas.getWidth() - 1; i++) {
       for (int j = 0; j < canvas.getHeight(); j++) {
-        if (canvas.getPixel(i, j) == 1) {
+        if (canvas.getPixel(new Vector2D(i,j)) == 1) {
           System.out.print("*");
         } else {
           System.out.print(" ");
         }
-    }
+      }
       System.out.println();
+    }
   }
-
-  }}
+}

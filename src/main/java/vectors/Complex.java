@@ -42,4 +42,8 @@ public class Complex extends Vector2D {
     return new Complex(this.getReal() - other.getX0(), getImaginary() -
         other.getX1());
   }
+  @Override
+  public Complex toComplex() {
+    return this;
+  }
 }
