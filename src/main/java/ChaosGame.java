@@ -41,6 +41,24 @@ public class ChaosGame {
   }
 
   /**
+   * Gets the description of the chaos game. Used for test classes
+   *
+   * @return The description of the chaos game
+   */
+  public ChaosGameDescription getDescription() {
+    return this.description;
+  }
+
+  /**
+   * Gets the current point of the chaos game. Used for test classes
+   *
+   * @return The current point of the chaos game
+   */
+  public Vector2D getCurrentPoint() {
+    return this.currentPoint;
+  }
+
+  /**
    * Sets the canvas for the chaos game.
    *
    * @param canvas The canvas for the chaos game
