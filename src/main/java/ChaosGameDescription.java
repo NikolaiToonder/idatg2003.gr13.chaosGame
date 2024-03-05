@@ -28,6 +28,21 @@ public class ChaosGameDescription {
     setTransforms(transforms);
   }
 
+  public ChaosGameDescription(String path) {
+    ChaosGameFileHandler fileHandler = new ChaosGameFileHandler();
+    List<String> values = fileHandler.readFromFile(path);
+    values = setCanvasCoordsFromFile(values);
+    System.out.println(values.get(0));
+  }
+
+  public List<String> setCanvasCoordsFromFile(List<String> values) {
+    String[] minCoords = values.get(1).split(",");
+    String[] maxCoords = values.get(2).split(",");
+    setMinCoords(new Vector2D(Double.parseDouble(minCoords[0]), Double.parseDouble(minCoords[1])));
+    setMaxCoords(new Vector2D(Double.parseDouble(maxCoords[0]), Double.parseDouble(maxCoords[1])));
+    return values;
+  }
+
   /**
    * Gets the minimum coordinates of the canvas.
    *
