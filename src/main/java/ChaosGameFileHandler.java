@@ -45,14 +45,15 @@ public class ChaosGameFileHandler {
           .replaceAll("\\s", "");
       String lowerRight = reader.readLine().replaceAll("#.*","")
           .replaceAll("\\s", "");
-      List<String> values = List.of(transform, lowerLeft, lowerRight);
+      List<String> values = new java.util.ArrayList<>(List.of(transform, lowerLeft, lowerRight));
       boolean stop = false;
       while (!stop) {
-        String line = reader.readLine().replaceAll("#.*","")
-            .replaceAll("\\s", "");
+        String line = reader.readLine();
         if (line == null) {
           stop = true;
         } else {
+          line = line.replaceAll("#.*","")
+              .replaceAll("\\s", "");
           values.add(line);
         }
       }

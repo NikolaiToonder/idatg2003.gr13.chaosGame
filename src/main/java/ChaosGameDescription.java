@@ -1,5 +1,9 @@
 import java.util.List;
+import matrix.Matrix2x2;
+import transformations.AffineTransform2D;
+import transformations.JuliaTransform;
 import transformations.Transform2D;
+import vectors.Complex;
 import vectors.Vector2D;
 
 /**
@@ -31,17 +35,47 @@ public class ChaosGameDescription {
   public ChaosGameDescription(String path) {
     ChaosGameFileHandler fileHandler = new ChaosGameFileHandler();
     List<String> values = fileHandler.readFromFile(path);
-    values = setCanvasCoordsFromFile(values);
-    System.out.println(values.get(0));
+    System.out.println(values.get(3));
+    if (values.get(0).equals("Julia")) {
+      setCanvasCoordsFromFile(values);
+      setTransformsFromFileJulia(values);
+    } else {
+      setCanvasCoordsFromFile(values);
+      setTransformsFromFileAffine(values);
+    }
   }
 
-  public List<String> setCanvasCoordsFromFile(List<String> values) {
+  public void setCanvasCoordsFromFile(List<String> values) {
     String[] minCoords = values.get(1).split(",");
     String[] maxCoords = values.get(2).split(",");
     setMinCoords(new Vector2D(Double.parseDouble(minCoords[0]), Double.parseDouble(minCoords[1])));
     setMaxCoords(new Vector2D(Double.parseDouble(maxCoords[0]), Double.parseDouble(maxCoords[1])));
-    return values;
   }
+  public void setTransformsFromFileAffine(List<String> values) {
+    List<Transform2D> transformations = new java.util.ArrayList<>(List.of());
+    for (int i = 3; i < values.size(); i++) {
+      String[] value = values.get(i).split(",");
+
+      Matrix2x2 matrix = new Matrix2x2(Double.parseDouble(value[0]), Double.parseDouble(value[1]),
+          Double.parseDouble(value[2]), Double.parseDouble(value[3]));
+      Vector2D vector = new Vector2D(Double.parseDouble(value[4]), Double.parseDouble(value[5]));
+      transformations.add(new AffineTransform2D(matrix, vector));
+    }
+    setTransforms(transformations);
+  }
+
+  public void setTransformsFromFileJulia(List<String> values) {
+    String[] value = values.get(3).split(",");
+    Complex point = new Complex(Double.parseDouble(value[0]), Double.parseDouble(value[1]));
+    int sign = 1;
+    if (point.getImaginary() < 0) {
+      sign = -1;
+    }
+    List<Transform2D> transformations = List.of(new JuliaTransform(point, sign));
+    setTransforms(transformations);
+
+  }
+
 
   /**
    * Gets the minimum coordinates of the canvas.
