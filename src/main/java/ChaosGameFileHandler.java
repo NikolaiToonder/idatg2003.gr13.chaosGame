@@ -7,8 +7,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * Class responsible for reading and writing to files.
+ *
+ * @version 1.0
+ */
+
 
 public class ChaosGameFileHandler {
+
+  /**
+   * Reads the description of the chaos game from a file.
+   * @param path The path to the file containing the description.
+   * @return A list of strings containing the description of the chaos game.
+   */
 
   public List<String> readFromFile(String path) {
     Path filePath = Paths.get(path);
@@ -28,6 +40,16 @@ public class ChaosGameFileHandler {
     return null; // Consider returning an empty list instead of null to avoid potential NullPointerExceptions in the caller
   }
 
+  /**
+   * Reads the description of the chaos game from a file, specifically for Julia transformation.
+   * The file should contain information about canvas coordinates and transforms.
+   *
+   * @param reader The reader to read the file.
+   * @param transform The type of transform to be used.
+   * @return A list of strings containing the description of the chaos game.
+   * @throws IllegalArgumentException If an error occurs while reading the file.
+   */
+
   public List<String> readJuliaTransform(BufferedReader reader, String transform) {
     try {
       String lowerLeft = reader.readLine().replaceAll("#.*", "")
@@ -42,6 +64,16 @@ public class ChaosGameFileHandler {
       throw new IllegalArgumentException("Error reading file");
     }
   }
+
+  /**
+   * Reads the description of the chaos game from a file, specifically for Affine transformation.
+   * The file should contain information about canvas coordinates and transforms.
+   *
+   * @param reader The reader to read the file.
+   * @param transform The type of transform to be used.
+   * @return A list of strings containing the description of the chaos game.
+   * @throws IllegalArgumentException If an error occurs while reading the file.
+   */
 
   public List<String> readAffineTransform(BufferedReader reader, String transform) {
     try {
@@ -68,6 +100,12 @@ public class ChaosGameFileHandler {
     }
   }
 
+  /**
+   * Writes the canvas to a file. The canvas is a 2D array of integers, where 1 represents a pixel and 0 represents no pixel.
+   *
+   * @param values The canvas to be written to a file.
+   * @param fileName The name of the file to write to.
+   */
   public static void writeToFile(int[][] values, String fileName) {
     try (BufferedWriter writer = Files.newBufferedWriter(Path.of(fileName + "out.txt"))) {
       for (int[] row : values) {

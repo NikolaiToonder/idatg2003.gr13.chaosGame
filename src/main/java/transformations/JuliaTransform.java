@@ -1,9 +1,15 @@
 package transformations;
 
-import java.util.Random;
 import vectors.Complex;
 import vectors.Vector2D;
 
+/**
+ * Class representing a Julia transformation in 2D. The transformation is represented by a complex
+ * number and a sign.
+ *
+ * @version 1.0
+
+ */
 public class JuliaTransform implements Transform2D{
   private final Complex constant;
   private int sign;
@@ -33,8 +39,8 @@ public class JuliaTransform implements Transform2D{
 
   /**
    * Transforms a Complex vector using the Julia transformation.
-   * @param vector
-   * @return
+   * @param vector  The vector to transform
+   * @return The transformed vector
    */
   public Vector2D transform(Vector2D vector) {
     Complex complexNum = vector.toComplex().subtract(this.constant).sqrt();
