@@ -86,8 +86,8 @@ public class ChaosGame {
       int randomIndex = this.random.nextInt(description.getTransforms().size());
       Transform2D transform = description.getTransforms().get(randomIndex);
       this.currentPoint = transform.transform(this.currentPoint);
-      System.out.println(currentPoint.getX0() + " " + currentPoint.getX1());
       this.canvas.putPixel(currentPoint);
+      this.description.handleValuesForOutprint(this.canvas.getCanvasArray());
     }
 
     // Print the results of the Chaos Game

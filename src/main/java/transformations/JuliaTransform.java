@@ -1,20 +1,21 @@
 package transformations;
 
+import java.util.Random;
 import vectors.Complex;
 import vectors.Vector2D;
 
 public class JuliaTransform implements Transform2D{
-  private final Complex point;
+  private final Complex constant;
   private int sign;
 
   /**
    * Constructor for the transformations.JuliaTransform class.
    * The transformation is represented by a complex number and a sign.
-   * @param point The complex number
+   * @param constant The complex constant
    * @param sign The sign
    */
-  public JuliaTransform(Complex point, int sign) {
-    this.point = point;
+  public JuliaTransform(Complex constant, int sign) {
+    this.constant = constant;
     setSign(sign);
   }
 
@@ -36,8 +37,7 @@ public class JuliaTransform implements Transform2D{
    * @return
    */
   public Vector2D transform(Vector2D vector) {
-    Complex complexSubtraction = vector.subtract(this.point).toComplex();
-    Complex complexSqrt = complexSubtraction.sqrt();
-    return new Complex(complexSqrt.getX0(), this.sign * complexSqrt.getX1());
+    Complex complexNum = vector.toComplex().subtract(this.constant).sqrt();
+    return new Complex(complexNum.getX0(), this.sign * complexNum.getX1());
   }
 }

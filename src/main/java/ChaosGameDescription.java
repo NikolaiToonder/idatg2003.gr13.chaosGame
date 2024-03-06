@@ -17,6 +17,7 @@ public class ChaosGameDescription {
   private Vector2D minCoords;
   private Vector2D maxCoords;
   private List<Transform2D> transforms;
+  private String path;
 
   /**
    * Constructor for the ChaosGameDescription class.
@@ -34,6 +35,7 @@ public class ChaosGameDescription {
 
   public ChaosGameDescription(String path) {
     ChaosGameFileHandler fileHandler = new ChaosGameFileHandler();
+    this.path = path;
     List<String> values = fileHandler.readFromFile(path);
     System.out.println(values.get(3));
     if (values.get(0).equals("Julia")) {
@@ -138,5 +140,8 @@ public class ChaosGameDescription {
    */
   public void addTransforms(Transform2D transform) {
     this.transforms.add(transform);
+  }
+  public void handleValuesForOutprint(int[][] values) {
+    ChaosGameFileHandler.writeToFile(values, this.path);
   }
 }

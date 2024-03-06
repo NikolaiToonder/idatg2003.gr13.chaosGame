@@ -25,10 +25,7 @@ public class Complex extends Vector2D {
         * Math.sqrt(0.5 * (sqrtr - x0)));
   }
   public Complex add(Complex other) {
-    return new Complex(getX0() + other.getX0(), getX1() + other.getX1());
-  }
-  public Complex subtract(Complex other) {
-    return new Complex(getX0() - other.getX0(), getX1() - other.getX1());
+    return new Complex(getReal() + other.getReal(), getImaginary() + other.getImaginary());
   }
   public double getReal() {
     return getX0();

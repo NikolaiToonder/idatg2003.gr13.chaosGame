@@ -115,5 +115,4 @@ public class ChaosCanvas {
     AffineTransform2D transformCoordsToIndices = new AffineTransform2D(a, b);
     return transformCoordsToIndices.transform(point);
   }
-
 }
