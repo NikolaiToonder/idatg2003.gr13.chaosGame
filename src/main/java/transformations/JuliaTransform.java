@@ -8,8 +8,9 @@ import vectors.Vector2D;
  * number and a sign.
  *
  * @version 1.0
+  */
 
- */
+
 public class JuliaTransform implements Transform2D{
   private final Complex constant;
   private int sign;
@@ -45,5 +46,13 @@ public class JuliaTransform implements Transform2D{
   public Vector2D transform(Vector2D vector) {
     Complex complexNum = vector.toComplex().subtract(this.constant).sqrt();
     return new Complex(complexNum.getX0(), this.sign * complexNum.getX1());
+  }
+
+  /**
+   * Made for testing purposes.
+   * @return The sign
+   */
+  public int getSign() {
+    return sign;
   }
 }
