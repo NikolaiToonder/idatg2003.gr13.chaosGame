@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class JuliaTransformTest {
+class JuliaTransformTest {
 
   @Test
   void testTransformPositive() {
@@ -31,7 +31,7 @@ public class JuliaTransformTest {
 
 
   @Test
-  public void testSetSignValidPositive() {
+   void testSetSignValidPositive() {
     Complex constant = new Complex(1, 1);
     JuliaTransform juliaTransform = new JuliaTransform(constant, 1);
     juliaTransform.setSign(-1);
@@ -39,7 +39,7 @@ public class JuliaTransformTest {
   }
 
   @Test
-  public void testSetSignValidNegative() {
+   void testSetSignValidNegative() {
     Complex constant = new Complex(1, 1);
     JuliaTransform juliaTransform = new JuliaTransform(constant, -1);
     juliaTransform.setSign(1);
@@ -47,23 +47,22 @@ public class JuliaTransformTest {
   }
 
   @Test
-  public void testSetSignInvalidPositive() {
+  void testSetSignInvalidPositive() {
     Complex constant = new Complex(1, 1);
     JuliaTransform juliaTransform = new JuliaTransform(constant, 1);
-    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-      juliaTransform.setSign(0);
-    });
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+        juliaTransform.setSign(0));
     assertEquals("Sign must be 1 or -1", exception.getMessage());
   }
 
   @Test
-  public void testSetSignInvalidNegative() {
+  void testSetSignInvalidNegative() {
     Complex constant = new Complex(1, 1);
     JuliaTransform juliaTransform = new JuliaTransform(constant, 1);
-    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-      juliaTransform.setSign(2);
-    });
-    assertNotEquals("", exception.getMessage());
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+        juliaTransform.setSign(2));
+    assertNotEquals("This is not the exception message", exception.getMessage());
   }
+
 }
 
