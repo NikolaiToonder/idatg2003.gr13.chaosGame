@@ -21,45 +21,28 @@ class ComplexTest {
   void tearDown() {
   }
 
-  /**
-   * Test the sqrt method of the Complex class.
-   * The method should return a new complex number that's the square root of the original.
-   */
 
   @Test
-  void sqrt() {
+  void sqrtPositive() {
     double x0 = 0.3;
     double x1 = 0.6;
     double sqrtr = Math.sqrt(x0 * x0 + x1 * x1);
     Complex complexTest = new Complex(x0, x1);
     Complex result = complexTest.sqrt();
-    System.out.println(result.getX0() + " " + result.getX1());
     assertEquals(Math.sqrt(0.5 * (sqrtr + x0)), result.getX0());
-
   }
 
-  /**
-   * Test the add method of the Complex class.
-   * The method should return a new complex number that's the sum of the original and the parameter.
-   */
-
   @Test
-  void add() {
+  void addPositive() {
     double x0 = 0.3;
     double x1 = 0.6;
     Complex complexTest = new Complex(x0, x1);
     Complex result = complexTest.add(complexTest);
     assertEquals(x0 + x0, result.getX0());
-
   }
 
-  /**
-   * Test the subtract method of the Complex class.
-   * The method should return a new complex number that's the difference of the original and the parameter.
-   */
-
   @Test
-  void subtract() {
+  void subtractPosivite() {
     double x0 = 0.3;
     double x1 = 0.6;
     Complex complexTest = new Complex(x0, x1);

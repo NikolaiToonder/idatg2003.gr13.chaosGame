@@ -1,3 +1,6 @@
+package chaosGameClasses;
+
+import chaosGameClasses.ChaosGameFileHandler;
 import java.util.List;
 import matrix.Matrix2x2;
 import transformations.AffineTransform2D;
@@ -8,7 +11,7 @@ import vectors.Vector2D;
 
 /**
  * Class representing the description of a chaos game. The description includes the transforms to be
- * used and the bounds of the canvas. Fields of class may be changed by ChaosGameFileHandler class.
+ * used and the bounds of the canvas. Fields of class may be changed by chaosGameClasses.ChaosGameFileHandler class.
  *
  * @version 1.0
  */
@@ -20,7 +23,7 @@ public class ChaosGameDescription {
   private String path;
 
   /**
-   * Constructs a ChaosGameDescription object with the provided list of transforms and canvas coordinates.
+   * Constructs a chaosGameClasses.ChaosGameDescription object with the provided list of transforms and canvas coordinates.
    *
    * @param transforms The list of transforms to be applied.
    * @param minCoords The minimum coordinates of the canvas.
@@ -34,7 +37,7 @@ public class ChaosGameDescription {
   }
 
   /**
-   * Constructs a ChaosGameDescription object by reading description from a file.
+   * Constructs a chaosGameClasses.ChaosGameDescription object by reading description from a file.
    * The file should contain information about canvas coordinates and transforms.
    *
    * @param path The path to the file containing the description.
@@ -52,6 +55,13 @@ public class ChaosGameDescription {
       setCanvasCoordsFromFile(values);
       setTransformsFromFileAffine(values);
     }
+  }
+
+  public String getPath() {
+    return path;
+  }
+  public void setPath(String path) {
+    this.path = path;
   }
 
   /**
@@ -182,6 +192,6 @@ public class ChaosGameDescription {
    * @param values The values to set the path to the file containing the description
    */
   public void handleValuesForOutprint(int[][] values) {
-    ChaosGameFileHandler.writeToFile(values, this.path);
+    ChaosGameFileHandler.writeToFile(values);
   }
 }

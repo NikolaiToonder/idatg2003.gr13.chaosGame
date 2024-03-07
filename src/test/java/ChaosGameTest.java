@@ -1,4 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import chaosGameClasses.ChaosGame;
+import chaosGameClasses.ChaosGameDescription;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +11,7 @@ import transformations.Transform2D;
 import vectors.Vector2D;
 
 /**
- * Class responsible for testing the ChaosGame class.
+ * Class responsible for testing the chaosGameClasses.ChaosGame class.
  *
  */
 
@@ -34,7 +37,7 @@ class ChaosGameTest {
   }
 
   /**
-   * Positive tests for the initialization of the ChaosGame class.
+   * Positive tests for the initialization of the chaosGameClasses.ChaosGame class.
 
    */
 
@@ -48,7 +51,7 @@ class ChaosGameTest {
   }
 
   /**
-   * Negative tests for the initialization of the ChaosGame class.
+   * Negative tests for the initialization of the chaosGameClasses.ChaosGame class.
    *
    */
 
@@ -62,7 +65,7 @@ class ChaosGameTest {
   }
 
   /**
-   * Positive tests for the setting of the description of the ChaosGame class.
+   * Positive tests for the setting of the description of the chaosGameClasses.ChaosGame class.
    */
   @Test
   void testSetDescription_Positive() {
@@ -78,7 +81,7 @@ class ChaosGameTest {
   }
 
   /**
-   * Negative tests for the setting of the description of the ChaosGame class.
+   * Negative tests for the setting of the description of the chaosGameClasses.ChaosGame class.
    */
   @Test
   void testSetDescription_Negative() {

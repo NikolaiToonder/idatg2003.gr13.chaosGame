@@ -1,3 +1,5 @@
+package chaosGameClasses;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -104,10 +106,9 @@ public class ChaosGameFileHandler {
    * Writes the canvas to a file. The canvas is a 2D array of integers, where 1 represents a pixel and 0 represents no pixel.
    *
    * @param values The canvas to be written to a file.
-   * @param fileName The name of the file to write to.
    */
-  public static void writeToFile(int[][] values, String fileName) {
-    try (BufferedWriter writer = Files.newBufferedWriter(Path.of(fileName + "out.txt"))) {
+  public static void writeToFile(int[][] values) {
+    try (BufferedWriter writer = Files.newBufferedWriter(Path.of("out.txt"))) {
       for (int[] row : values) {
         for (int column : row) {
           if (column == 1) {

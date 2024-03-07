@@ -1,3 +1,5 @@
+package chaosGameClasses;
+
 import javafx.scene.transform.Affine;
 import matrix.Matrix2x2;
 import transformations.AffineTransform2D;
@@ -18,7 +20,7 @@ public class ChaosCanvas {
   private Vector2D maxCoords;
 
   /**
-   * Constructor for the ChaosCanvas class.
+   * Constructor for the chaosGameClasses.ChaosCanvas class.
    *
    * @param width     The width of the canvas
    * @param height    The height of the canvas

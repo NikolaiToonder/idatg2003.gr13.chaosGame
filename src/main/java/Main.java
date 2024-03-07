@@ -1,3 +1,5 @@
+import chaosGameClasses.ChaosGame;
+import chaosGameClasses.ChaosGameDescription;
 import vectors.Vector2D;
 
 /**
@@ -7,10 +9,10 @@ public class Main {
 
   public static void main(String[] args) {
     ChaosGameDescription description = new ChaosGameDescription(
-        "C:/Users/nikol/Desktop/NTNU/IDATG1005/Test/affineTransform.txt");
+        "src/resources/sierpinskiTriangle.txt");
     Vector2D startingPoint = new Vector2D(0, 0);
-    ChaosGame app = new ChaosGame(description, 70,140, startingPoint);
-    app.runSteps(10);
+    ChaosGame app = new ChaosGame(description, 70,140, startingPoint, "src/resources/");
+    app.runGame();
 
 
     /*
@@ -27,9 +29,9 @@ public class Main {
     AffineTransform2D transformation3 = new AffineTransform2D(transformationMatrix3, transformationVector2);
     AffineTransform2D transformation4 = new AffineTransform2D(transformationMatrix4, transformationVector3);
     List<Transform2D> affineTransforms = List.of(transformation1, transformation2, transformation3, transformation4);
-    ChaosGameDescription description = new ChaosGameDescription(affineTransforms, new Vector2D(-2, -2), new Vector2D(10, 10));
+    chaosGameClasses.ChaosGameDescription description = new chaosGameClasses.ChaosGameDescription(affineTransforms, new Vector2D(-2, -2), new Vector2D(10, 10));
     Vector2D startingPoint = new Vector2D(0, 0);
-    ChaosGame app = new ChaosGame(description, 100, 300, startingPoint);
+    chaosGameClasses.ChaosGame app = new chaosGameClasses.ChaosGame(description, 100, 300, startingPoint);
     app.runSteps(3000000);
      */
 
@@ -39,9 +41,9 @@ public class Main {
     int sign = -1;
     JuliaTransform juliaTransform = new JuliaTransform(point, sign);
     List<Transform2D> juliaTransforms = List.of(juliaTransform);
-    ChaosGameDescription description = new ChaosGameDescription(juliaTransforms, new Vector2D(-1.6,-1), new Vector2D(1.6, 1));
+    chaosGameClasses.ChaosGameDescription description = new chaosGameClasses.ChaosGameDescription(juliaTransforms, new Vector2D(-1.6,-1), new Vector2D(1.6, 1));
     Vector2D startingPoint = new Vector2D(0, 0);
-    ChaosGame app = new ChaosGame(description, 70, 140, startingPoint);
+    chaosGameClasses.ChaosGame app = new chaosGameClasses.ChaosGame(description, 70, 140, startingPoint);
     app.runSteps(1000000);
 
      */
