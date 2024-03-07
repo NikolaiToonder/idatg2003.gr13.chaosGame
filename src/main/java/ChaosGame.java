@@ -86,10 +86,9 @@ public class ChaosGame {
       int randomIndex = this.random.nextInt(description.getTransforms().size());
       Transform2D transform = description.getTransforms().get(randomIndex);
       this.currentPoint = transform.transform(this.currentPoint);
+      System.out.println(this.currentPoint.getX0() + " " + this.currentPoint.getX1());
       this.canvas.putPixel(currentPoint);
-      this.description.handleValuesForOutprint(this.canvas.getCanvasArray());
     }
-
     // Print the results of the Chaos Game
     //MOVE THIS TO PRINTER CLASS
     for (int i = 0; i < canvas.getWidth() - 1; i++) {
@@ -102,5 +101,6 @@ public class ChaosGame {
       }
       System.out.println();
     }
+    this.description.handleValuesForOutprint(this.canvas.getCanvasArray());
   }
 }
