@@ -19,6 +19,15 @@ public class Main {
     app.runSteps(300000);
 
 
+/*
+    public static void main(String[] args) {
+      ChaosGameDescription description = new ChaosGameDescription(
+          "C:/Users/musta/Downloads/Mappe2Prog2/affineTransform.txt");
+      Vector2D startingPoint = new Vector2D(0, 0);
+      ChaosGame app = new ChaosGame(description, 70,140, startingPoint);
+      app.runSteps(30000);
+
+*/
     /*
     Matrix2x2 transformationMatrix1 = new Matrix2x2(0, 0, 0, 0.16);
     Matrix2x2 transformationMatrix2 = new Matrix2x2(0.85, 0.04, -0.04, 0.85);
