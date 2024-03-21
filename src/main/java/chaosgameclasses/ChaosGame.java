@@ -1,7 +1,5 @@
-package chaosGameClasses;
+package chaosgameclasses;
 
-import chaosGameClasses.ChaosCanvas;
-import chaosGameClasses.ChaosGameDescription;
 import java.util.Random;
 import transformations.Transform2D;
 import utilities.Printer;
@@ -22,7 +20,7 @@ public class ChaosGame {
   private final UserInput userInput = new UserInput();
   private boolean closeApp = false;
   private final Printer printer = new Printer();
-  private String folder;
+
 
   /**
    * Constructor for the chaosGameClasses.ChaosGame class.
@@ -33,19 +31,20 @@ public class ChaosGame {
    * @param currentPoint The starting point & the current point for the chaos game (will be updated
    *                     as the game iterates)
    */
-  public ChaosGame(ChaosGameDescription description, int width, int height, Vector2D currentPoint, String folder) {
+  public ChaosGame(ChaosGameDescription description, int height, int width, Vector2D currentPoint) {
     setDescription(description);
     this.random = new Random();
     this.currentPoint = currentPoint;
-    this.folder = folder;
-    setCanvas(new ChaosCanvas(width, height,
+    setCanvas(new ChaosCanvas(height, width,
         description.getMinCoords(), description.getMaxCoords()));
   }
 
-
+  /**
+   * Runs the chaos game. Uses a switch case.
+   */
   public void runGame() {
     while (!closeApp) {
-      printer.printMainMenu(folder);
+      printer.printMainMenu(description.getPath());
 
       String input = userInput.getInput();
       switch (input) {
@@ -57,25 +56,36 @@ public class ChaosGame {
     }
   }
 
+  /**
+   * Runs the chaos game for a given number of steps.
+   */
   public void runChaosGame() {
+    canvas.clear();
     printer.printGetNrOfSteps();
     runSteps(userInput.getNrOfSteps());
   }
+
+  /**
+   * Changes the path of the chaos game description.
+   */
   public void changePath() {
     printer.transformationChanging();
     String input = userInput.getInput();
     switch (input) {
       case "1" -> {
         this.description = new ChaosGameDescription("src/resources/sierpinskiTriangle.txt");
-        this.canvas = new ChaosCanvas(canvas.getWidth(), canvas.getHeight(), description.getMinCoords(), description.getMaxCoords());
+        this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
+            description.getMinCoords(), description.getMaxCoords());
       }
       case "2" -> {
         this.description = new ChaosGameDescription("src/resources/barnsleyTransform.txt");
-        this.canvas = new ChaosCanvas(canvas.getWidth(), canvas.getHeight(), description.getMinCoords(), description.getMaxCoords());
+        this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
+            description.getMinCoords(), description.getMaxCoords());
       }
       case "3" -> {
         this.description = new ChaosGameDescription("src/resources/juliaTransform.txt");
-        this.canvas = new ChaosCanvas(canvas.getWidth(), canvas.getHeight(), description.getMinCoords(), description.getMaxCoords());
+        this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
+            description.getMinCoords(), description.getMaxCoords());
       }
       default -> printer.invalidPath();
     }
@@ -137,6 +147,7 @@ public class ChaosGame {
       printer.errorMessage();
 
     } else {
+      this.currentPoint = description.getMinCoords();
       for (int i = 0; i < steps; i++) {
         int randomIndex = this.random.nextInt(description.getTransforms().size());
         Transform2D transform = description.getTransforms().get(randomIndex);

@@ -1,6 +1,5 @@
-package chaosGameClasses;
+package chaosgameclasses;
 
-import chaosGameClasses.ChaosGameFileHandler;
 import java.util.List;
 import matrix.Matrix2x2;
 import transformations.AffineTransform2D;
@@ -11,7 +10,8 @@ import vectors.Vector2D;
 
 /**
  * Class representing the description of a chaos game. The description includes the transforms to be
- * used and the bounds of the canvas. Fields of class may be changed by chaosGameClasses.ChaosGameFileHandler class.
+ * used and the bounds of the canvas. Fields of class may be changed by
+ * chaosGameClasses.ChaosGameFileHandler class.
  *
  * @version 1.0
  */
@@ -23,11 +23,12 @@ public class ChaosGameDescription {
   private String path;
 
   /**
-   * Constructs a chaosGameClasses.ChaosGameDescription object with the provided list of transforms and canvas coordinates.
+   * Constructs a chaosGameClasses.ChaosGameDescription object with the provided list of transforms
+   * and canvas coordinates.
    *
    * @param transforms The list of transforms to be applied.
-   * @param minCoords The minimum coordinates of the canvas.
-   * @param maxCoords The maximum coordinates of the canvas.
+   * @param minCoords  The minimum coordinates of the canvas.
+   * @param maxCoords  The maximum coordinates of the canvas.
    */
   public ChaosGameDescription(List<Transform2D> transforms, Vector2D minCoords,
       Vector2D maxCoords) {
@@ -47,7 +48,6 @@ public class ChaosGameDescription {
     ChaosGameFileHandler fileHandler = new ChaosGameFileHandler();
     this.path = path;
     List<String> values = fileHandler.readFromFile(path);
-    System.out.println(values.get(3));
     if (values.get(0).equals("Julia")) {
       setCanvasCoordsFromFile(values);
       setTransformsFromFileJulia(values);
@@ -60,6 +60,7 @@ public class ChaosGameDescription {
   public String getPath() {
     return path;
   }
+
   public void setPath(String path) {
     this.path = path;
   }
@@ -77,14 +78,11 @@ public class ChaosGameDescription {
   }
 
   /**
-   * Sets the transforms to be used from a file.
-   * The file should contain information about the transforms.
-   * The first three lines of the file should contain the canvas coordinates.
-   * The rest of the lines should contain the information about the transforms.
-   * Each line representing a transform should be formatted as follows:
-   * "a,b,c,d,e,f", where:
-   * - a, b, c, d are the elements of the 2x2 transformation matrix.
-   * - e, f are the translation values.
+   * Sets the transforms to be used from a file. The file should contain information about the
+   * transforms. The first three lines of the file should contain the canvas coordinates. The rest
+   * of the lines should contain the information about the transforms. Each line representing a
+   * transform should be formatted as follows: "a,b,c,d,e,f", where: - a, b, c, d are the elements
+   * of the 2x2 transformation matrix. - e, f are the translation values.
    *
    * @param values The values from the file to set the transforms to be used.
    */
@@ -102,11 +100,10 @@ public class ChaosGameDescription {
   }
 
   /**
-   * Sets the transforms to be used from a file for generating Julia sets.
-   * The file should contain information about the transforms.
-   * The first three lines of the file should contain the canvas coordinates.
-   * The fourth line should contain the complex point for the Julia set generation.
-   * The rest of the lines should contain additional information about the transforms, if any.
+   * Sets the transforms to be used from a file for generating Julia sets. The file should contain
+   * information about the transforms. The first three lines of the file should contain the canvas
+   * coordinates. The fourth line should contain the complex point for the Julia set generation. The
+   * rest of the lines should contain additional information about the transforms, if any.
    *
    * @param values The values from the file to set the transforms to be used.
    */
@@ -117,7 +114,8 @@ public class ChaosGameDescription {
     if (point.getImaginary() < 0) {
       sign = -1;
     }
-    List<Transform2D> transformations = List.of(new JuliaTransform(point, sign));
+
+    List<Transform2D> transformations = List.of(new JuliaTransform(point, sign), new JuliaTransform(point, -sign));
     setTransforms(transformations);
 
   }

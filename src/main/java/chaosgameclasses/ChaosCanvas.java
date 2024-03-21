@@ -1,13 +1,12 @@
-package chaosGameClasses;
+package chaosgameclasses;
 
-import javafx.scene.transform.Affine;
 import matrix.Matrix2x2;
 import transformations.AffineTransform2D;
 import vectors.Vector2D;
 
 /**
- * Class responsible for making a canvas for the chaos game.
- * The canvas is a 2D array of integers, where 1 represents a pixel and 0 represents no pixel.
+ * Class responsible for making a canvas for the chaos game. The canvas is a 2D array of integers,
+ * where 1 represents a pixel and 0 represents no pixel.
  *
  * @version 1.0
  */
@@ -27,13 +26,13 @@ public class ChaosCanvas {
    * @param minCoords The minimum coordinates of the canvas
    * @param maxCoords The maximum coordinates of the canvas
    */
-  public ChaosCanvas(int width, int height, Vector2D minCoords, Vector2D maxCoords) {
+  public ChaosCanvas(int height, int width, Vector2D minCoords, Vector2D maxCoords) {
 
     this.width = width;
     this.height = height;
     this.minCoords = minCoords;
     this.maxCoords = maxCoords;
-    this.canvas = new int[width][height];
+    this.canvas = new int[height][width];
   }
 
   /**
@@ -58,13 +57,14 @@ public class ChaosCanvas {
    */
   public void putPixel(Vector2D point) {
     Vector2D transformed = transformCoordsToIndices(point);
-    int xIndex = (int) transformed.getX0();
-    int yIndex = (int) transformed.getX1();
-    if (xIndex < 0 || xIndex >= width || yIndex < 0 || yIndex >= height) {
+    int xindex = (int) transformed.getX0();
+    int yindex = (int) transformed.getX1();
+    if (xindex < 0 || xindex >= width || yindex < 0 || yindex >= height) {
       return;
     }
-    canvas[xIndex][yIndex] = 1;
+    canvas[xindex][yindex] = 1;
   }
+
   /**
    * Gets the width of the canvas.
    *
@@ -100,7 +100,7 @@ public class ChaosCanvas {
   }
 
   /**
-   * transforms
+   * Transforms a Vector2D point to an index x and y value on our canvas.
    *
    * @param point The coordinates of the pixel (vector)
    * @return The transformed vector

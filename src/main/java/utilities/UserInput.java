@@ -27,6 +27,11 @@ public class UserInput {
     return input;
   }
 
+  /**
+   * Method to get the user input for number of steps.
+   *
+   * @return number of steps
+   */
   public int getNrOfSteps() {
     String input = lineScanner.nextLine();
     if (isValidInput.isValidNumberOfSteps(input)) {

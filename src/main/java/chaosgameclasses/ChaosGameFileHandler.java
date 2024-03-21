@@ -1,12 +1,12 @@
-package chaosGameClasses;
+package chaosgameclasses;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,6 +20,7 @@ public class ChaosGameFileHandler {
 
   /**
    * Reads the description of the chaos game from a file.
+   *
    * @param path The path to the file containing the description.
    * @return A list of strings containing the description of the chaos game.
    */
@@ -39,14 +40,14 @@ public class ChaosGameFileHandler {
       e.printStackTrace();
       throw new IllegalArgumentException("Error reading file");
     }
-    return null; // Consider returning an empty list instead of null to avoid potential NullPointerExceptions in the caller
+    return Collections.emptyList(); //Returns empty list to avoid nullpointerexception
   }
 
   /**
-   * Reads the description of the chaos game from a file, specifically for Julia transformation.
-   * The file should contain information about canvas coordinates and transforms.
+   * Reads the description of the chaos game from a file, specifically for Julia transformation. The
+   * file should contain information about canvas coordinates and transforms.
    *
-   * @param reader The reader to read the file.
+   * @param reader    The reader to read the file.
    * @param transform The type of transform to be used.
    * @return A list of strings containing the description of the chaos game.
    * @throws IllegalArgumentException If an error occurs while reading the file.
@@ -71,7 +72,7 @@ public class ChaosGameFileHandler {
    * Reads the description of the chaos game from a file, specifically for Affine transformation.
    * The file should contain information about canvas coordinates and transforms.
    *
-   * @param reader The reader to read the file.
+   * @param reader    The reader to read the file.
    * @param transform The type of transform to be used.
    * @return A list of strings containing the description of the chaos game.
    * @throws IllegalArgumentException If an error occurs while reading the file.
@@ -103,12 +104,13 @@ public class ChaosGameFileHandler {
   }
 
   /**
-   * Writes the canvas to a file. The canvas is a 2D array of integers, where 1 represents a pixel and 0 represents no pixel.
+   * Writes the canvas to a file. The canvas is a 2D array of integers, where 1 represents a pixel
+   * and 0 represents no pixel.
    *
    * @param values The canvas to be written to a file.
    */
   public static void writeToFile(int[][] values) {
-    try (BufferedWriter writer = Files.newBufferedWriter(Path.of("out.txt"))) {
+    try (BufferedWriter writer = Files.newBufferedWriter(Path.of("src/resources/out.txt"))) {
       for (int[] row : values) {
         for (int column : row) {
           if (column == 1) {
@@ -119,7 +121,6 @@ public class ChaosGameFileHandler {
         }
         writer.newLine();
       }
-      writer.close();
     } catch (IOException e) {
       e.printStackTrace();
       throw new IllegalArgumentException("Error writing to file");

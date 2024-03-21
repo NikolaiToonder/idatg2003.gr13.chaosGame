@@ -7,16 +7,6 @@ import java.lang.Math;
 
 class ComplexTest {
 
-<<<<<<< HEAD
-  @BeforeEach
-  void setUp() {
-  }
-
-  @AfterEach
-  void tearDown() {
-  }
-
-
   @Test
   void sqrtPositive() {
     double x0 = 0.3;
@@ -43,13 +33,13 @@ class ComplexTest {
     Complex complexTest = new Complex(x0, x1);
     Complex result = complexTest.subtract(complexTest);
     assertEquals(0.0, result.getX0());
-=======
+  }
   @Test
   void testSqrt_Positive() {
-    Complex complexTest = new Complex(4.0, 3.0);
+    Complex complexTest = new Complex(0.1, -0.4);
     Complex result = complexTest.sqrt();
-    assertEquals(2.1, Math.round(result.getReal()*10.0)/10.0);
-    assertEquals(0.7, Math.round(result.getImaginary()*10.0)/10.0);
+    assertEquals(0.5, Math.round(result.getReal()*10.0)/10.0);
+    assertEquals(-0.4, Math.round(result.getImaginary()*10.0)/10.0);
   }
 
 
@@ -95,6 +85,5 @@ class ComplexTest {
     Complex result = complex1.subtract(complex2);
     assertNotEquals(2.0, result.getReal());
     assertNotEquals(1.0, result.getImaginary());
->>>>>>> 568f985bce8e81ebecd0bcc8f621c844bb8e2d43
   }
 }
