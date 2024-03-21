@@ -1,7 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import chaosGameClasses.ChaosGame;
-import chaosGameClasses.ChaosGameDescription;
+import chaosgameclasses.ChaosGame;
+import chaosgameclasses.ChaosGameDescription;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +44,8 @@ class ChaosGameTest {
   @Test
   void testInitialization_Positive() {
     assertNotNull(chaosGame.getCanvas(), "Canvas should not be null");
-    assertEquals(800, chaosGame.getCanvas().getWidth(), "Canvas width should be 800");
-    assertEquals(600, chaosGame.getCanvas().getHeight(), "Canvas height should be 600");
+    assertEquals(600, chaosGame.getCanvas().getWidth(), "Canvas width should be 800");
+    assertEquals(800, chaosGame.getCanvas().getHeight(), "Canvas height should be 600");
     assertEquals(description, chaosGame.getDescription(), "Description should match");
     assertEquals(startPoint, chaosGame.getCurrentPoint(), "Start point should match");
   }

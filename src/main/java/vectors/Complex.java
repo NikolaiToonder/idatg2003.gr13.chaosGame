@@ -1,5 +1,9 @@
 package vectors;
 
+/**
+ * Class to represent a complex number, used in this case to also respresent a
+ * complex number in the julia transformation.
+ */
 public class Complex extends Vector2D {
 
   /**
@@ -15,25 +19,27 @@ public class Complex extends Vector2D {
 
   /**
    * Calculates the square root of a complex number.
+   *
    * @return new complex number that's the square root of the original
    */
   public Complex sqrt() {
-    double x0 = getX0();
-    double x1 = getX1();
-    double sqrtr = Math.sqrt(x0 * x0 + x1 * x1);
-    return new Complex(Math.sqrt(0.5 * (sqrtr + x0)), Math.signum(x1)
-        * Math.sqrt(0.5 * (sqrtr - x0)));
+    double realPart = Math.sqrt(
+        0.5 * (Math.sqrt(Math.pow(getReal(), 2) + Math.pow(getImaginary(), 2)) + getReal()));
+    double imaginaryPart = Math.signum(
+        0.5 * (Math.sqrt(Math.pow(getReal(), 2) + Math.pow(getImaginary(), 2)) - getReal()));
+    return new Complex(realPart, imaginaryPart);
   }
 
   /**
-   * Multiplies this complex number with another complex number.
-   * The multiplication operation is defined as: (a + bi) * (c + di) = (ac - bd) + (ad + bc)i
+   * Multiplies this complex number with another complex number. The multiplication operation is
+   * defined as: (a + bi) * (c + di) = (ac - bd) + (ad + bc)i
    *
    * @param other The other complex number to multiply with.
    * @return The product of this complex number and the other complex number.
    */
   public Complex add(Complex other) {
-    return new Complex(getReal() + other.getReal(), getImaginary() + other.getImaginary());
+    return new Complex(getReal() + other.getReal(),
+        getImaginary() + other.getImaginary());
   }
 
   /**
@@ -56,16 +62,16 @@ public class Complex extends Vector2D {
   }
 
   /**
-   * Subtracts a vector from this complex number, treating the real and imaginary parts as coordinates.
+   * Subtracts a vector from this complex number, treating the real and imaginary parts as
+   * coordinates.
    *
    * @param other The vector to subtract.
    * @return A new complex number representing the result of the subtraction.
    */
-
   @Override
   public Complex subtract(Vector2D other) {
-    return new Complex(this.getReal() - other.getX0(), getImaginary() -
-        other.getX1());
+    return new Complex(this.getReal() - other.getX0(), getImaginary()
+        - other.getX1());
   }
 
   /**
@@ -76,5 +82,9 @@ public class Complex extends Vector2D {
   @Override
   public Complex toComplex() {
     return this;
+  }
+
+  public Complex multiply(int sign) {
+    return new Complex(sign*getReal(), sign * getImaginary());
   }
 }

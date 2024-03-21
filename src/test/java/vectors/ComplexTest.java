@@ -37,10 +37,10 @@ class ComplexTest {
   }
   @Test
   void testSqrt_Positive() {
-    Complex complexTest = new Complex(4.0, 3.0);
+    Complex complexTest = new Complex(0.1, -0.4);
     Complex result = complexTest.sqrt();
-    assertEquals(2.1, Math.round(result.getReal()*10.0)/10.0);
-    assertEquals(0.7, Math.round(result.getImaginary()*10.0)/10.0);
+    assertEquals(0.5, Math.round(result.getReal()*10.0)/10.0);
+    assertEquals(-0.4, Math.round(result.getImaginary()*10.0)/10.0);
   }
 
 
