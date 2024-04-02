@@ -16,7 +16,7 @@ public class StartupPage extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Label label = new Label("Welcome to the Startup Page!");
+        Label label = new Label("Welcome to the Chaos Game!");
         label.setTextFill(Color.WHITE);
         label.setTranslateY(-100);
 
