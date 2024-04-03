@@ -25,16 +25,19 @@ public class SimulationView extends Pane {
     // Clear previous drawing
     gc.setFill(Color.LIGHTGRAY); // Set background color
     gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-    Vector2D oldValue = chaosGame.getCurrentPoint();
-    for (int i = 0; i < iterations; i++) {
-      chaosGame.runStep();
-      gc.setStroke(Color.BLACK);
-      Vector2D newValue = chaosGame.getCurrentPoint();
-      gc.strokeLine(oldValue.getX0(), oldValue.getX1(), newValue.getX0(), newValue.getX1());
-      System.out.println("Drawing line from " + oldValue.getX0() + " to " + newValue.getX0());
-    }
 
+    // Initialize chaosGame with vertices of an equilateral triangle
+    // ...
+
+    Vector2D point = chaosGame.getCurrentPoint(); // Random initial point within the triangle
+    gc.setFill(Color.BLACK);
+    for (int i = 0; i < iterations; i++) {
+      chaosGame.runStep(); // This should move the point halfway towards a randomly chosen vertex
+      point = chaosGame.getCanvas().getTransformed(); // Get the new point
+      gc.fillOval(point.getX0(), point.getX1(), 1, 1); // Draw a small dot at the new point
+    }
   }
+
 
   // Resize canvas with SimulationView
   @Override

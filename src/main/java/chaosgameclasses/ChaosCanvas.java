@@ -17,6 +17,7 @@ public class ChaosCanvas {
   private int height;
   private Vector2D minCoords;
   private Vector2D maxCoords;
+  private Vector2D transformed;
 
   /**
    * Constructor for the chaosGameClasses.ChaosCanvas class.
@@ -56,9 +57,9 @@ public class ChaosCanvas {
    * @param point The coordinates of the pixel (vector)
    */
   public void putPixel(Vector2D point) {
-    Vector2D transformed = transformCoordsToIndices(point);
-    int xindex = (int) transformed.getX0();
-    int yindex = (int) transformed.getX1();
+    this.transformed = transformCoordsToIndices(point);
+    int xindex = (int) this.transformed.getX0();
+    int yindex = (int) this.transformed.getX1();
     if (xindex < 0 || xindex >= width || yindex < 0 || yindex >= height) {
       return;
     }
@@ -116,6 +117,10 @@ public class ChaosCanvas {
 
     AffineTransform2D transformCoordsToIndices = new AffineTransform2D(a, b);
     return transformCoordsToIndices.transform(point);
+  }
+
+  public Vector2D getTransformed() {
+    return this.transformed;
   }
 
 

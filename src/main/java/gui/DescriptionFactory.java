@@ -14,7 +14,7 @@ public class DescriptionFactory {
         return createBarnsley();
       }
       case "Sierpinski" -> {
-        return createSierpinski();
+        return new ChaosGameDescription("src/resources/sierpinskiTriangle.txt");
       }
       default -> {
         return null;
@@ -22,20 +22,6 @@ public class DescriptionFactory {
     }
   }
 
-  private ChaosGameDescription createSierpinski() {
-    Matrix2x2 transformationMatrix1 = new Matrix2x2(.5, 0, 0, .5);
-    Matrix2x2 transformationMatrix2 = new Matrix2x2(.5, 0, 0, .5);
-    Matrix2x2 transformationMatrix3 = new Matrix2x2(.5, 0, 0, .5);
-    Vector2D transformationVector1 = new Vector2D(0, 0);
-    Vector2D transformationVector2 = new Vector2D(.25, .5);
-    Vector2D transformationVector3 = new Vector2D(.5, 0);
-
-    AffineTransform2D transformation1 = new AffineTransform2D(transformationMatrix1, transformationVector1);
-    AffineTransform2D transformation2 = new AffineTransform2D(transformationMatrix2, transformationVector2);
-    AffineTransform2D transformation3 = new AffineTransform2D(transformationMatrix3, transformationVector2);
-    List<Transform2D> affineTransforms = List.of(transformation1, transformation2, transformation3);
-    return new chaosgameclasses.ChaosGameDescription(affineTransforms, new Vector2D(0,0), new Vector2D(1,1));
-  }
 
   private ChaosGameDescription createBarnsley() {
     Matrix2x2 transformationMatrix1 = new Matrix2x2(0, 0, 0, 0.16);
