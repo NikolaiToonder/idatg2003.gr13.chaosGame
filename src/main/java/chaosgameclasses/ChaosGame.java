@@ -1,5 +1,9 @@
 package chaosgameclasses;
 
+import controller.ChaosGameObserver;
+import controller.Observer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import transformations.Transform2D;
 import utilities.Printer;
@@ -20,6 +24,7 @@ public class ChaosGame {
   private final UserInput userInput = new UserInput();
   private boolean closeApp = false;
   private final Printer printer = new Printer();
+  private List<Observer> observers = new ArrayList<>();
 
 
   /**
@@ -147,7 +152,7 @@ public class ChaosGame {
       printer.errorMessage();
 
     } else {
-      this.currentPoint = description.getMinCoords();
+      this.currentPoint = new Vector2D(0.5,0.5);
       for (int i = 0; i < steps; i++) {
         int randomIndex = this.random.nextInt(description.getTransforms().size());
         Transform2D transform = description.getTransforms().get(randomIndex);
@@ -157,5 +162,17 @@ public class ChaosGame {
       printer.printCanvasToTerminal(this.canvas);
       this.description.handleValuesForOutprint(this.canvas.getCanvasArray());
     }
+  }
+  public void runStep() {
+    int randomIndex = this.random.nextInt(description.getTransforms().size());
+    Transform2D transform = description.getTransforms().get(randomIndex);
+    this.currentPoint = transform.transform(this.currentPoint);
+    this.canvas.putPixel(currentPoint);
+  }
+  public void addSubscriber(ChaosGameObserver observer) {
+    this.observers.add(observer);
+  }
+  public void ClearCanvas() {
+    this.canvas.clear();
   }
 }

@@ -1,5 +1,4 @@
 package gui;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -13,6 +12,8 @@ import javafx.stage.Stage;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class StartupPage extends Application {
+    Scene chaosGameScene = new Scene(new ChaosGameView().createContent(), 800, 500); // createContent() should return the root node for ChaosGameView
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -30,42 +31,35 @@ public class StartupPage extends Application {
         Color[] textColors = {Color.WHITE, Color.BLACK};
         AtomicInteger currentIndex = new AtomicInteger(0);
 
-
-        startButton.setOnAction(e -> {
-            /*    primaryStage.close();
-            new ChaosGamePage().start(new Stage());
-
-             */
-            System.out.println("WORK IN PROGRESS");
-        });
-
-        exitButton.setOnAction(e -> {
-            Platform.exit();
-        });
-
-
-
+        // Set onAction for changeTheme button
         changeTheme.setOnAction(e -> {
-            String[] backgroundColors = {"#2b2d31", "#F3F3F3"}; // <-- Hex values for the background colors :)
+            String[] backgroundColors = {"#2b2d31", "#F3F3F3"};
 
             currentIndex.set((currentIndex.get() + 1) % backgroundColors.length);
             String newColor = backgroundColors[currentIndex.get()];
             primaryStage.getScene().getRoot().setStyle("-fx-background-color: " + newColor + ";");
             label.setTextFill(textColors[currentIndex.get()]);
-            startButton.setTextFill(textColors[currentIndex.get()]);
-            exitButton.setTextFill(textColors[currentIndex.get()]);
         });
+
+        // Set onAction for startButton
+        startButton.setOnAction(e -> {
+            System.out.println("Starting the program...");
+
+            primaryStage.setScene(chaosGameScene);
+            primaryStage.show();
+
+            System.out.println("WORK IN PROGRESS");
+        });
+
+        // Set onAction for exitButton
+        exitButton.setOnAction(e -> Platform.exit());
 
         VBox vBox = new VBox(10);
         vBox.setAlignment(Pos.CENTER);
-        vBox.getChildren().addAll(label, startButton, exitButton);
-
-        VBox vBox2 = new VBox(10);
-        vBox2.setAlignment(Pos.BOTTOM_LEFT);
-        vBox2.getChildren().addAll(changeTheme);
+        vBox.getChildren().addAll(label, startButton, exitButton, changeTheme); // Added changeTheme here for simplicity
 
         StackPane root = new StackPane();
-        root.getChildren().addAll(vBox, vBox2);
+        root.getChildren().addAll(vBox);
         root.setStyle("-fx-background-color: #2b2d31;");
         Scene scene = new Scene(root, 800, 500);
 

@@ -23,16 +23,14 @@ public class Complex extends Vector2D {
    * @return new complex number that's the square root of the original
    */
   public Complex sqrt() {
-    double realPart = Math.sqrt(
-        0.5 * (Math.sqrt(Math.pow(getReal(), 2) + Math.pow(getImaginary(), 2)) + getReal()));
-    double imaginaryPart = Math.signum(
-        0.5 * (Math.sqrt(Math.pow(getReal(), 2) + Math.pow(getImaginary(), 2)) - getReal()));
+    double magnitude = Math.sqrt(Math.pow(getReal(), 2) + Math.pow(getImaginary(), 2));
+    double realPart = Math.sqrt((magnitude + getReal()) / 2);
+    double imaginaryPart = Math.signum(getImaginary()) * Math.sqrt((magnitude - getReal()) / 2);
     return new Complex(realPart, imaginaryPart);
   }
 
   /**
-   * Multiplies this complex number with another complex number. The multiplication operation is
-   * defined as: (a + bi) * (c + di) = (ac - bd) + (ad + bc)i
+   * Adds a complex number to this complex number.
    *
    * @param other The other complex number to multiply with.
    * @return The product of this complex number and the other complex number.
@@ -56,7 +54,6 @@ public class Complex extends Vector2D {
    *
    * @return The imaginary part of this complex number.
    */
-
   public double getImaginary() {
     return getX1();
   }
