@@ -29,11 +29,21 @@ public class ChaosCanvas {
    */
   public ChaosCanvas(int height, int width, Vector2D minCoords, Vector2D maxCoords) {
 
-    this.width = width;
-    this.height = height;
+    setWidth(width);
+    setHeight(height);
     this.minCoords = minCoords;
     this.maxCoords = maxCoords;
     this.canvas = new int[height][width];
+  }
+
+  public void setWidth(int width) {
+    this.width = width;
+    this.canvas = new int[width][height];
+  }
+
+  public void setHeight(int height) {
+    this.height = height;
+    this.canvas = new int[width][height];
   }
 
   /**
@@ -58,8 +68,8 @@ public class ChaosCanvas {
    */
   public void putPixel(Vector2D point) {
     this.transformed = transformCoordsToIndices(point);
-    int xindex = (int) this.transformed.getX0();
-    int yindex = (int) this.transformed.getX1();
+    int xindex = (int) transformed.getX0();
+    int yindex = (int) transformed.getX1();
     if (xindex < 0 || xindex >= width || yindex < 0 || yindex >= height) {
       return;
     }
@@ -97,7 +107,7 @@ public class ChaosCanvas {
    * Clears the canvas.
    */
   public void clear() {
-    canvas = new int[width][height];
+    this.canvas = new int[width][height];
   }
 
   /**
