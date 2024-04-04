@@ -4,7 +4,6 @@ import chaosgameclasses.ChaosGame;
 import controller.ChaosGameObserver;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
