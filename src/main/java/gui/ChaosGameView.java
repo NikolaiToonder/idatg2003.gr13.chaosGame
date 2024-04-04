@@ -16,7 +16,7 @@ public class ChaosGameView {
   private SimulationView simulationView;
   DescriptionFactory descriptionFactory = new DescriptionFactory();
   ChaosGameObserver chaosGameObserver = new ChaosGameObserver();
-  ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Barnsley"),
+  ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"),
       100,300, new Vector2D(0.5,0.5));
 
 

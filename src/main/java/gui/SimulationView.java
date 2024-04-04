@@ -17,7 +17,7 @@ public class SimulationView extends Pane {
 
   public SimulationView() {
     // Initialize the canvas with square dimensions
-    canvas = new Canvas(500,500); // Set initial size to a square
+    canvas = new Canvas(495, 495); // Set initial size to a square
     this.getChildren().add(canvas); // Add canvas to pane
 
     // Apply styles to the SimulationView for border and background
