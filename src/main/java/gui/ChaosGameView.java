@@ -21,7 +21,7 @@ public class ChaosGameView {
   private SimulationView simulationView;
   private DescriptionFactory descriptionFactory = new DescriptionFactory();
   private ChaosGameObserver chaosGameObserver = new ChaosGameObserver();
-  private ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"), 500,
+  private ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Barnsley"), 500,
       500, new Vector2D(0.5, 0.5));
   private String backgroundColor;
 
@@ -43,7 +43,7 @@ public class ChaosGameView {
     Label zoomInLabel = new Label("Zoom In");
     zoomInLabel.setStyle("-fx-text-fill: white;");
 
-    Slider iterationSlider = new Slider(100, 100000, 1000);
+    Slider iterationSlider = new Slider(100, 1000000, 1000);
     Slider zoomInSlider = new Slider(0.1, 1, 0.5);
 
     // Configure your slider and add listeners to update the fractal view

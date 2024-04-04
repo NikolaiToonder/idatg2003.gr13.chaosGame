@@ -37,6 +37,6 @@ public class DescriptionFactory {
     AffineTransform2D transformation3 = new AffineTransform2D(transformationMatrix3, transformationVector2);
     AffineTransform2D transformation4 = new AffineTransform2D(transformationMatrix4, transformationVector3);
     List<Transform2D> affineTransforms = List.of(transformation1, transformation2, transformation3, transformation4);
-    return new chaosgameclasses.ChaosGameDescription(affineTransforms, new Vector2D(-2, -2), new Vector2D(10, 10));
+    return new chaosgameclasses.ChaosGameDescription(affineTransforms, new Vector2D(-2.65, 0), new Vector2D(2.65, 10));
   }
 }

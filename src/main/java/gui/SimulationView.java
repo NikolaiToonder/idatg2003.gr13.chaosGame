@@ -1,12 +1,14 @@
 package gui;
 
 import chaosgameclasses.ChaosGame;
+import java.util.HexFormat;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import vectors.Vector2D;
 
 public class SimulationView extends Pane {
@@ -17,11 +19,11 @@ public class SimulationView extends Pane {
 
   public SimulationView() {
     // Initialize the canvas with square dimensions
-    canvas = new Canvas(495, 495); // Set initial size to a square
+    canvas = new Canvas(500, 500); // Set initial size to a square
     this.getChildren().add(canvas); // Add canvas to pane
 
     // Apply styles to the SimulationView for border and background
-    this.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-background-color: white;");
+    this.setStyle("-fx-background-color: #2b2d31;");
 
     // Ensure the SimulationView itself is prepared to maintain a square shape
     // Here, we simply start with a square configuration, but see Step 1 for dynamic resizing
@@ -35,21 +37,21 @@ public class SimulationView extends Pane {
 
 
   public void updateSimulationView(ChaosGame chaosGame, Number iterations) {
-    System.out.println(chaosGame.getCanvas().getHeight());
     drawFractal(chaosGame, iterations.intValue());
   }
 
   private void drawFractal(ChaosGame chaosGame, int iterations) {
     gc = canvas.getGraphicsContext2D();
 
-    gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight()); // Clear the canvas
+    gc.setFill(Paint.valueOf("#2b2d31"));
+    gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
     Vector2D point; // Random initial point within the triangle
-    gc.setFill(Color.BLACK);
+    gc.setFill(Color.WHITE);
 
     for (int i = 0; i < iterations; i++) {
       chaosGame.runStep();
       point = chaosGame.getCanvas().getTransformed();
-      gc.fillOval(point.getX0(), point.getX1(), 1, 1);
+      gc.fillOval(point.getX1(), point.getX0(), 1, 1);
     }
   }
 
