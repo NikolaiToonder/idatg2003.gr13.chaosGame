@@ -159,7 +159,6 @@ public class ChaosGame {
         this.currentPoint = transform.transform(this.currentPoint);
         this.canvas.putPixel(currentPoint);
       }
-      printer.printCanvasToTerminal(this.canvas);
       this.description.handleValuesForOutprint(this.canvas.getCanvasArray());
     }
   }
@@ -172,7 +171,7 @@ public class ChaosGame {
   public void addSubscriber(ChaosGameObserver observer) {
     this.observers.add(observer);
   }
-  public void ClearCanvas() {
+  public void clearCanvas() {
     this.canvas.clear();
   }
 }

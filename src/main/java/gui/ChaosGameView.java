@@ -1,18 +1,22 @@
 package gui;
 
+
 import chaosgameclasses.ChaosGame;
 import controller.ChaosGameObserver;
 import javafx.geometry.Pos;
+
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import vectors.Vector2D;
 
 public class ChaosGameView {
+
 
   private SimulationView simulationView;
   private DescriptionFactory descriptionFactory = new DescriptionFactory();
@@ -28,8 +32,10 @@ public class ChaosGameView {
   public Parent createContent() {
     simulationView = new SimulationView(); // Initialize SimulationView
 
-    BorderPane root = new BorderPane();
-    root.setCenter(simulationView); // Use SimulationView as the center
+    // Wrap SimulationView in another pane for padding if necessary
+    StackPane simulationWrapper = new StackPane(simulationView);
+    simulationWrapper.setMaxHeight(500); // Set a maximum height for the simulation view (optional)
+    simulationWrapper.setMaxWidth(500);
 
     // Setup sliders and controls
     Label iterationsLabel = new Label("Iterations");
@@ -49,6 +55,9 @@ public class ChaosGameView {
 
     VBox controlsPane = new VBox(iterationsLabel, iterationSlider, zoomInLabel,
         zoomInSlider); // Add all controls here
+    BorderPane root = new BorderPane();
+    root.setCenter(simulationWrapper); // Use the wrapper as the center to maintain padding and static size
+
     root.setRight(controlsPane);
 
     // Back to Menu button

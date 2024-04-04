@@ -54,12 +54,8 @@ public class StartupPage extends Application {
 
         // Set onAction for startButton
         startButton.setOnAction(e -> {
-            System.out.println("Starting the program...");
-
             primaryStage.setScene(chaosGameScene);
             primaryStage.show();
-
-            System.out.println("PROGRAM RUNNING...");
         });
 
         // Set onAction for exitButton
