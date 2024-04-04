@@ -24,7 +24,6 @@ public class ChaosGameView {
 
     // Wrap SimulationView in another pane for padding if necessary
     StackPane simulationWrapper = new StackPane(simulationView);
-    simulationWrapper.setPadding(new Insets(10)); // Adds padding around the simulation view
     simulationWrapper.setMaxHeight(500); // Set a maximum height for the simulation view (optional)
     simulationWrapper.setMaxWidth(500);
 
