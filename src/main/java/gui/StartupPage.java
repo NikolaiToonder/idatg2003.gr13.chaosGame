@@ -24,8 +24,10 @@ public class StartupPage extends Application {
         Button exitButton = new Button("Exit program");
         Button changeTheme = new Button("Change theme");
 
+
         startButton.setStyle("-fx-background-color: #CCCCCC;");
         exitButton.setStyle("-fx-background-color: #CCCCCC;");
+
 
         Color[] textColors = {Color.WHITE, Color.BLACK};
         AtomicInteger currentIndex = new AtomicInteger(0);
@@ -34,7 +36,6 @@ public class StartupPage extends Application {
         startButton.setOnAction(e -> {
             /*    primaryStage.close();
             new ChaosGamePage().start(new Stage());
-
              */
             System.out.println("WORK IN PROGRESS");
         });
