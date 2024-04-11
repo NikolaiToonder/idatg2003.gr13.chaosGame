@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -50,6 +51,7 @@ public class ChaosGameView {
 
     Slider iterationSlider = new Slider(100, 100000, 50000);
     Slider zoomSlider = new Slider(1, 10, 1);
+    simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
 
     // Configure your slider and add listeners to update the fractal view
     iterationSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -63,8 +65,9 @@ public class ChaosGameView {
       simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
     });
 
+
     VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider); // Add all controls here
-    controlsPane.setAlignment(Pos.CENTER_RIGHT); // Align controls to the right
+    controlsPane.setAlignment(Pos.CENTER); // Align controls to the right
 
     // Back to Menu button
     Button backToMenuButton = new Button("Back to Menu");
@@ -74,16 +77,17 @@ public class ChaosGameView {
     VBox backToMenuPane = new VBox(backToMenuButton); // VBox containing back to menu button
     backToMenuPane.setAlignment(Pos.BOTTOM_RIGHT); // Align the button to the bottom right
 
-    // Create a BorderPane to arrange the components
     BorderPane root = new BorderPane();
+    AnchorPane anchor = new AnchorPane(root);
     root.setCenter(simulationView); // Set the simulation view in the center
     root.setRight(controlsPane); // Set the controls pane on the right
     root.setBottom(backToMenuPane); // Set the back to menu button at the bottom
 
+
     // Set background color
     root.setStyle("-fx-background-color: " + backgroundColor + ";");
 
-    return root;
+    return anchor;
   }
 
 }
