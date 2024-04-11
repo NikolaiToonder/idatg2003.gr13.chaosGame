@@ -1,8 +1,8 @@
 package gui;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,72 +11,70 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
-public class StartupPage extends Application {
+/**
+ * Main Menu for the Chaos Game program.
+ */
+public class StartupPage {
+    private Consumer<Stage> onStartGame;
+    private Stage primaryStage;
+    private Label label;
+    private VBox vBox;
+    private Color[] textColors = {Color.WHITE, Color.BLACK};
+    private AtomicInteger currentIndex = new AtomicInteger(0);
+    private static final String DEFAULT_BACKGROUND_COLOR = "#2b2d31"; // Default background color
 
-    boolean isBackgroundDark;
-    static String startupBackgroundColor = "#2b2d31"; // Default background color for StartupPage
+    public StartupPage(Consumer<Stage> onStartGame, Stage primaryStage) {
+        this.onStartGame = onStartGame;
+        this.primaryStage = primaryStage;
+        setupUI();
+    }
 
-    Scene chaosGameScene = new Scene(new ChaosGameView(startupBackgroundColor).createContent(), 800, 500);
-
-    @Override
-    public void start(Stage primaryStage) {
-        Label label = new Label("Welcome to the Chaos Game!");
+    private void setupUI() {
+        label = new Label("Welcome to the Chaos Game!");
         label.setTextFill(Color.WHITE);
-        label.setTranslateY(-100);
-
-
         label.setTranslateY(-100);
 
         Button startButton = new Button("Start program");
         Button exitButton = new Button("Exit program");
         Button changeTheme = new Button("Change theme");
 
+        styleButtons(startButton, exitButton, changeTheme);
+        configureButtons(startButton, exitButton, changeTheme);
 
-
-        startButton.setStyle("-fx-background-color: #58b719;");
-        exitButton.setStyle("-fx-background-color: #f55353;");
-        changeTheme.setStyle("-fx-background-color: #CCCCCC;");
-
-        Color[] textColors = {Color.WHITE, Color.BLACK};
-        AtomicInteger currentIndex = new AtomicInteger(0);
-
-        // Set onAction for changeTheme button
-        changeTheme.setOnAction(e -> {
-            String[] backgroundColors = {"#2b2d31", "#F3F3F3"};
-            currentIndex.set((currentIndex.get() + 1) % backgroundColors.length);
-            String newColor = backgroundColors[currentIndex.get()];
-            primaryStage.getScene().getRoot().setStyle("-fx-background-color: " + newColor + ";");
-            label.setTextFill(textColors[currentIndex.get()]);
-
-            isBackgroundDark = newColor.equals("#2b2d31");
-        });
-
-        // Set onAction for startButton
-        startButton.setOnAction(e -> {
-            primaryStage.setScene(chaosGameScene);
-            primaryStage.show();
-        });
-
-        // Set onAction for exitButton
-        exitButton.setOnAction(e -> Platform.exit());
-
-        VBox vBox = new VBox(10);
+        vBox = new VBox(10, label, startButton, changeTheme, exitButton);
         vBox.setAlignment(Pos.CENTER);
-        vBox.getChildren().addAll(label, startButton, changeTheme, exitButton); // Added changeTheme here for simplicity
-        StackPane root = new StackPane();
-        root.getChildren().addAll(vBox);
-        root.setStyle("-fx-background-color: " + startupBackgroundColor + ";"); // Set the same theme as StartupPage
-        Scene scene = new Scene(root, 800, 500);
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("ChaosGame");
-        primaryStage.show();
+        vBox.setStyle("-fx-background-color: " + DEFAULT_BACKGROUND_COLOR + ";");
     }
 
+    public Parent createContent() {
+        StackPane root = new StackPane(vBox);
+        return root;
+    }
 
+    /**
+     * Takes in a list of buttons and styles them.
+     * The syntax in parameter could be written differently.
+     * @param buttons list of buttons to style
+     */
+    private void styleButtons(Button... buttons) {
+        buttons[0].setStyle("-fx-background-color: #58b719;"); // startButton
+        buttons[1].setStyle("-fx-background-color: #f55353;"); // exitButton
+        buttons[2].setStyle("-fx-background-color: #CCCCCC;"); // changeTheme
+    }
 
-    public static void main(String[] args) {
-        launch(args);
+    private void configureButtons(Button startButton, Button exitButton, Button changeTheme) {
+        changeTheme.setOnAction(e -> toggleTheme());
+        startButton.setOnAction(e -> onStartGame.accept(primaryStage));
+        exitButton.setOnAction(e -> Platform.exit());
+    }
+
+    private void toggleTheme() {
+        String[] backgroundColors = {"#2b2d31", "#F3F3F3"};
+        currentIndex.set((currentIndex.get() + 1) % backgroundColors.length);
+        String newColor = backgroundColors[currentIndex.get()];
+        vBox.setStyle("-fx-background-color: " + newColor + ";");
+        label.setTextFill(textColors[currentIndex.get()]);
     }
 }

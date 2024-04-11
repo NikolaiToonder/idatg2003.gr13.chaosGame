@@ -11,7 +11,7 @@ public class DescriptionFactory {
   public ChaosGameDescription createAffine2D(String chosenFractal) {
     switch (chosenFractal) {
       case "Barnsley" -> {
-        return createBarnsley();
+        return new ChaosGameDescription("src/resources/barnsleyTransform.txt");
       }
       case "Sierpinski" -> {
         return new ChaosGameDescription("src/resources/sierpinskiTriangle.txt");

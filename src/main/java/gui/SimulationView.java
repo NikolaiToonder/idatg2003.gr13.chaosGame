@@ -11,6 +11,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import vectors.Vector2D;
 
+
+/**
+ * JavaFX class for the actual simulation view. Will be used with ChaosGameView to view the
+ * chaos game.
+ */
 public class SimulationView extends Pane {
   private Canvas canvas;
   private GraphicsContext gc;
