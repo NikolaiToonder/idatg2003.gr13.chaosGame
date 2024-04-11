@@ -18,6 +18,8 @@ public class ChaosCanvas {
   private Vector2D minCoords;
   private Vector2D maxCoords;
   private Vector2D transformed;
+  private final Vector2D originalMinCoords;
+  private final Vector2D originalMaxCoords;
 
   /**
    * Constructor for the chaosGameClasses.ChaosCanvas class.
@@ -31,7 +33,9 @@ public class ChaosCanvas {
 
     setWidth(width);
     setHeight(height);
+    this.originalMinCoords = minCoords;
     this.minCoords = minCoords;
+    this.originalMaxCoords = maxCoords;
     this.maxCoords = maxCoords;
     this.canvas = new int[height][width];
   }
@@ -133,5 +137,8 @@ public class ChaosCanvas {
     return this.transformed;
   }
 
-
+  public void zoom(double scalar) {
+    this.minCoords = this.originalMinCoords.multiply(1/scalar);
+    this.maxCoords = this.originalMaxCoords.multiply(1/scalar);
+  }
 }

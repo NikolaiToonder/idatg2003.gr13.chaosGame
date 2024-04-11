@@ -28,8 +28,9 @@ public class ChaosGameView {
   private SimulationView simulationView;
   private DescriptionFactory descriptionFactory = new DescriptionFactory();
   private ChaosGameObserver chaosGameObserver = new ChaosGameObserver();
-  private ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinskigit"), 500,
-      500, new Vector2D(0.5, 0.5));
+  private Vector2D standardizedView = new Vector2D(0.5, 0.5);
+  private ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"), 500,
+      500, standardizedView);
   private String backgroundColor;
   private Consumer<Stage> backToMenuAction;
 
@@ -48,7 +49,7 @@ public class ChaosGameView {
     zoomInLabel.setStyle("-fx-text-fill: white;");
 
     Slider iterationSlider = new Slider(100, 100000, 50000);
-    Slider zoomInSlider = new Slider(0.1, 1, 0.5);
+    Slider zoomSlider = new Slider(1, 10, 1);
 
     // Configure your slider and add listeners to update the fractal view
     iterationSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -56,7 +57,13 @@ public class ChaosGameView {
       simulationView.updateSimulationView(chaosGame, newValue.intValue()); // Call to update the simulation view
     });
 
-    VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomInSlider); // Add all controls here
+    zoomSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+      zoomInLabel.setText("Zoom In: " + Math.round(newValue.doubleValue()) + "x");
+      chaosGame.zoom(newValue.doubleValue());
+      simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
+    });
+
+    VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider); // Add all controls here
     controlsPane.setAlignment(Pos.CENTER_RIGHT); // Align controls to the right
 
     // Back to Menu button

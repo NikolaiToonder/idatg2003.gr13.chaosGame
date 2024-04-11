@@ -174,4 +174,7 @@ public class ChaosGame {
   public void clearCanvas() {
     this.canvas.clear();
   }
+  public void zoom(double scalar) {
+    this.canvas.zoom(scalar);
+  }
 }
