@@ -41,7 +41,7 @@ public class ChaosGameView {
   }
 
   public Parent createContent(Stage primaryStage) {
-    simulationView = new SimulationView(); // Initialize SimulationView
+    simulationView = new SimulationView();
 
     // Setup sliders and controls
     Label iterationsLabel = new Label("Iterations: ");

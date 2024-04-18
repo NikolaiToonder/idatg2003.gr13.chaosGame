@@ -5,6 +5,7 @@ import java.util.HexFormat;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -24,7 +25,7 @@ public class SimulationView extends Pane {
 
   public SimulationView() {
     // Initialize the canvas with square dimensions
-    canvas = new Canvas(500, 500); // Set initial size to a square
+    canvas = new Canvas(550, 650); // Set initial size to a square
     this.getChildren().add(canvas); // Add canvas to pane
 
     // Apply styles to the SimulationView for border and background
