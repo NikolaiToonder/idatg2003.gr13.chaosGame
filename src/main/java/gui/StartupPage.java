@@ -74,6 +74,9 @@ public class StartupPage extends Application {
         primaryStage.show();
     }
 
+    public Scene getNewChaosGameScene() {
+        return chaosGameScene;
+    }
 
 
     public static void main(String[] args) {

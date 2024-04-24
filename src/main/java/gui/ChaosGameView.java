@@ -43,7 +43,7 @@ public class ChaosGameView {
     Label zoomInLabel = new Label("Zoom In");
     zoomInLabel.setStyle("-fx-text-fill: white;");
 
-    Slider iterationSlider = new Slider(100, 1000000, 1000);
+    Slider iterationSlider = new Slider(100, 100000, 1000);
     Slider zoomInSlider = new Slider(0.1, 1, 0.5);
 
     // Configure your slider and add listeners to update the fractal view
@@ -63,7 +63,8 @@ public class ChaosGameView {
     // Back to Menu button
     Button backToMenuButton = new Button("Back to Menu");
     backToMenuButton.setOnAction(e -> {
-
+      Stage stage = (Stage) backToMenuButton.getScene().getWindow();
+      stage.setScene(new StartupPage().getNewChaosGameScene());
       System.out.println("Back to menu button clicked!");
     });
 
