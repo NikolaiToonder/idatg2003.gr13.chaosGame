@@ -14,8 +14,8 @@ public class MainApp extends Application {
   @Override
   public void start(Stage primaryStage) {
     primaryStage.setScene(createStartupScene(primaryStage));
-    primaryStage.setHeight(700);
-    primaryStage.setWidth(700);
+    primaryStage.setHeight(750);
+    primaryStage.setWidth(760);
     primaryStage.show();
   }
 

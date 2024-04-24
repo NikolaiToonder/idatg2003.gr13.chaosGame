@@ -3,20 +3,28 @@ package gui;
 
 import chaosgameclasses.ChaosGame;
 import controller.ChaosGameObserver;
+import java.util.List;
 import java.util.function.Consumer;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 import javafx.scene.Parent;
-import javafx.scene.Scene;
+
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.HBox;
+
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import matrix.Matrix2x2;
+import transformations.Transform2D;
 import vectors.Vector2D;
 
 
@@ -28,12 +36,14 @@ public class ChaosGameView {
 
   private SimulationView simulationView;
   private DescriptionFactory descriptionFactory = new DescriptionFactory();
-  private ChaosGameObserver chaosGameObserver = new ChaosGameObserver();
   private Vector2D standardizedView = new Vector2D(0.5, 0.5);
   private ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"), 500,
       500, standardizedView);
   private String backgroundColor;
   private Consumer<Stage> backToMenuAction;
+  ChoiceBox<String> choiceBoxMatrix = new ChoiceBox<>();
+  private int currentTransformation = 1;
+  HBox textFieldsBox = createTextFieldsBox();
 
   public ChaosGameView(String backgroundColor, Consumer<Stage> backToMenuAction) {
     this.backgroundColor = backgroundColor;
@@ -42,6 +52,8 @@ public class ChaosGameView {
 
   public Parent createContent(Stage primaryStage) {
     simulationView = new SimulationView();
+    updateChoiceBoxMatrix();
+    updateTextFields();
 
     // Setup sliders and controls
     Label iterationsLabel = new Label("Iterations: ");
@@ -51,6 +63,14 @@ public class ChaosGameView {
 
     Slider iterationSlider = new Slider(100, 100000, 50000);
     Slider zoomSlider = new Slider(1, 10, 1);
+    ChoiceBox<String> choiceBox = new ChoiceBox<>();
+
+    // Add items to the ChoiceBox
+    choiceBox.getItems().addAll("Julia", "Sierpinski", "Barnsley");
+
+    // Set a default selection
+    choiceBox.setValue("Sierpinski");
+
     simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
 
     // Configure your slider and add listeners to update the fractal view
@@ -65,29 +85,103 @@ public class ChaosGameView {
       simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
     });
 
+    choiceBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+      this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(newValue), 500, 500,
+          standardizedView);
+      chaosGame.zoom(zoomSlider.getValue());
+      updateChoiceBoxMatrix();
+      simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
+    });
 
-    VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider); // Add all controls here
+    choiceBoxMatrix.valueProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue != null) {
+        String[] parts = newValue.split(" ");
+        if (parts.length > 1) {
+          this.currentTransformation = Integer.parseInt(parts[1]);
+          updateTextFields();
+        }
+      }
+    });
+
+
+
+    VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox); // Add all controls here
     controlsPane.setAlignment(Pos.CENTER); // Align controls to the right
+    controlsPane.setPrefHeight(300);
 
     // Back to Menu button
     Button backToMenuButton = new Button("Back to Menu");
     backToMenuButton.setOnAction(e -> backToMenuAction.accept(primaryStage));
 
 
-    VBox backToMenuPane = new VBox(backToMenuButton); // VBox containing back to menu button
-    backToMenuPane.setAlignment(Pos.BOTTOM_RIGHT); // Align the button to the bottom right
+    textFieldsBox.setPadding(new Insets(20, 20, 20, 20));
+
 
     BorderPane root = new BorderPane();
     AnchorPane anchor = new AnchorPane(root);
     root.setCenter(simulationView); // Set the simulation view in the center
     root.setRight(controlsPane); // Set the controls pane on the right
-    root.setBottom(backToMenuPane); // Set the back to menu button at the bottom
+    root.setBottom(textFieldsBox);// Set the back to menu button at the bottom
 
-
-    // Set background color
     root.setStyle("-fx-background-color: " + backgroundColor + ";");
 
     return anchor;
   }
 
+  private TextField createTextField(String labelText) {
+    TextField textField = new TextField();
+    textField.setPromptText(labelText);
+    return textField;
+  }
+
+  private HBox createTextFieldsBox() {
+    TextField a00TextField = createTextField("a00");
+    TextField a01TextField = createTextField("a01");
+    TextField a10TextField = createTextField("a10");
+    TextField a11TextField = createTextField("a11");
+
+    // Create an HBox to hold the text fields
+    HBox textFieldsBox = new HBox(10);
+    textFieldsBox.getChildren().addAll(a00TextField, a01TextField, a10TextField, a11TextField, this.choiceBoxMatrix);
+    textFieldsBox.setPadding(new Insets(0, 0, 20, 0));
+    return textFieldsBox;
+  }
+
+
+  private void updateChoiceBoxMatrix() {
+    this.choiceBoxMatrix.getItems().clear();
+    for (int i = 0; i < this.chaosGame.getDescription().getNumberOfTransforms(); i++) {
+      choiceBoxMatrix.getItems().add("Matrix " + (i+1));
+    }
+    choiceBoxMatrix.setValue("Matrix 1");
+    this.currentTransformation = 1;
+  }
+
+  private void updateTextFields() {
+    List<Matrix2x2> matrices = this.chaosGame.getDescription().getMatrixList();
+    List<Vector2D> vectors = this.chaosGame.getDescription().getVectorList();
+
+    Matrix2x2 matrix = matrices.get(currentTransformation - 1);
+    Vector2D vector = vectors.get(currentTransformation - 1);
+
+    textFieldsBox.getChildren().forEach(node -> {
+      if (node instanceof TextField) {
+        TextField textField = (TextField) node;
+        if (textField.getPromptText().equals("a00")) {
+          textField.setText(String.valueOf(matrix.getA00()));
+        } else if (textField.getPromptText().equals("a01")) {
+          textField.setText(String.valueOf(matrix.getA01()));
+        } else if (textField.getPromptText().equals("a10")) {
+          textField.setText(String.valueOf(matrix.getA10()));
+        } else if (textField.getPromptText().equals("a11")) {
+          textField.setText(String.valueOf(matrix.getA11()));
+        }
+      }
+    });
+
+  }
+
+  public int getCurrentTransformation() {
+    return currentTransformation;
+  }
 }
