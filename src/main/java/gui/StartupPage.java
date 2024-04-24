@@ -24,13 +24,14 @@ public class StartupPage {
   private Label label;
   private VBox vBox;
   private Color[] textColors = {Color.WHITE, Color.BLACK};
-  private AtomicInteger currentIndex = new AtomicInteger(0);
+  private static AtomicInteger currentIndex = new AtomicInteger(0);
   private static final String DEFAULT_BACKGROUND_COLOR = "#2b2d31"; // Default background color
 
   public StartupPage(Consumer<Stage> onStartGame, Stage primaryStage) {
     this.onStartGame = onStartGame;
     this.primaryStage = primaryStage;
     setupUI();
+    //primaryStage.setResizable(false);
   }
 
   private void setupUI() {
@@ -47,7 +48,14 @@ public class StartupPage {
 
     vBox = new VBox(10, label, startButton, changeTheme, exitButton);
     vBox.setAlignment(Pos.CENTER);
-    vBox.setStyle("-fx-background-color: " + DEFAULT_BACKGROUND_COLOR + ";");
+
+    if (isDarkMode()
+        || currentIndex.get() == 0) {
+      vBox.setStyle("-fx-background-color: " + DEFAULT_BACKGROUND_COLOR + ";");
+    } else {
+      vBox.setStyle("-fx-background-color: #F3F3F3;");
+    }
+
   }
 
   public Parent createContent() {
@@ -59,6 +67,10 @@ public class StartupPage {
     AnchorPane.setRightAnchor(vBox, 0.0);
     AnchorPane.setBottomAnchor(vBox, 0.0);
     AnchorPane.setLeftAnchor(vBox, 0.0);
+
+    // Center the vBox within the AnchorPane
+    AnchorPane.setTopAnchor(vBox, (root.getHeight() - vBox.getHeight()) / 2);
+    AnchorPane.setLeftAnchor(vBox, (root.getWidth() - vBox.getWidth()) / 2);
 
     return root;
   }
@@ -88,4 +100,9 @@ public class StartupPage {
     vBox.setStyle("-fx-background-color: " + newColor + ";");
     label.setTextFill(textColors[currentIndex.get()]);
   }
+
+  public static boolean isDarkMode() {
+    return currentIndex.get() == 0;
+  }
+
 }

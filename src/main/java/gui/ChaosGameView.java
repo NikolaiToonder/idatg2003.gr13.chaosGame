@@ -1,14 +1,11 @@
 package gui;
 
-
 import chaosgameclasses.ChaosGame;
 import controller.ChaosGameObserver;
 import java.util.function.Consumer;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
-
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -19,12 +16,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import vectors.Vector2D;
 
-
 /**
  * JavaFX class for viewing the main simulation after the login page.
  */
 public class ChaosGameView {
-
 
   private SimulationView simulationView;
   private DescriptionFactory descriptionFactory = new DescriptionFactory();
@@ -34,6 +29,7 @@ public class ChaosGameView {
       500, standardizedView);
   private String backgroundColor;
   private Consumer<Stage> backToMenuAction;
+  private boolean isDarkMode;
 
   public ChaosGameView(String backgroundColor, Consumer<Stage> backToMenuAction) {
     this.backgroundColor = backgroundColor;
@@ -41,13 +37,20 @@ public class ChaosGameView {
   }
 
   public Parent createContent(Stage primaryStage) {
-    simulationView = new SimulationView();
+    simulationView = new SimulationView(isDarkMode);
 
     // Setup sliders and controls
     Label iterationsLabel = new Label("Iterations: ");
-    iterationsLabel.setStyle("-fx-text-fill: white;");
     Label zoomInLabel = new Label("Zoom In");
-    zoomInLabel.setStyle("-fx-text-fill: white;");
+
+    if (isDarkMode) {
+      iterationsLabel.setStyle("-fx-text-fill: white;");
+      zoomInLabel.setStyle("-fx-text-fill: white;");
+    } else {
+      iterationsLabel.setStyle("-fx-text-fill: black;");
+      zoomInLabel.setStyle("-fx-text-fill: black;");
+    }
+
 
     Slider iterationSlider = new Slider(100, 100000, 50000);
     Slider zoomSlider = new Slider(1, 10, 1);
@@ -84,10 +87,13 @@ public class ChaosGameView {
     root.setBottom(backToMenuPane); // Set the back to menu button at the bottom
 
 
-    // Set background color
-    root.setStyle("-fx-background-color: " + backgroundColor + ";");
+
+    if (isDarkMode) {
+      root.setStyle("-fx-background-color: #2b2d31;");
+    } else {
+      root.setStyle("-fx-background-color: #f4f4f4;");
+    }
 
     return anchor;
   }
-
 }
