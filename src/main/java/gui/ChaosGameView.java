@@ -2,10 +2,8 @@ package gui;
 
 
 import chaosgameclasses.ChaosGame;
-import controller.ChaosGameObserver;
 import java.util.List;
 import java.util.function.Consumer;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
@@ -24,7 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import matrix.Matrix2x2;
-import transformations.Transform2D;
+import vectors.Complex;
 import vectors.Vector2D;
 
 
@@ -35,14 +33,15 @@ public class ChaosGameView {
 
 
   private SimulationView simulationView;
-  private DescriptionFactory descriptionFactory = new DescriptionFactory();
-  private Vector2D standardizedView = new Vector2D(0.5, 0.5);
+  private final DescriptionFactory descriptionFactory = new DescriptionFactory();
+  private final Vector2D standardizedView = new Vector2D(0.5, 0.5);
   private ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"), 500,
       500, standardizedView);
-  private String backgroundColor;
-  private Consumer<Stage> backToMenuAction;
+  private final String backgroundColor;
+  private final Consumer<Stage> backToMenuAction;
   ChoiceBox<String> choiceBoxMatrix = new ChoiceBox<>();
   private int currentTransformation = 1;
+  private boolean showVector = false;
   HBox textFieldsBox = createTextFieldsBox();
 
   public ChaosGameView(String backgroundColor, Consumer<Stage> backToMenuAction) {
@@ -53,7 +52,8 @@ public class ChaosGameView {
   public Parent createContent(Stage primaryStage) {
     simulationView = new SimulationView();
     updateChoiceBoxMatrix();
-    updateTextFields();
+    //runs because the first transformation is always affine
+    updateTextFieldsAffine();
 
     // Setup sliders and controls
     Label iterationsLabel = new Label("Iterations: ");
@@ -89,16 +89,22 @@ public class ChaosGameView {
       this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(newValue), 500, 500,
           standardizedView);
       chaosGame.zoom(zoomSlider.getValue());
-      updateChoiceBoxMatrix();
       simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
+      if (newValue.equals("Julia")) {
+        this.showVector = false;
+        updateTextFieldsJulia();
+      } else {
+        updateTextFieldsAffine();
+      }
+      updateChoiceBoxMatrix();
     });
 
     choiceBoxMatrix.valueProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue != null) {
         String[] parts = newValue.split(" ");
-        if (parts.length > 1) {
+        if (parts.length > 1 && this.chaosGame.getDescription().getTypeOfTransformation().equals("Affine")) {
           this.currentTransformation = Integer.parseInt(parts[1]);
-          updateTextFields();
+          updateTextFieldsAffine();
         }
       }
     });
@@ -140,6 +146,7 @@ public class ChaosGameView {
     TextField a10TextField = createTextField("a10");
     TextField a11TextField = createTextField("a11");
 
+
     // Create an HBox to hold the text fields
     HBox textFieldsBox = new HBox(10);
     textFieldsBox.getChildren().addAll(a00TextField, a01TextField, a10TextField, a11TextField, this.choiceBoxMatrix);
@@ -152,36 +159,72 @@ public class ChaosGameView {
     this.choiceBoxMatrix.getItems().clear();
     for (int i = 0; i < this.chaosGame.getDescription().getNumberOfTransforms(); i++) {
       choiceBoxMatrix.getItems().add("Matrix " + (i+1));
+      choiceBoxMatrix.getItems().add("Vector " + (i+1));
     }
     choiceBoxMatrix.setValue("Matrix 1");
     this.currentTransformation = 1;
   }
 
-  private void updateTextFields() {
+  private void updateTextFieldsAffine() {
+    this.chaosGame.getDescription().setTypeOfTransformation("Affine");
     List<Matrix2x2> matrices = this.chaosGame.getDescription().getMatrixList();
     List<Vector2D> vectors = this.chaosGame.getDescription().getVectorList();
 
     Matrix2x2 matrix = matrices.get(currentTransformation - 1);
     Vector2D vector = vectors.get(currentTransformation - 1);
 
+    String chosenText = this.choiceBoxMatrix.getValue().split(" ")[0];
+    System.out.println(chosenText);
+    this.showVector = chosenText.equals("Vector");
+    if (!showVector) {
     textFieldsBox.getChildren().forEach(node -> {
-      if (node instanceof TextField) {
-        TextField textField = (TextField) node;
+      if (node instanceof TextField textField) {
         if (textField.getPromptText().equals("a00")) {
           textField.setText(String.valueOf(matrix.getA00()));
         } else if (textField.getPromptText().equals("a01")) {
           textField.setText(String.valueOf(matrix.getA01()));
         } else if (textField.getPromptText().equals("a10")) {
+          textField.disableProperty().set(false);
           textField.setText(String.valueOf(matrix.getA10()));
         } else if (textField.getPromptText().equals("a11")) {
           textField.setText(String.valueOf(matrix.getA11()));
+          textField.disableProperty().set(false);
+        }
+      }
+    });} else {
+      textFieldsBox.getChildren().forEach(node -> {
+        if (node instanceof TextField textField) {
+          if (textField.getPromptText().equals("a00")) {
+            textField.setText(String.valueOf(vector.getX0()));
+          } else if (textField.getPromptText().equals("a01")) {
+            textField.setText(String.valueOf(vector.getX1()));
+          }else if (textField.getPromptText().equals("a10")||textField.getPromptText().equals("a11")){
+            textField.setText("-");
+            textField.disableProperty().set(true);
+          }
+        }
+      });
+    }
+  }
+
+  private void updateTextFieldsJulia() {
+    this.chaosGame.getDescription().setTypeOfTransformation("Julia");
+    List<Complex> complexNumbers = this.chaosGame.getDescription().getComplexNumbers();
+
+    Complex complex = complexNumbers.get(currentTransformation - 1);
+
+    textFieldsBox.getChildren().forEach(node -> {
+      if (node instanceof TextField textField) {
+        if (textField.getPromptText().equals("a00")) {
+          textField.setText(String.valueOf(complex.getReal()));
+        } else if (textField.getPromptText().equals("a01")) {
+          textField.setText(String.valueOf(complex.getImaginary()));
+        }else if (textField.getPromptText().equals("a10")||textField.getPromptText().equals("a11")){
+          textField.setText("-");
+          textField.disableProperty().set(true);
         }
       }
     });
-
   }
 
-  public int getCurrentTransformation() {
-    return currentTransformation;
-  }
 }
