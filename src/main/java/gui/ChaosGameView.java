@@ -94,6 +94,7 @@ public class ChaosGameView {
         this.showVector = false;
         updateTextFieldsJulia();
       } else {
+        updateChoiceBoxMatrix();
         updateTextFieldsAffine();
       }
       updateChoiceBoxMatrix();
@@ -174,7 +175,6 @@ public class ChaosGameView {
     Vector2D vector = vectors.get(currentTransformation - 1);
 
     String chosenText = this.choiceBoxMatrix.getValue().split(" ")[0];
-    System.out.println(chosenText);
     this.showVector = chosenText.equals("Vector");
     if (!showVector) {
     textFieldsBox.getChildren().forEach(node -> {
