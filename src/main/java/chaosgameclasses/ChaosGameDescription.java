@@ -21,6 +21,9 @@ public class ChaosGameDescription {
   private Vector2D maxCoords;
   private List<Transform2D> transforms;
   private String path;
+  private int numberOfTransforms;
+  private List<Matrix2x2> matrixList;
+  private List<Vector2D> vectorList;
 
   /**
    * Constructs a chaosGameClasses.ChaosGameDescription object with the provided list of transforms
@@ -64,6 +67,9 @@ public class ChaosGameDescription {
   public void setPath(String path) {
     this.path = path;
   }
+  public int getNumberOfTransforms() {
+    return numberOfTransforms;
+  }
 
   /**
    * Sets the minimum coordinates of the canvas.
@@ -88,6 +94,9 @@ public class ChaosGameDescription {
    */
   public void setTransformsFromFileAffine(List<String> values) {
     List<Transform2D> transformations = new java.util.ArrayList<>(List.of());
+    List<Matrix2x2> matrix2x2List = new java.util.ArrayList<>(List.of());
+    List<Vector2D> vector2DList = new java.util.ArrayList<>(List.of());
+    this.numberOfTransforms = values.size() - 3;
     for (int i = 3; i < values.size(); i++) {
       String[] value = values.get(i).split(",");
 
@@ -95,8 +104,28 @@ public class ChaosGameDescription {
           Double.parseDouble(value[2]), Double.parseDouble(value[3]));
       Vector2D vector = new Vector2D(Double.parseDouble(value[4]), Double.parseDouble(value[5]));
       transformations.add(new AffineTransform2D(matrix, vector));
+      matrix2x2List.add(matrix);
+      vector2DList.add(vector);
     }
     setTransforms(transformations);
+    setMatrixList(matrix2x2List);
+    setVectorList(vector2DList);
+  }
+
+  public void setMatrixList(List<Matrix2x2> matrixList) {
+    this.matrixList = matrixList;
+  }
+
+  public void setVectorList(List<Vector2D> vectorList) {
+    this.vectorList = vectorList;
+  }
+
+  public List<Matrix2x2> getMatrixList() {
+    return matrixList;
+  }
+
+  public List<Vector2D> getVectorList() {
+    return vectorList;
   }
 
   /**

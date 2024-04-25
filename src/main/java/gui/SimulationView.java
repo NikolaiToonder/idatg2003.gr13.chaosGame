@@ -21,17 +21,17 @@ public class SimulationView extends Pane {
   private double currentWidth;
   private boolean isDarkMode;
 
-  public SimulationView(boolean isDarkMode) {
+  public SimulationView(boolean isLightMode) {
     // Initialize the canvas with square dimensions
     canvas = new Canvas(550, 650); // Set initial size to a square
     this.getChildren().add(canvas); // Add canvas to pane
 
+    this.isDarkMode = !isLightMode;
 
-
-    if (isDarkMode) {
+    if (isLightMode) {
       this.setStyle("-fx-background-color: #2b2d31;");
     } else {
-      this.setStyle("-fx-background-color: #f0f0f0;");
+      this.setStyle("-fx-background-color: #f4f4f4;");
     }
 
     // Ensure the SimulationView itself is prepared to maintain a square shape
@@ -54,7 +54,7 @@ public class SimulationView extends Pane {
     gc = canvas.getGraphicsContext2D();
 
 
-    if (isDarkMode) {
+    if (!isDarkMode) {
       gc.setFill(Paint.valueOf("#2b2d31"));
     } else {
       gc.setFill(Paint.valueOf("#f4f4f4"));
@@ -63,8 +63,9 @@ public class SimulationView extends Pane {
 
     gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
     Vector2D point; // Random initial point within the triangle
-    if (isDarkMode) {
+    if (!isDarkMode) {
       gc.setFill(Color.WHITE);
+      gc.setFill(Paint.valueOf("#f4f4f4"));
     } else {
       gc.setFill(Color.BLACK);
     }

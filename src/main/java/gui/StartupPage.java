@@ -31,6 +31,7 @@ public class StartupPage {
     this.onStartGame = onStartGame;
     this.primaryStage = primaryStage;
     setupUI();
+    //primaryStage.setFullScreen(true);
     //primaryStage.setResizable(false);
   }
 
@@ -59,21 +60,18 @@ public class StartupPage {
   }
 
   public Parent createContent() {
-    AnchorPane root = new AnchorPane();
+    StackPane root = new StackPane(); // Change AnchorPane to StackPane
     root.getChildren().add(vBox);
 
-    // Set the anchor constraints
-    AnchorPane.setTopAnchor(vBox, 0.0);
-    AnchorPane.setRightAnchor(vBox, 0.0);
-    AnchorPane.setBottomAnchor(vBox, 0.0);
-    AnchorPane.setLeftAnchor(vBox, 0.0);
+    // Center the vBox within the StackPane
+    StackPane.setAlignment(vBox, Pos.CENTER);
 
-    // Center the vBox within the AnchorPane
-    AnchorPane.setTopAnchor(vBox, (root.getHeight() - vBox.getHeight()) / 2);
-    AnchorPane.setLeftAnchor(vBox, (root.getWidth() - vBox.getWidth()) / 2);
+
 
     return root;
+
   }
+
 
   /**
    * Takes in a list of buttons and styles them. The syntax in parameter could be written

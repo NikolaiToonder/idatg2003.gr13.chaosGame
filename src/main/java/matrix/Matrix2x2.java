@@ -29,6 +29,22 @@ public class Matrix2x2 {
     this.a11 = a11;
   }
 
+  public double getA00() {
+    return a00;
+  }
+
+  public double getA01() {
+    return a01;
+  }
+
+  public double getA10() {
+    return a10;
+  }
+
+  public double getA11() {
+    return a11;
+  }
+
   /**
    * Multiplies the 2x2-matrix by a 2x1 vector. The vector is brought from the Vector2D class.
    *
