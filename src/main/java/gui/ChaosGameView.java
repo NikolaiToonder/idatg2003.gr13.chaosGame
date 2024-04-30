@@ -1,52 +1,41 @@
 package gui;
 
-
-
 import chaosgameclasses.ChaosGame;
-import com.sun.tools.javac.Main;
-import controller.ChaosGameObserver;
-import java.util.List;
-import java.util.function.Consumer;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
 import javafx.scene.Parent;
-
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import matrix.Matrix2x2;
-import transformations.Transform2D;
 import vectors.Vector2D;
 
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * JavaFX class for viewing the main simulation after the login page.
  */
 public class ChaosGameView {
 
-
   private SimulationView simulationView;
   private DescriptionFactory descriptionFactory = new DescriptionFactory();
   private Vector2D standardizedView = new Vector2D(0.5, 0.5);
   private ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"), 500,
       500, standardizedView);
- // private String backgroundColor;
   private Consumer<Stage> backToMenuAction;
   ChoiceBox<String> choiceBoxMatrix = new ChoiceBox<>();
   private int currentTransformation = 1;
   HBox textFieldsBox = createTextFieldsBox();
+
 
   public ChaosGameView(Consumer<Stage> backToMenuAction) {
     this.backToMenuAction = backToMenuAction;
@@ -111,7 +100,15 @@ public class ChaosGameView {
 
     // Back to Menu button
     Button backToMenuButton = new Button("Back to Menu");
-    backToMenuButton.setOnAction(e -> backToMenuAction.accept(primaryStage));
+    backToMenuButton.setOnAction(e -> {
+      try {
+        // Restart the application
+        new MainApp().start(new Stage());
+        primaryStage.close(); // Close the current stage
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    });
 
     backToMenuButton.setStyle("-fx-background-color: #f4f4f4;");
     backToMenuButton.setStyle("-fx-text-fill: black;");
@@ -132,11 +129,21 @@ public class ChaosGameView {
     // Set background color for anchor pane
     root.setStyle("-fx-background-color: #2b2d31;");
 
+    // Add listeners to prevent resizing smaller than specified minimum
+    primaryStage.widthProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue.doubleValue() < primaryStage.getMinWidth()) {
+        primaryStage.setWidth(primaryStage.getMinWidth());
+      }
+    });
+
+    primaryStage.heightProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue.doubleValue() < primaryStage.getMinHeight()) {
+        primaryStage.setHeight(primaryStage.getMinHeight());
+      }
+    });
+
     return root;
   }
-
-
-
 
   private TextField createTextField(String labelText) {
     TextField textField = new TextField();
@@ -157,11 +164,10 @@ public class ChaosGameView {
     return textFieldsBox;
   }
 
-
   private void updateChoiceBoxMatrix() {
     this.choiceBoxMatrix.getItems().clear();
     for (int i = 0; i < this.chaosGame.getDescription().getNumberOfTransforms(); i++) {
-      choiceBoxMatrix.getItems().add("Matrix " + (i+1));
+      choiceBoxMatrix.getItems().add("Matrix " + (i + 1));
     }
     choiceBoxMatrix.setValue("Matrix 1");
     this.currentTransformation = 1;
@@ -191,7 +197,6 @@ public class ChaosGameView {
 
   }
 
-
   public int getCurrentTransformation() {
     return currentTransformation;
   }
@@ -199,4 +204,5 @@ public class ChaosGameView {
   public boolean isScreenResized() {
     return simulationView.isScreenResized();
   }
+
 }

@@ -3,15 +3,12 @@ package gui;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
@@ -23,16 +20,12 @@ public class StartupPage {
   private Stage primaryStage;
   private Label label;
   private VBox vBox;
-  private Color[] textColors = {Color.WHITE, Color.BLACK};
-  private static AtomicInteger currentIndex = new AtomicInteger(0);
   private static final String DEFAULT_BACKGROUND_COLOR = "#2b2d31"; // Default background color
 
   public StartupPage(Consumer<Stage> onStartGame, Stage primaryStage) {
     this.onStartGame = onStartGame;
     this.primaryStage = primaryStage;
     setupUI();
-    //primaryStage.setFullScreen(true);
-    //primaryStage.setResizable(false);
   }
 
   private void setupUI() {
@@ -50,16 +43,6 @@ public class StartupPage {
     vBox.setAlignment(Pos.CENTER);
 
     vBox.setStyle("-fx-background-color: " + DEFAULT_BACKGROUND_COLOR + ";");
-/*
-    if (isDarkMode()
-        || currentIndex.get() == 0) {
-      vBox.setStyle("-fx-background-color: " + DEFAULT_BACKGROUND_COLOR + ";");
-    } else {
-      vBox.setStyle("-fx-background-color: #F3F3F3;");
-    }
-
- */
-
   }
 
   public Parent createContent() {
@@ -69,21 +52,17 @@ public class StartupPage {
     // Center the vBox within the StackPane
     StackPane.setAlignment(vBox, Pos.CENTER);
 
-
-
     return root;
-
   }
 
-
   /**
-   * Takes in a list of buttons and styles them. The syntax in parameter could be written
-   * differently.
+   * Takes in a list of buttons and styles them.
    *
    * @param buttons list of buttons to style
    */
   private void styleButtons(Button... buttons) {
     buttons[0].setStyle("-fx-background-color: #58b719;"); // startButton
+    buttons[0].setTextFill(Color.WHITE); // startButton
     buttons[1].setStyle("-fx-background-color: #f55353;"); // exitButton
   }
 
@@ -91,21 +70,4 @@ public class StartupPage {
     startButton.setOnAction(e -> onStartGame.accept(primaryStage));
     exitButton.setOnAction(e -> Platform.exit());
   }
-
-
-  /*
-  private void toggleTheme() {
-    String[] backgroundColors = {"#2b2d31", "#F3F3F3"};
-    currentIndex.set((currentIndex.get() + 1) % backgroundColors.length);
-    String newColor = backgroundColors[currentIndex.get()];
-    vBox.setStyle("-fx-background-color: " + newColor + ";");
-    label.setTextFill(textColors[currentIndex.get()]);
-  }
-
-  public static boolean isDarkMode() {
-    return currentIndex.get() == 0;
-  }
-
-   */
-
 }

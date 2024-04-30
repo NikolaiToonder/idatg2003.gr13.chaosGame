@@ -1,7 +1,9 @@
 package gui;
 
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -11,28 +13,15 @@ import javafx.stage.Stage;
 public class MainApp extends Application {
 
   private static final double MIN_WIDTH = 760; // Minimum width
-  private static final double MIN_HEIGHT = 500; // Minimum height
+  private static final double MIN_HEIGHT = 600; // Minimum height
 
   @Override
   public void start(Stage primaryStage) {
     primaryStage.setScene(createStartupScene(primaryStage));
     primaryStage.setMinWidth(MIN_WIDTH);
     primaryStage.setMinHeight(MIN_HEIGHT);
+    centerStage(primaryStage); // Center the stage
     primaryStage.show();
-
-    // Add listener to stage width property
-    primaryStage.widthProperty().addListener((observable, oldValue, newValue) -> {
-      if (newValue.doubleValue() < MIN_WIDTH) {
-        primaryStage.setWidth(MIN_WIDTH);
-      }
-    });
-
-    // Add listener to stage height property
-    primaryStage.heightProperty().addListener((observable, oldValue, newValue) -> {
-      if (newValue.doubleValue() < MIN_HEIGHT) {
-        primaryStage.setHeight(MIN_HEIGHT);
-      }
-    });
   }
 
   public Scene createStartupScene(Stage primaryStage) {
@@ -46,8 +35,15 @@ public class MainApp extends Application {
 
   private void changeToChaosGameView(Stage primaryStage) {
     ChaosGameView chaosGameView = new ChaosGameView(this::changeToStartupScene);
-    Scene chaosGameScene = new Scene(chaosGameView.createContent(primaryStage));
+    Scene chaosGameScene = new Scene(chaosGameView.createContent(primaryStage), 760, 600); // Set initial size
     primaryStage.setScene(chaosGameScene);
+    centerStage(primaryStage); // Center the stage
+  }
+
+  private void centerStage(Stage stage) {
+    Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+    stage.setX((screenBounds.getWidth() - stage.getWidth()) / 2);
+    stage.setY((screenBounds.getHeight() - stage.getHeight()) / 2);
   }
 
   public static void main(String[] args) {
