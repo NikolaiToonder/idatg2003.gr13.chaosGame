@@ -83,7 +83,7 @@ public class StartupPage {
 
     private void toggleTheme() {
         String[] backgroundColors = {"#2b2d31", "#F3F3F3"};
-        currentIndex.set((currentIndex.get() + 1) % backgroundColors.length)
+        currentIndex.set((currentIndex.get() + 1) % backgroundColors.length);
         String newColor = backgroundColors[currentIndex.get()];
         vBox.setStyle("-fx-background-color: " + newColor + ";");
         label.setTextFill(textColors[currentIndex.get()]);
