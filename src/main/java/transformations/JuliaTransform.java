@@ -27,6 +27,7 @@ public class JuliaTransform implements Transform2D {
     setSign(sign);
   }
 
+
   /**
    * Setter for sign. The sign must be 1 or -1.
    *

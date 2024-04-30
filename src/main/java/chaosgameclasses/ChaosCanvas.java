@@ -17,6 +17,9 @@ public class ChaosCanvas {
   private int height;
   private Vector2D minCoords;
   private Vector2D maxCoords;
+  private Vector2D transformed;
+  private final Vector2D originalMinCoords;
+  private final Vector2D originalMaxCoords;
 
   /**
    * Constructor for the chaosGameClasses.ChaosCanvas class.
@@ -27,12 +30,23 @@ public class ChaosCanvas {
    * @param maxCoords The maximum coordinates of the canvas
    */
   public ChaosCanvas(int height, int width, Vector2D minCoords, Vector2D maxCoords) {
-
-    this.width = width;
-    this.height = height;
+    setWidth(width);
+    setHeight(height);
+    this.originalMinCoords = minCoords;
     this.minCoords = minCoords;
+    this.originalMaxCoords = maxCoords;
     this.maxCoords = maxCoords;
     this.canvas = new int[height][width];
+  }
+
+  public void setWidth(int width) {
+    this.width = width;
+    this.canvas = new int[width][height];
+  }
+
+  public void setHeight(int height) {
+    this.height = height;
+    this.canvas = new int[width][height];
   }
 
   /**
@@ -56,7 +70,7 @@ public class ChaosCanvas {
    * @param point The coordinates of the pixel (vector)
    */
   public void putPixel(Vector2D point) {
-    Vector2D transformed = transformCoordsToIndices(point);
+    this.transformed = transformCoordsToIndices(point);
     int xindex = (int) transformed.getX0();
     int yindex = (int) transformed.getX1();
     if (xindex < 0 || xindex >= width || yindex < 0 || yindex >= height) {
@@ -96,7 +110,7 @@ public class ChaosCanvas {
    * Clears the canvas.
    */
   public void clear() {
-    canvas = new int[width][height];
+    this.canvas = new int[width][height];
   }
 
   /**
@@ -107,14 +121,23 @@ public class ChaosCanvas {
    */
   public Vector2D transformCoordsToIndices(Vector2D point) {
     Matrix2x2 a = new Matrix2x2(0,
-        (width - 1) / (minCoords.getX1() - maxCoords.getX1()),
-        (height - 1) / (maxCoords.getX0() - minCoords.getX0()),
-        0);
+            (width - 1) / (minCoords.getX1() - maxCoords.getX1()),
+            (height - 1) / (maxCoords.getX0() - minCoords.getX0()),
+            0);
     Vector2D b = new Vector2D(
-        ((width - 1) * maxCoords.getX1()) / (maxCoords.getX1() - minCoords.getX1()),
-        ((height - 1) * minCoords.getX0()) / (minCoords.getX0() - maxCoords.getX0()));
+            ((width - 1) * maxCoords.getX1()) / (maxCoords.getX1() - minCoords.getX1()),
+            ((height - 1) * minCoords.getX0()) / (minCoords.getX0() - maxCoords.getX0()));
 
     AffineTransform2D transformCoordsToIndices = new AffineTransform2D(a, b);
     return transformCoordsToIndices.transform(point);
+  }
+
+  public Vector2D getTransformed() {
+    return this.transformed;
+  }
+
+  public void zoom(double scalar) {
+    this.minCoords = this.originalMinCoords.multiply(1/scalar);
+    this.maxCoords = this.originalMaxCoords.multiply(1/scalar);
   }
 }

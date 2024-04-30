@@ -1,5 +1,6 @@
 package transformations;
 
+import java.util.List;
 import matrix.Matrix2x2;
 import vectors.Vector2D;
 
@@ -23,8 +24,12 @@ public class AffineTransform2D implements Transform2D {
   public AffineTransform2D(Matrix2x2 matrix, Vector2D vector) {
     this.matrix = matrix;
     this.vector = vector;
-
   }
+
+  public Matrix2x2 getMatrix() {
+    return matrix;
+  }
+
 
   /**
    * Transforms a 2D vector using the affine transformation.

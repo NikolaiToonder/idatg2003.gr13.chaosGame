@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import matrix.Matrix2x2;
 
 /**
  * Class responsible for reading and writing to files.
@@ -29,7 +30,7 @@ public class ChaosGameFileHandler {
     Path filePath = Paths.get(path);
     try (BufferedReader reader = Files.newBufferedReader(filePath)) {
       String transform = reader.readLine().replaceAll("#.*", "")
-          .replaceAll("\\s", "");
+              .replaceAll("\\s", "");
 
       if (transform.contains("Affine2D")) {
         return readAffineTransform(reader, transform);
@@ -56,11 +57,11 @@ public class ChaosGameFileHandler {
   public List<String> readJuliaTransform(BufferedReader reader, String transform) {
     try {
       String lowerLeft = reader.readLine().replaceAll("#.*", "")
-          .replaceAll("\\s", "");
+              .replaceAll("\\s", "");
       String lowerRight = reader.readLine().replaceAll("#.*", "")
-          .replaceAll("\\s", "");
+              .replaceAll("\\s", "");
       String complexNumber = reader.readLine().replaceAll("#.*", "")
-          .replaceAll("\\s", "");
+              .replaceAll("\\s", "");
       return List.of(transform, lowerLeft, lowerRight, complexNumber);
     } catch (Exception e) {
       e.printStackTrace();
@@ -81,9 +82,9 @@ public class ChaosGameFileHandler {
   public List<String> readAffineTransform(BufferedReader reader, String transform) {
     try {
       String lowerLeft = reader.readLine().replaceAll("#.*", "")
-          .replaceAll("\\s", "");
+              .replaceAll("\\s", "");
       String lowerRight = reader.readLine().replaceAll("#.*", "")
-          .replaceAll("\\s", "");
+              .replaceAll("\\s", "");
       List<String> values = new java.util.ArrayList<>(List.of(transform, lowerLeft, lowerRight));
       boolean stop = false;
       while (!stop) {
@@ -92,7 +93,7 @@ public class ChaosGameFileHandler {
           stop = true;
         } else {
           line = line.replaceAll("#.*", "")
-              .replaceAll("\\s", "");
+                  .replaceAll("\\s", "");
           values.add(line);
         }
       }
@@ -121,6 +122,31 @@ public class ChaosGameFileHandler {
         }
         writer.newLine();
       }
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new IllegalArgumentException("Error writing to file");
+    }
+  }
+
+  public static void changeLine(String path, List<String> valuesToChange, int lineNumber) {
+    try {
+      Path filePath = Paths.get(path);
+      List<String> lines = Files.readAllLines(filePath);
+      String lineToChange = lines.get(lineNumber).replaceAll("#.*", "");
+      String[] values = lineToChange.split(",");
+      System.out.println(valuesToChange.size());
+      if (valuesToChange.size() >3) {
+        for (int i = 0; i < values.length - 2; i++) {
+          values[i] = valuesToChange.get(i);
+        }
+      } else {
+        int lastIndex = values.length -1;
+        values[lastIndex] = valuesToChange.get(1);
+        values[lastIndex-1] = valuesToChange.get(0);
+      }
+      lines.set(lineNumber, String.join(",", values));
+
+      Files.write(filePath, lines);
     } catch (IOException e) {
       e.printStackTrace();
       throw new IllegalArgumentException("Error writing to file");

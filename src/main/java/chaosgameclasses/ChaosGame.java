@@ -1,5 +1,9 @@
 package chaosgameclasses;
 
+import controller.ChaosGameObserver;
+import controller.Observer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import transformations.Transform2D;
 import utilities.Printer;
@@ -20,6 +24,7 @@ public class ChaosGame {
   private final UserInput userInput = new UserInput();
   private boolean closeApp = false;
   private final Printer printer = new Printer();
+  private List<Observer> observers = new ArrayList<>();
 
 
   /**
@@ -36,7 +41,7 @@ public class ChaosGame {
     this.random = new Random();
     this.currentPoint = currentPoint;
     setCanvas(new ChaosCanvas(height, width,
-        description.getMinCoords(), description.getMaxCoords()));
+            description.getMinCoords(), description.getMaxCoords()));
   }
 
   /**
@@ -75,17 +80,17 @@ public class ChaosGame {
       case "1" -> {
         this.description = new ChaosGameDescription("src/resources/sierpinskiTriangle.txt");
         this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
-            description.getMinCoords(), description.getMaxCoords());
+                description.getMinCoords(), description.getMaxCoords());
       }
       case "2" -> {
         this.description = new ChaosGameDescription("src/resources/barnsleyTransform.txt");
         this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
-            description.getMinCoords(), description.getMaxCoords());
+                description.getMinCoords(), description.getMaxCoords());
       }
       case "3" -> {
         this.description = new ChaosGameDescription("src/resources/juliaTransform.txt");
         this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
-            description.getMinCoords(), description.getMaxCoords());
+                description.getMinCoords(), description.getMaxCoords());
       }
       default -> printer.invalidPath();
     }
@@ -147,15 +152,30 @@ public class ChaosGame {
       printer.errorMessage();
 
     } else {
-      this.currentPoint = description.getMinCoords();
+      //default starting point for this program.
+      this.currentPoint = new Vector2D(0.5,0.5);
       for (int i = 0; i < steps; i++) {
         int randomIndex = this.random.nextInt(description.getTransforms().size());
         Transform2D transform = description.getTransforms().get(randomIndex);
         this.currentPoint = transform.transform(this.currentPoint);
         this.canvas.putPixel(currentPoint);
       }
-      printer.printCanvasToTerminal(this.canvas);
       this.description.handleValuesForOutprint(this.canvas.getCanvasArray());
     }
+  }
+  public void runStep() {
+    int randomIndex = this.random.nextInt(description.getTransforms().size());
+    Transform2D transform = description.getTransforms().get(randomIndex);
+    this.currentPoint = transform.transform(this.currentPoint);
+    this.canvas.putPixel(currentPoint);
+  }
+  public void addSubscriber(ChaosGameObserver observer) {
+    this.observers.add(observer);
+  }
+  public void clearCanvas() {
+    this.canvas.clear();
+  }
+  public void zoom(double scalar) {
+    this.canvas.zoom(scalar);
   }
 }

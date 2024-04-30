@@ -1,6 +1,10 @@
 package chaosgameclasses;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import matrix.Matrix2x2;
 import transformations.AffineTransform2D;
 import transformations.JuliaTransform;
@@ -21,6 +25,12 @@ public class ChaosGameDescription {
   private Vector2D maxCoords;
   private List<Transform2D> transforms;
   private String path;
+  private int numberOfTransforms;
+  private List<Matrix2x2> matrixList;
+  private List<Vector2D> vectorList;
+  private String typeOfTransformation;
+  private List<Complex> complexNumbers;
+  private int sign;
 
   /**
    * Constructs a chaosGameClasses.ChaosGameDescription object with the provided list of transforms
@@ -31,7 +41,7 @@ public class ChaosGameDescription {
    * @param maxCoords  The maximum coordinates of the canvas.
    */
   public ChaosGameDescription(List<Transform2D> transforms, Vector2D minCoords,
-      Vector2D maxCoords) {
+                              Vector2D maxCoords) {
     setMaxCoords(maxCoords);
     setMinCoords(minCoords);
     setTransforms(transforms);
@@ -48,7 +58,8 @@ public class ChaosGameDescription {
     ChaosGameFileHandler fileHandler = new ChaosGameFileHandler();
     this.path = path;
     List<String> values = fileHandler.readFromFile(path);
-    if (values.get(0).equals("Julia")) {
+    this.typeOfTransformation = values.get(0);
+    if (this.typeOfTransformation.equals("Julia")) {
       setCanvasCoordsFromFile(values);
       setTransformsFromFileJulia(values);
     } else {
@@ -63,6 +74,9 @@ public class ChaosGameDescription {
 
   public void setPath(String path) {
     this.path = path;
+  }
+  public int getNumberOfTransforms() {
+    return numberOfTransforms;
   }
 
   /**
@@ -88,15 +102,37 @@ public class ChaosGameDescription {
    */
   public void setTransformsFromFileAffine(List<String> values) {
     List<Transform2D> transformations = new java.util.ArrayList<>(List.of());
+    List<Matrix2x2> matrix2x2List = new java.util.ArrayList<>(List.of());
+    List<Vector2D> vector2DList = new java.util.ArrayList<>(List.of());
+    this.numberOfTransforms = values.size() - 3;
     for (int i = 3; i < values.size(); i++) {
       String[] value = values.get(i).split(",");
-
       Matrix2x2 matrix = new Matrix2x2(Double.parseDouble(value[0]), Double.parseDouble(value[1]),
-          Double.parseDouble(value[2]), Double.parseDouble(value[3]));
+              Double.parseDouble(value[2]), Double.parseDouble(value[3]));
       Vector2D vector = new Vector2D(Double.parseDouble(value[4]), Double.parseDouble(value[5]));
       transformations.add(new AffineTransform2D(matrix, vector));
+      matrix2x2List.add(matrix);
+      vector2DList.add(vector);
     }
     setTransforms(transformations);
+    setMatrixList(matrix2x2List);
+    setVectorList(vector2DList);
+  }
+
+  public void setMatrixList(List<Matrix2x2> matrixList) {
+    this.matrixList = matrixList;
+  }
+
+  public void setVectorList(List<Vector2D> vectorList) {
+    this.vectorList = vectorList;
+  }
+
+  public List<Matrix2x2> getMatrixList() {
+    return matrixList;
+  }
+
+  public List<Vector2D> getVectorList() {
+    return vectorList;
   }
 
   /**
@@ -109,6 +145,7 @@ public class ChaosGameDescription {
    */
   public void setTransformsFromFileJulia(List<String> values) {
     String[] value = values.get(3).split(",");
+    this.numberOfTransforms = 1;
     Complex point = new Complex(Double.parseDouble(value[0]), Double.parseDouble(value[1]));
     int sign = 1;
     if (point.getImaginary() < 0) {
@@ -116,8 +153,13 @@ public class ChaosGameDescription {
     }
 
     List<Transform2D> transformations = List.of(new JuliaTransform(point, sign), new JuliaTransform(point, -sign));
+    this.complexNumbers = List.of(point);
     setTransforms(transformations);
 
+  }
+
+  public void setTypeOfTransformation(String typeOfTransformation) {
+    this.typeOfTransformation = typeOfTransformation;
   }
 
 
@@ -128,6 +170,14 @@ public class ChaosGameDescription {
    */
   public Vector2D getMinCoords() {
     return minCoords;
+  }
+
+  public int getSign() {
+    return sign;
+  }
+
+  public List<Complex> getComplexNumbers() {
+    return this.complexNumbers;
   }
 
   /**
@@ -191,5 +241,34 @@ public class ChaosGameDescription {
    */
   public void handleValuesForOutprint(int[][] values) {
     ChaosGameFileHandler.writeToFile(values);
+  }
+
+  public void writeToFile(String typeOfTransform, String choiceString, List<TextField> values){
+    boolean isJulia = typeOfTransform.equals("Julia");
+    if (isJulia) {
+      List<String> juliaValues = List.of(values.get(0).getText(), values.get(1).getText());
+
+
+      String row = choiceString.split(" ")[1];
+      ChaosGameFileHandler.changeLine(this.path, juliaValues, Integer.parseInt(row) + 2);
+    } else {
+      boolean isMatrix = choiceString.split(" ")[0].equals("Matrix");
+      String row = choiceString.split(" ")[1];
+
+      if (isMatrix) {
+        List<String> matrixValues = values.stream()
+                .map(TextField::getText)
+                .collect(Collectors.toList());
+
+        ChaosGameFileHandler.changeLine(this.path, matrixValues, Integer.parseInt(row) + 2);
+      } else {
+        List<String> vectorValues = List.of(values.get(0).getText(), values.get(1).getText());
+
+        ChaosGameFileHandler.changeLine(this.path, vectorValues, Integer.parseInt(row) + 2);
+      }
+    }
+  }
+  public String getTypeOfTransformation() {
+    return this.typeOfTransformation;
   }
 }
