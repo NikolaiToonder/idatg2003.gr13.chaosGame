@@ -1,7 +1,6 @@
 package gui;
 
 
-import static gui.StartupPage.isDarkMode;
 
 import chaosgameclasses.ChaosGame;
 import com.sun.tools.javac.Main;
@@ -42,31 +41,21 @@ public class ChaosGameView {
   private Vector2D standardizedView = new Vector2D(0.5, 0.5);
   private ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"), 500,
       500, standardizedView);
-  private String backgroundColor;
+ // private String backgroundColor;
   private Consumer<Stage> backToMenuAction;
   ChoiceBox<String> choiceBoxMatrix = new ChoiceBox<>();
   private int currentTransformation = 1;
   HBox textFieldsBox = createTextFieldsBox();
 
-  public ChaosGameView(String backgroundColor, Consumer<Stage> backToMenuAction) {
-    this.backgroundColor = backgroundColor;
+  public ChaosGameView(Consumer<Stage> backToMenuAction) {
     this.backToMenuAction = backToMenuAction;
   }
 
   public Parent createContent(Stage primaryStage) {
-    simulationView = new SimulationView(isDarkMode());
+    simulationView = new SimulationView();
     updateChoiceBoxMatrix();
     updateTextFields();
-
-
-
-    if (isDarkMode()) {
-      simulationView.setStyle("-fx-background-color: #2b2d31;");
-    } else {
-      simulationView.setStyle("-fx-background-color: #f4f4f4;");
-    }
-
-
+    simulationView.setStyle("-fx-background-color: #2b2d31;");
 
     // Setup sliders and controls
     Label iterationsLabel = new Label("Iterations: ");
@@ -96,16 +85,10 @@ public class ChaosGameView {
       zoomInLabel.setText("Zoom In: " + Math.round(newValue.doubleValue()) + "x");
       chaosGame.zoom(newValue.doubleValue());
       simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
-
     });
 
-    if (isDarkMode()) {
-      iterationsLabel.setStyle("-fx-text-fill: white;");
-      zoomInLabel.setStyle("-fx-text-fill: white;");
-    } else {
-      iterationsLabel.setStyle("-fx-text-fill: black;");
-      zoomInLabel.setStyle("-fx-text-fill: black;");
-    }
+    iterationsLabel.setStyle("-fx-text-fill: white;");
+    zoomInLabel.setStyle("-fx-text-fill: white;");
 
     choiceBox.valueProperty().addListener((observable, oldValue, newValue) -> {
       this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(newValue), 500, 500,
@@ -125,29 +108,18 @@ public class ChaosGameView {
       }
     });
 
-
-
     // Back to Menu button
     Button backToMenuButton = new Button("Back to Menu");
     backToMenuButton.setOnAction(e -> backToMenuAction.accept(primaryStage));
 
+    backToMenuButton.setStyle("-fx-background-color: #f4f4f4;");
     backToMenuButton.setStyle("-fx-text-fill: black;");
-    if (!isDarkMode()) {
-      backToMenuButton.setStyle("-fx-background-color: #2b2d31;");
-      backToMenuButton.setStyle("-fx-text-fill: black;");
-    } else {
-      backToMenuButton.setStyle("-fx-background-color: #f4f4f4;");
-
-    }
 
     VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox, backToMenuButton ); // Add all controls here
     controlsPane.setAlignment(Pos.CENTER); // Align controls to the right
     controlsPane.setPrefHeight(300);
 
-
-
     textFieldsBox.setPadding(new Insets(20, 20, 20, 20));
-
 
     BorderPane root = new BorderPane();
     AnchorPane anchor = new AnchorPane(root);
@@ -155,15 +127,19 @@ public class ChaosGameView {
     root.setRight(controlsPane); // Set the controls pane on the right
     root.setBottom(textFieldsBox);// Set the back to menu button at the bottom
 
+    // Set background color for anchor pane
+    anchor.setStyle("-fx-background-color: #2b2d31;");
 
-    if (isDarkMode()) {
-      root.setStyle("-fx-background-color: #2b2d31;");
-    } else {
-      root.setStyle("-fx-background-color: #f4f4f4;");
-    }
+    anchor.getChildren().add(controlsPane);
+
+    AnchorPane.setBottomAnchor(textFieldsBox, 0.0);
+    AnchorPane.setRightAnchor(controlsPane, 0.0);
+
+
 
     return anchor;
   }
+
 
   private TextField createTextField(String labelText) {
     TextField textField = new TextField();
@@ -221,5 +197,9 @@ public class ChaosGameView {
 
   public int getCurrentTransformation() {
     return currentTransformation;
+  }
+
+  public boolean isScreenResized() {
+    return simulationView.isScreenResized();
   }
 }

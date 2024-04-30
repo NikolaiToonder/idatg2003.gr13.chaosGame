@@ -42,20 +42,23 @@ public class StartupPage {
 
     Button startButton = new Button("Start program");
     Button exitButton = new Button("Exit program");
-    Button changeTheme = new Button("Change theme");
 
-    styleButtons(startButton, exitButton, changeTheme);
-    configureButtons(startButton, exitButton, changeTheme);
+    styleButtons(startButton, exitButton);
+    configureButtons(startButton, exitButton);
 
-    vBox = new VBox(10, label, startButton, changeTheme, exitButton);
+    vBox = new VBox(10, label, startButton, exitButton);
     vBox.setAlignment(Pos.CENTER);
 
+    vBox.setStyle("-fx-background-color: " + DEFAULT_BACKGROUND_COLOR + ";");
+/*
     if (isDarkMode()
         || currentIndex.get() == 0) {
       vBox.setStyle("-fx-background-color: " + DEFAULT_BACKGROUND_COLOR + ";");
     } else {
       vBox.setStyle("-fx-background-color: #F3F3F3;");
     }
+
+ */
 
   }
 
@@ -82,15 +85,15 @@ public class StartupPage {
   private void styleButtons(Button... buttons) {
     buttons[0].setStyle("-fx-background-color: #58b719;"); // startButton
     buttons[1].setStyle("-fx-background-color: #f55353;"); // exitButton
-    buttons[2].setStyle("-fx-background-color: #CCCCCC;"); // changeTheme
   }
 
-  private void configureButtons(Button startButton, Button exitButton, Button changeTheme) {
-    changeTheme.setOnAction(e -> toggleTheme());
+  private void configureButtons(Button startButton, Button exitButton) {
     startButton.setOnAction(e -> onStartGame.accept(primaryStage));
     exitButton.setOnAction(e -> Platform.exit());
   }
 
+
+  /*
   private void toggleTheme() {
     String[] backgroundColors = {"#2b2d31", "#F3F3F3"};
     currentIndex.set((currentIndex.get() + 1) % backgroundColors.length);
@@ -102,5 +105,7 @@ public class StartupPage {
   public static boolean isDarkMode() {
     return currentIndex.get() == 0;
   }
+
+   */
 
 }

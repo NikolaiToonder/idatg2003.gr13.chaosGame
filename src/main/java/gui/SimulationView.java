@@ -19,20 +19,24 @@ public class SimulationView extends Pane {
   private GraphicsContext gc;
   private double currentHeight;
   private double currentWidth;
-  private boolean isDarkMode;
+ // private boolean isDarkMode;
 
-  public SimulationView(boolean isLightMode) {
+  public SimulationView( ) {
     // Initialize the canvas with square dimensions
     canvas = new Canvas(550, 650); // Set initial size to a square
     this.getChildren().add(canvas); // Add canvas to pane
 
-    this.isDarkMode = !isLightMode;
+    //this.isDarkMode = !isLightMode;
+/*
+
 
     if (isLightMode) {
       this.setStyle("-fx-background-color: #2b2d31;");
     } else {
       this.setStyle("-fx-background-color: #f4f4f4;");
     }
+
+ */
 
     // Ensure the SimulationView itself is prepared to maintain a square shape
     // Here, we simply start with a square configuration, but see Step 1 for dynamic resizing
@@ -52,23 +56,31 @@ public class SimulationView extends Pane {
 
   private void drawFractal(ChaosGame chaosGame, int iterations) {
     gc = canvas.getGraphicsContext2D();
-
-
+    gc.setFill(Paint.valueOf("#2b2d31"));
+/*
     if (!isDarkMode) {
       gc.setFill(Paint.valueOf("#2b2d31"));
     } else {
       gc.setFill(Paint.valueOf("#f4f4f4"));
     }
 
+ */
+
 
     gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
     Vector2D point; // Random initial point within the triangle
+
+    gc.setFill(Color.WHITE);
+
+    /*
     if (!isDarkMode) {
       gc.setFill(Color.WHITE);
       gc.setFill(Paint.valueOf("#f4f4f4"));
     } else {
       gc.setFill(Color.BLACK);
     }
+
+     */
 
     for (int i = 0; i < iterations; i++) {
       chaosGame.runStep();
@@ -83,5 +95,9 @@ public class SimulationView extends Pane {
 
   public GraphicsContext getGraphicsContext() {
     return gc;
+  }
+
+  public boolean isScreenResized() {
+    return currentHeight != canvas.getHeight() || currentWidth != canvas.getWidth();
   }
 }

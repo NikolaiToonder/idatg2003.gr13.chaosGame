@@ -28,7 +28,7 @@ public class MainApp extends Application {
   }
 
   private void changeToChaosGameView(Stage primaryStage) {
-    ChaosGameView chaosGameView = new ChaosGameView("#2b2d31", this::changeToStartupScene);
+    ChaosGameView chaosGameView = new ChaosGameView(this::changeToStartupScene);
     Scene chaosGameScene = new Scene(chaosGameView.createContent(primaryStage));
     primaryStage.setScene(chaosGameScene);
   }
