@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static java.awt.Color.blue;
+
+import chaosgameclasses.ChaosGame;
+import javafx.application.Platform;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
@@ -17,11 +23,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import matrix.Matrix2x2;
@@ -40,29 +43,33 @@ public class ChaosGameView {
   private final Vector2D standardizedView = new Vector2D(0.5, 0.5);
   private ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"), 500,
           500, standardizedView);
-  private final String backgroundColor;
-  private final Consumer<Stage> backToMenuAction;
+
+
   ChoiceBox<String> choiceBoxMatrix = new ChoiceBox<>();
   private int currentTransformation = 1;
   private boolean showVector = false;
+
   HBox textFieldsBox = createTextFieldsBox();
 
-  public ChaosGameView(String backgroundColor, Consumer<Stage> backToMenuAction) {
-    this.backgroundColor = backgroundColor;
-    this.backToMenuAction = backToMenuAction;
+
+
+  String whiteColor = "-fx-text-fill: white;";
+
+
+  public ChaosGameView(Consumer<Stage> backToMenuAction) {
+
   }
 
   public Parent createContent(Stage primaryStage) {
     simulationView = new SimulationView();
     updateChoiceBoxMatrix();
-    //runs because the first transformation is always affine
-    updateTextFieldsAffine();
+    simulationView.setStyle("-fx-background-color: #2b2d31;");
 
     // Setup sliders and controls
     Label iterationsLabel = new Label("Iterations: ");
-    iterationsLabel.setStyle("-fx-text-fill: white;");
+    iterationsLabel.setStyle(whiteColor);
     Label zoomInLabel = new Label("Zoom In");
-    zoomInLabel.setStyle("-fx-text-fill: white;");
+    zoomInLabel.setStyle(whiteColor);
 
     Slider iterationSlider = new Slider(100, 100000, 50000);
     Slider zoomSlider = new Slider(1, 10, 1);
@@ -73,8 +80,6 @@ public class ChaosGameView {
 
     // Set a default selection
     choiceBox.setValue("Sierpinski");
-
-    Button draw = new Button("Draw");
 
     simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
 
@@ -90,31 +95,39 @@ public class ChaosGameView {
       simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
     });
 
+    iterationSlider.setStyle("-fx-control-inner-background: #2b2d31;");
+    iterationSlider.setStyle("-fx-background-color: #32e816;");
+    iterationsLabel.setStyle(whiteColor);
+    zoomInLabel.setStyle(whiteColor);
+
     choiceBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-      this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(newValue), 500, 500,
-              standardizedView);
+      this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(newValue), 500, 500, standardizedView);
       chaosGame.zoom(zoomSlider.getValue());
-      simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
+      updateChoiceBoxMatrix();
       if (newValue.equals("Julia")) {
-        this.showVector = false;
-        updateChoiceBoxMatrix();
         updateTextFieldsJulia();
       } else {
-        updateChoiceBoxMatrix();
         updateTextFieldsAffine();
       }
-      updateChoiceBoxMatrix();
+      simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
     });
 
     choiceBoxMatrix.valueProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue != null) {
         String[] parts = newValue.split(" ");
-        if (parts.length > 1 && this.chaosGame.getDescription().getTypeOfTransformation().equals("Affine")) {
+        if (parts.length > 1) {
           this.currentTransformation = Integer.parseInt(parts[1]);
-          updateTextFieldsAffine();
+          if (this.chaosGame.getDescription().getTypeOfTransformation().equals("Julia")) {
+            updateTextFieldsJulia();
+          } else {
+            updateTextFieldsAffine();
+          }
         }
       }
     });
+
+    // Draw button
+    Button draw = new Button("Draw");
     draw.setOnAction(e -> {
       String typeOfTransform = choiceBox.getValue();
       String choiceToEdit = choiceBoxMatrix.getValue();
@@ -123,39 +136,50 @@ public class ChaosGameView {
               .map(node -> (TextField) node)
               .collect(Collectors.toList());
       this.chaosGame.getDescription().writeToFile(typeOfTransform, choiceToEdit, textFieldsList);
-      this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(choiceBox.getValue()), 500, 500,
-              standardizedView);
-      if(typeOfTransform.equals("Julia")){
+      this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(choiceBox.getValue()), 500, 500, standardizedView);
+      if (typeOfTransform.equals("Julia")) {
         updateTextFieldsJulia();
       } else {
         updateTextFieldsAffine();
       }
       simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
     });
-
-
-
-    VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox, draw); // Add all controls here
-    controlsPane.setAlignment(Pos.CENTER); // Align controls to the right
-    controlsPane.setPrefHeight(300);
+    draw.setStyle("-fx-background-color: #32e816;");
+    draw.setTextFill(javafx.scene.paint.Color.WHITE);
 
     // Back to Menu button
-    Button backToMenuButton = new Button("Back to Menu");
-    backToMenuButton.setOnAction(e -> backToMenuAction.accept(primaryStage));
+    Button backToMenuButton = new Button("Close application");
+    backToMenuButton.setOnAction(e -> Platform.exit());
+    backToMenuButton.setStyle("-fx-background-color: #f55353;");
+    backToMenuButton.setTextFill(javafx.scene.paint.Color.WHITE);
 
+    VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox, draw, backToMenuButton);
+    controlsPane.setAlignment(Pos.CENTER);
+    controlsPane.setPrefHeight(300);
 
     textFieldsBox.setPadding(new Insets(20, 20, 20, 20));
 
+    VBox simulationAndInfoBox = new VBox(simulationView, textFieldsBox);
+    simulationAndInfoBox.setVgrow(simulationView, Priority.ALWAYS);
 
     BorderPane root = new BorderPane();
-    AnchorPane anchor = new AnchorPane(root);
-    root.setCenter(simulationView); // Set the simulation view in the center
-    root.setRight(controlsPane); // Set the controls pane on the right
-    root.setBottom(textFieldsBox);// Set the back to menu button at the bottom
+    root.setRight(controlsPane);
+    root.setCenter(simulationAndInfoBox);
+    root.setStyle("-fx-background-color: #2b2d31;");
 
-    root.setStyle("-fx-background-color: " + backgroundColor + ";");
+    primaryStage.widthProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue.doubleValue() < primaryStage.getMinWidth()) {
+        primaryStage.setWidth(primaryStage.getMinWidth());
+      }
+    });
 
-    return anchor;
+    primaryStage.heightProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue.doubleValue() < primaryStage.getMinHeight()) {
+        primaryStage.setHeight(primaryStage.getMinHeight());
+      }
+    });
+
+    return root;
   }
 
   private TextField createTextField(String labelText) {
@@ -182,8 +206,8 @@ public class ChaosGameView {
   private void updateChoiceBoxMatrix() {
     this.choiceBoxMatrix.getItems().clear();
     for (int i = 0; i < this.chaosGame.getDescription().getNumberOfTransforms(); i++) {
-      choiceBoxMatrix.getItems().add("Matrix " + (i+1));
-      choiceBoxMatrix.getItems().add("Vector " + (i+1));
+      choiceBoxMatrix.getItems().add("Matrix " + (i + 1));
+      choiceBoxMatrix.getItems().add("Vector " + (i + 1));
     }
     choiceBoxMatrix.setValue("Matrix 1");
     this.currentTransformation = 1;
@@ -214,14 +238,15 @@ public class ChaosGameView {
             textField.disableProperty().set(false);
           }
         }
-      });} else {
+      });
+    } else {
       textFieldsBox.getChildren().forEach(node -> {
         if (node instanceof TextField textField) {
           if (textField.getPromptText().equals("a00")) {
             textField.setText(String.valueOf(vector.getX0()));
           } else if (textField.getPromptText().equals("a01")) {
             textField.setText(String.valueOf(vector.getX1()));
-          }else if (textField.getPromptText().equals("a10")||textField.getPromptText().equals("a11")){
+          } else if (textField.getPromptText().equals("a10") || textField.getPromptText().equals("a11")) {
             textField.setText("-");
             textField.disableProperty().set(true);
           }
@@ -242,7 +267,7 @@ public class ChaosGameView {
           textField.setText(String.valueOf(complex.getReal()));
         } else if (textField.getPromptText().equals("a01")) {
           textField.setText(String.valueOf(complex.getImaginary()));
-        }else if (textField.getPromptText().equals("a10")||textField.getPromptText().equals("a11")){
+        } else if (textField.getPromptText().equals("a10") || textField.getPromptText().equals("a11")) {
           textField.setText("-");
           textField.disableProperty().set(true);
         }
