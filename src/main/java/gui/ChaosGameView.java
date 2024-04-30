@@ -3,10 +3,13 @@ package gui;
 
 import chaosgameclasses.ChaosGame;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+import javafx.scene.Node;
 import javafx.scene.Parent;
 
 import javafx.scene.control.Button;
@@ -71,6 +74,8 @@ public class ChaosGameView {
     // Set a default selection
     choiceBox.setValue("Sierpinski");
 
+    Button draw = new Button("Draw");
+
     simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
 
     // Configure your slider and add listeners to update the fractal view
@@ -92,6 +97,7 @@ public class ChaosGameView {
       simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
       if (newValue.equals("Julia")) {
         this.showVector = false;
+        updateChoiceBoxMatrix();
         updateTextFieldsJulia();
       } else {
         updateChoiceBoxMatrix();
@@ -109,10 +115,27 @@ public class ChaosGameView {
         }
       }
     });
+    draw.setOnAction(e -> {
+      String typeOfTransform = choiceBox.getValue();
+      String choiceToEdit = choiceBoxMatrix.getValue();
+      List<TextField> textFieldsList = textFieldsBox.getChildren().stream()
+          .filter(node -> node instanceof TextField)
+          .map(node -> (TextField) node)
+          .collect(Collectors.toList());
+      this.chaosGame.getDescription().writeToFile(typeOfTransform, choiceToEdit, textFieldsList);
+      this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(choiceBox.getValue()), 500, 500,
+          standardizedView);
+      if(typeOfTransform.equals("Julia")){
+        updateTextFieldsJulia();
+      } else {
+        updateTextFieldsAffine();
+      }
+      simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
+    });
 
 
 
-    VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox); // Add all controls here
+    VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox, draw); // Add all controls here
     controlsPane.setAlignment(Pos.CENTER); // Align controls to the right
     controlsPane.setPrefHeight(300);
 

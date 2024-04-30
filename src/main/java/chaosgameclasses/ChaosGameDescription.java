@@ -1,6 +1,10 @@
 package chaosgameclasses;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import matrix.Matrix2x2;
 import transformations.AffineTransform2D;
 import transformations.JuliaTransform;
@@ -237,6 +241,32 @@ public class ChaosGameDescription {
    */
   public void handleValuesForOutprint(int[][] values) {
     ChaosGameFileHandler.writeToFile(values);
+  }
+
+  public void writeToFile(String typeOfTransform, String choiceString, List<TextField> values){
+    boolean isJulia = typeOfTransform.equals("Julia");
+    if (isJulia) {
+      List<String> juliaValues = List.of(values.get(0).getText(), values.get(1).getText());
+
+
+      String row = choiceString.split(" ")[1];
+      ChaosGameFileHandler.changeLine(this.path, juliaValues, Integer.parseInt(row) + 2);
+    } else {
+      boolean isMatrix = choiceString.split(" ")[0].equals("Matrix");
+      String row = choiceString.split(" ")[1];
+
+      if (isMatrix) {
+        List<String> matrixValues = values.stream()
+            .map(TextField::getText)
+            .collect(Collectors.toList());
+
+        ChaosGameFileHandler.changeLine(this.path, matrixValues, Integer.parseInt(row) + 2);
+      } else {
+        List<String> vectorValues = List.of(values.get(0).getText(), values.get(1).getText());
+
+        ChaosGameFileHandler.changeLine(this.path, vectorValues, Integer.parseInt(row) + 2);
+      }
+    }
   }
   public String getTypeOfTransformation() {
     return this.typeOfTransformation;

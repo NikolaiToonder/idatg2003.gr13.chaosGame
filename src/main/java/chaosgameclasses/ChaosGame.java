@@ -152,6 +152,7 @@ public class ChaosGame {
       printer.errorMessage();
 
     } else {
+      //default starting point for this program.
       this.currentPoint = new Vector2D(0.5,0.5);
       for (int i = 0; i < steps; i++) {
         int randomIndex = this.random.nextInt(description.getTransforms().size());

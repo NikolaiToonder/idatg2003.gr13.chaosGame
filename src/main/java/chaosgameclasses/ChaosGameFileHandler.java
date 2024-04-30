@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import matrix.Matrix2x2;
 
 /**
  * Class responsible for reading and writing to files.
@@ -121,6 +122,31 @@ public class ChaosGameFileHandler {
         }
         writer.newLine();
       }
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new IllegalArgumentException("Error writing to file");
+    }
+  }
+
+  public static void changeLine(String path, List<String> valuesToChange, int lineNumber) {
+    try {
+      Path filePath = Paths.get(path);
+      List<String> lines = Files.readAllLines(filePath);
+      String lineToChange = lines.get(lineNumber).replaceAll("#.*", "");
+      String[] values = lineToChange.split(",");
+      System.out.println(valuesToChange.size());
+     if (valuesToChange.size() >3) {
+       for (int i = 0; i < values.length - 2; i++) {
+         values[i] = valuesToChange.get(i);
+       }
+     } else {
+       int lastIndex = values.length -1;
+        values[lastIndex] = valuesToChange.get(1);
+        values[lastIndex-1] = valuesToChange.get(0);
+     }
+      lines.set(lineNumber, String.join(",", values));
+
+      Files.write(filePath, lines);
     } catch (IOException e) {
       e.printStackTrace();
       throw new IllegalArgumentException("Error writing to file");
