@@ -1,11 +1,9 @@
 package gui;
 
 import chaosgameclasses.ChaosGame;
-import java.util.HexFormat;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -18,10 +16,7 @@ import vectors.Vector2D;
  * chaos game.
  */
 public class SimulationView extends Pane {
-  private Canvas canvas;
-  private GraphicsContext gc;
-  private double currentHeight;
-  private double currentWidth;
+  private final Canvas canvas;
 
   public SimulationView() {
     // Initialize the canvas with square dimensions
@@ -37,8 +32,8 @@ public class SimulationView extends Pane {
     StackPane.setAlignment(canvas, Pos.CENTER);
 
     // Set initial current width and height based on the canvas size; these are kept for potential future use
-    this.currentHeight = canvas.getHeight();
-    this.currentWidth = canvas.getWidth();
+    //double currentHeight = canvas.getHeight();
+   // double currentWidth = canvas.getWidth();
   }
 
 
@@ -47,7 +42,7 @@ public class SimulationView extends Pane {
   }
 
   private void drawFractal(ChaosGame chaosGame, int iterations) {
-    gc = canvas.getGraphicsContext2D();
+    GraphicsContext gc = canvas.getGraphicsContext2D();
 
     gc.setFill(Paint.valueOf("#2b2d31"));
     gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -61,13 +56,6 @@ public class SimulationView extends Pane {
     }
   }
 
-  public Canvas getCanvas() {
-    return canvas;
-  }
-
-  public GraphicsContext getGraphicsContext() {
-    return gc;
-  }
 
 
 }

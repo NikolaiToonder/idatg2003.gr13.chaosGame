@@ -3,13 +3,13 @@ package gui;
 
 import chaosgameclasses.ChaosGame;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
-import javafx.scene.Node;
 import javafx.scene.Parent;
 
 import javafx.scene.control.Button;
@@ -17,11 +17,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import matrix.Matrix2x2;
@@ -40,16 +37,12 @@ public class ChaosGameView {
     private final Vector2D standardizedView = new Vector2D(0.5, 0.5);
     private ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"), 500,
             500, standardizedView);
-    private final String backgroundColor;
-    private final Consumer<Stage> backToMenuAction;
     ChoiceBox<String> choiceBoxMatrix = new ChoiceBox<>();
     private int currentTransformation = 1;
     private boolean showVector = false;
     HBox textFieldsBox = createTextFieldsBox();
 
-    public ChaosGameView(String backgroundColor, Consumer<Stage> backToMenuAction) {
-        this.backgroundColor = backgroundColor;
-        this.backToMenuAction = backToMenuAction;
+    public ChaosGameView() {
     }
 
     public Parent createContent(Stage primaryStage) {
@@ -135,27 +128,45 @@ public class ChaosGameView {
 
 
 
-        VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox, draw); // Add all controls here
+
+
+        // Back to Menu button
+        Button backToMenuButton = new Button("Close application");
+        backToMenuButton.setOnAction(e -> Platform.exit());
+        backToMenuButton.setStyle("-fx-background-color: #f55353;");
+        backToMenuButton.setTextFill(javafx.scene.paint.Color.WHITE);
+
+
+        VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox, backToMenuButton); // Add all controls here
         controlsPane.setAlignment(Pos.CENTER); // Align controls to the right
         controlsPane.setPrefHeight(300);
 
-        // Back to Menu button
-        Button backToMenuButton = new Button("Back to Menu");
-        backToMenuButton.setOnAction(e -> backToMenuAction.accept(primaryStage));
-
-
         textFieldsBox.setPadding(new Insets(20, 20, 20, 20));
 
+        VBox simulationAndInfoBox = new VBox(simulationView, textFieldsBox);
+        VBox.setVgrow(simulationView, Priority.ALWAYS); // Allow simulationView to grow
 
         BorderPane root = new BorderPane();
-        AnchorPane anchor = new AnchorPane(root);
-        root.setCenter(simulationView); // Set the simulation view in the center
         root.setRight(controlsPane); // Set the controls pane on the right
-        root.setBottom(textFieldsBox);// Set the back to menu button at the bottom
+        root.setCenter(simulationAndInfoBox); // Set simulationView and textFieldsBox wrapper in the center
 
-        root.setStyle("-fx-background-color: " + backgroundColor + ";");
+        // Set background color for anchor pane
+        root.setStyle("-fx-background-color: #2b2d31;");
 
-        return anchor;
+        // Add listeners to prevent resizing smaller than specified minimum
+        primaryStage.widthProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() < primaryStage.getMinWidth()) {
+                primaryStage.setWidth(primaryStage.getMinWidth());
+            }
+        });
+
+        primaryStage.heightProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() < primaryStage.getMinHeight()) {
+                primaryStage.setHeight(primaryStage.getMinHeight());
+            }
+        });
+
+        return root;
     }
 
     private TextField createTextField(String labelText) {
