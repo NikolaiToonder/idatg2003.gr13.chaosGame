@@ -1,6 +1,9 @@
 package gui;
 
+import static java.awt.Color.blue;
+
 import chaosgameclasses.ChaosGame;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -27,18 +30,18 @@ import java.util.function.Consumer;
 public class ChaosGameView {
 
   private SimulationView simulationView;
-  private DescriptionFactory descriptionFactory = new DescriptionFactory();
-  private Vector2D standardizedView = new Vector2D(0.5, 0.5);
+  private final DescriptionFactory descriptionFactory = new DescriptionFactory();
+  private final Vector2D standardizedView = new Vector2D(0.5, 0.5);
   private ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"), 500,
       500, standardizedView);
-  private Consumer<Stage> backToMenuAction;
   ChoiceBox<String> choiceBoxMatrix = new ChoiceBox<>();
   private int currentTransformation = 1;
   HBox textFieldsBox = createTextFieldsBox();
 
+  String whiteColor = "-fx-text-fill: white;";
+
 
   public ChaosGameView(Consumer<Stage> backToMenuAction) {
-    this.backToMenuAction = backToMenuAction;
   }
 
   public Parent createContent(Stage primaryStage) {
@@ -49,9 +52,9 @@ public class ChaosGameView {
 
     // Setup sliders and controls
     Label iterationsLabel = new Label("Iterations: ");
-    iterationsLabel.setStyle("-fx-text-fill: white;");
+    iterationsLabel.setStyle(whiteColor);
     Label zoomInLabel = new Label("Zoom In");
-    zoomInLabel.setStyle("-fx-text-fill: white;");
+    zoomInLabel.setStyle(whiteColor);
 
     Slider iterationSlider = new Slider(100, 100000, 50000);
     Slider zoomSlider = new Slider(1, 10, 1);
@@ -77,8 +80,12 @@ public class ChaosGameView {
       simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
     });
 
-    iterationsLabel.setStyle("-fx-text-fill: white;");
-    zoomInLabel.setStyle("-fx-text-fill: white;");
+    iterationSlider.setStyle("-fx-control-inner-background: #2b2d31;");
+    iterationSlider.setStyle("-fx-background-color: #32e816;");
+
+
+    iterationsLabel.setStyle(whiteColor);
+    zoomInLabel.setStyle(whiteColor);
 
     choiceBox.valueProperty().addListener((observable, oldValue, newValue) -> {
       this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(newValue), 500, 500,
@@ -99,19 +106,11 @@ public class ChaosGameView {
     });
 
     // Back to Menu button
-    Button backToMenuButton = new Button("Back to Menu");
-    backToMenuButton.setOnAction(e -> {
-      try {
-        // Restart the application
-        new MainApp().start(new Stage());
-        primaryStage.close(); // Close the current stage
-      } catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    });
+    Button backToMenuButton = new Button("Close application");
+    backToMenuButton.setOnAction(e -> Platform.exit());
+    backToMenuButton.setStyle("-fx-background-color: #f55353;");
+    backToMenuButton.setTextFill(javafx.scene.paint.Color.WHITE);
 
-    backToMenuButton.setStyle("-fx-background-color: #f4f4f4;");
-    backToMenuButton.setStyle("-fx-text-fill: black;");
 
     VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox, backToMenuButton); // Add all controls here
     controlsPane.setAlignment(Pos.CENTER); // Align controls to the right
@@ -197,12 +196,5 @@ public class ChaosGameView {
 
   }
 
-  public int getCurrentTransformation() {
-    return currentTransformation;
-  }
-
-  public boolean isScreenResized() {
-    return simulationView.isScreenResized();
-  }
 
 }

@@ -12,7 +12,7 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
 
-  private static final double MIN_WIDTH = 760; // Minimum width
+  private static final double MIN_WIDTH = 710; // Minimum width
   private static final double MIN_HEIGHT = 600; // Minimum height
 
   @Override
