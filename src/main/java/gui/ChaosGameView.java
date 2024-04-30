@@ -22,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -115,30 +116,26 @@ public class ChaosGameView {
     backToMenuButton.setStyle("-fx-background-color: #f4f4f4;");
     backToMenuButton.setStyle("-fx-text-fill: black;");
 
-    VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox, backToMenuButton ); // Add all controls here
+    VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox, backToMenuButton); // Add all controls here
     controlsPane.setAlignment(Pos.CENTER); // Align controls to the right
     controlsPane.setPrefHeight(300);
 
     textFieldsBox.setPadding(new Insets(20, 20, 20, 20));
 
+    VBox simulationAndInfoBox = new VBox(simulationView, textFieldsBox);
+    simulationAndInfoBox.setVgrow(simulationView, Priority.ALWAYS); // Allow simulationView to grow
+
     BorderPane root = new BorderPane();
-    AnchorPane anchor = new AnchorPane(root);
-    root.setCenter(simulationView); // Set the simulation view in the center
     root.setRight(controlsPane); // Set the controls pane on the right
-    root.setBottom(textFieldsBox);// Set the back to menu button at the bottom
+    root.setCenter(simulationAndInfoBox); // Set simulationView and textFieldsBox wrapper in the center
 
     // Set background color for anchor pane
-    anchor.setStyle("-fx-background-color: #2b2d31;");
+    root.setStyle("-fx-background-color: #2b2d31;");
 
-    anchor.getChildren().add(controlsPane);
-
-    AnchorPane.setBottomAnchor(textFieldsBox, 0.0);
-    AnchorPane.setRightAnchor(controlsPane, 0.0);
-
-
-
-    return anchor;
+    return root;
   }
+
+
 
 
   private TextField createTextField(String labelText) {
