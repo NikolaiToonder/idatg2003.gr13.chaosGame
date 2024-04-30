@@ -1,3 +1,4 @@
+import chaosgameclasses.ChaosGame;
 import chaosgameclasses.ChaosGameDescription;
 import vectors.Vector2D;
 
@@ -8,9 +9,9 @@ public class Main {
 
   public static void main(String[] args) {
     ChaosGameDescription description = new ChaosGameDescription(
-        "src/resources/sierpinskiTriangle.txt");
+            "src/resources/sierpinskiTriangle.txt");
     Vector2D startingPoint = new Vector2D(0, 0);
-    ChaosGameDescription.ChaosGame app = new ChaosGameDescription.ChaosGame(description, 140,70, startingPoint);
+    ChaosGame app = new ChaosGame(description, 140,70, startingPoint);
     app.runGame();
 
 

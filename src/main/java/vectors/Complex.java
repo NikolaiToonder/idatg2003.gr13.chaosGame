@@ -37,7 +37,7 @@ public class Complex extends Vector2D {
    */
   public Complex add(Complex other) {
     return new Complex(getReal() + other.getReal(),
-        getImaginary() + other.getImaginary());
+            getImaginary() + other.getImaginary());
   }
 
   /**
@@ -68,7 +68,7 @@ public class Complex extends Vector2D {
   @Override
   public Complex subtract(Vector2D other) {
     return new Complex(this.getReal() - other.getX0(), getImaginary()
-        - other.getX1());
+            - other.getX1());
   }
 
   /**

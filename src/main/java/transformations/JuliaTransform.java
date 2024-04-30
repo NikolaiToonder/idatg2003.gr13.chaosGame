@@ -8,7 +8,7 @@ import vectors.Vector2D;
  * number and a sign.
  *
  * @version 1.0
-  */
+ */
 
 
 public class JuliaTransform implements Transform2D {
