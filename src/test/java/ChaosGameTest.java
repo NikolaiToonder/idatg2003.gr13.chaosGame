@@ -1,6 +1,5 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import chaosgameclasses.ChaosGame;
 import chaosgameclasses.ChaosGameDescription;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ import vectors.Vector2D;
 class ChaosGameTest {
   private ChaosGameDescription description;
   private Vector2D startPoint;
-  private ChaosGame chaosGame;
+  private ChaosGameDescription.ChaosGame chaosGame;
 
   /**
    * Sets up the test fixture.
@@ -33,7 +32,7 @@ class ChaosGameTest {
     Vector2D maxCoords = new Vector2D(10, 10);
     description = new ChaosGameDescription(transforms, minCoords, maxCoords);
     startPoint = new Vector2D(5, 5);
-    chaosGame = new ChaosGame(description, 800, 600, startPoint);
+    chaosGame = new ChaosGameDescription.ChaosGame(description, 800, 600, startPoint);
   }
 
   /**

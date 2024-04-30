@@ -1,7 +1,7 @@
 package controller;
 
-import chaosgameclasses.ChaosGame;
+import chaosgameclasses.ChaosGameDescription;
 
 public interface Observer {
-  void update(ChaosGame chaosGame);
+  void update(ChaosGameDescription.ChaosGame chaosGame);
 }

@@ -1,10 +1,10 @@
 package controller;
 
-import chaosgameclasses.ChaosGame;
+import chaosgameclasses.ChaosGameDescription;
 
 public class ChaosGameObserver implements Observer {
   @Override
-  public void update(ChaosGame chaosGame) {
+  public void update(ChaosGameDescription.ChaosGame chaosGame) {
   }
 }
 

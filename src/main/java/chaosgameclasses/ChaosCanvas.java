@@ -30,6 +30,7 @@ public class ChaosCanvas {
    * @param maxCoords The maximum coordinates of the canvas
    */
   public ChaosCanvas(int height, int width, Vector2D minCoords, Vector2D maxCoords) {
+
     setWidth(width);
     setHeight(height);
     this.originalMinCoords = minCoords;
@@ -140,4 +141,8 @@ public class ChaosCanvas {
     this.minCoords = this.originalMinCoords.multiply(1/scalar);
     this.maxCoords = this.originalMaxCoords.multiply(1/scalar);
   }
+
+
+
 }
+
