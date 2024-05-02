@@ -1,12 +1,14 @@
 package gui;
 
 import chaosgameclasses.ChaosGameDescription;
-import java.util.List;
-import matrix.Matrix2x2;
-import transformations.AffineTransform2D;
-import transformations.Transform2D;
-import vectors.Vector2D;
 
+/**
+ * Factory class for creating ChaosGameDescription objects.
+ * Uses files to generate the description of the chaos game.
+
+  * @version 1.0
+  * @author Nikolai Engelsen Tønder, Mustafa Kees
+ */
 public class DescriptionFactory {
   public ChaosGameDescription createAffine2D(String chosenFractal) {
     switch (chosenFractal) {

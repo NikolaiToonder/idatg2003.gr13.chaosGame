@@ -1,4 +1,4 @@
 Julia               # Type of transform
 -1.6, -1            # Lower left
 1.6, 1              # Upper right
--0.6,-0.8
+-0.456,-0.714
