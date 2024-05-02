@@ -41,7 +41,7 @@ public class ChaosGameDescription {
    * @param maxCoords  The maximum coordinates of the canvas.
    */
   public ChaosGameDescription(List<Transform2D> transforms, Vector2D minCoords,
-                              Vector2D maxCoords) {
+      Vector2D maxCoords) {
     setMaxCoords(maxCoords);
     setMinCoords(minCoords);
     setTransforms(transforms);
@@ -108,7 +108,7 @@ public class ChaosGameDescription {
     for (int i = 3; i < values.size(); i++) {
       String[] value = values.get(i).split(",");
       Matrix2x2 matrix = new Matrix2x2(Double.parseDouble(value[0]), Double.parseDouble(value[1]),
-              Double.parseDouble(value[2]), Double.parseDouble(value[3]));
+          Double.parseDouble(value[2]), Double.parseDouble(value[3]));
       Vector2D vector = new Vector2D(Double.parseDouble(value[4]), Double.parseDouble(value[5]));
       transformations.add(new AffineTransform2D(matrix, vector));
       matrix2x2List.add(matrix);
@@ -257,8 +257,8 @@ public class ChaosGameDescription {
 
       if (isMatrix) {
         List<String> matrixValues = values.stream()
-                .map(TextField::getText)
-                .collect(Collectors.toList());
+            .map(TextField::getText)
+            .collect(Collectors.toList());
 
         ChaosGameFileHandler.changeLine(this.path, matrixValues, Integer.parseInt(row) + 2);
       } else {

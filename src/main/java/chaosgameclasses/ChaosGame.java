@@ -41,7 +41,7 @@ public class ChaosGame {
         this.random = new Random();
         this.currentPoint = currentPoint;
         setCanvas(new ChaosCanvas(height, width,
-                description.getMinCoords(), description.getMaxCoords()));
+            description.getMinCoords(), description.getMaxCoords()));
     }
 
     /**
@@ -80,17 +80,17 @@ public class ChaosGame {
             case "1" -> {
                 this.description = new ChaosGameDescription("src/resources/sierpinskiTriangle.txt");
                 this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
-                        description.getMinCoords(), description.getMaxCoords());
+                    description.getMinCoords(), description.getMaxCoords());
             }
             case "2" -> {
                 this.description = new ChaosGameDescription("src/resources/barnsleyTransform.txt");
                 this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
-                        description.getMinCoords(), description.getMaxCoords());
+                    description.getMinCoords(), description.getMaxCoords());
             }
             case "3" -> {
                 this.description = new ChaosGameDescription("src/resources/juliaTransform.txt");
                 this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
-                        description.getMinCoords(), description.getMaxCoords());
+                    description.getMinCoords(), description.getMaxCoords());
             }
             default -> printer.invalidPath();
         }
