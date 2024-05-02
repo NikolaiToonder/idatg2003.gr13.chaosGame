@@ -43,6 +43,7 @@ public class ChaosGameView {
     HBox textFieldsBox = createTextFieldsBox();
 
     public ChaosGameView() {
+
     }
 
     public Parent createContent(Stage primaryStage) {
@@ -88,15 +89,15 @@ public class ChaosGameView {
                     standardizedView);
             chaosGame.zoom(zoomSlider.getValue());
             simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
-            if (newValue.equals("Julia")) {
-                this.showVector = false;
-                updateChoiceBoxMatrix();
-                updateTextFieldsJulia();
-            } else {
-                updateChoiceBoxMatrix();
-                updateTextFieldsAffine();
-            }
-            updateChoiceBoxMatrix();
+          if (!newValue.equals("Julia")) {
+              updateChoiceBoxMatrix();
+              updateTextFieldsAffine();
+          } else {
+              this.showVector = false;
+              updateChoiceBoxMatrix();
+              updateTextFieldsJulia();
+          }
+          updateChoiceBoxMatrix();
         });
 
         choiceBoxMatrix.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -137,7 +138,7 @@ public class ChaosGameView {
         backToMenuButton.setTextFill(javafx.scene.paint.Color.WHITE);
 
 
-        VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox, backToMenuButton); // Add all controls here
+        VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox,draw, backToMenuButton); // Add all controls here
         controlsPane.setAlignment(Pos.CENTER); // Align controls to the right
         controlsPane.setPrefHeight(300);
 
