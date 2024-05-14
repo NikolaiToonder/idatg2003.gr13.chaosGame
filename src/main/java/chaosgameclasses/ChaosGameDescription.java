@@ -275,4 +275,7 @@ public class ChaosGameDescription {
     ChaosGameFileHandler fileHandler = new ChaosGameFileHandler();
     fileHandler.resetFractals(this.path);
   }
+  public void writeToFileCustom(List<String> values){
+   ChaosGameFileHandler.writeCustomFractal(values);
+  }
 }
