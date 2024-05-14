@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 
 import javafx.scene.Parent;
 
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -19,6 +20,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import matrix.Matrix2x2;
@@ -128,7 +130,9 @@ public class ChaosGameView {
         });
 
 
-
+        // New button for the pop-up menu
+        Button popupButton = new Button("Show Pop-up Menu");
+        popupButton.setOnAction(e -> showPopupMenu(primaryStage));
 
 
         // Back to Menu button
@@ -138,7 +142,7 @@ public class ChaosGameView {
         backToMenuButton.setTextFill(javafx.scene.paint.Color.WHITE);
 
 
-        VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox,draw, backToMenuButton); // Add all controls here
+        VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox,draw, backToMenuButton, popupButton); // Add all controls here
         controlsPane.setAlignment(Pos.CENTER); // Align controls to the right
         controlsPane.setPrefHeight(300);
 
@@ -261,5 +265,35 @@ public class ChaosGameView {
             }
         });
     }
+    private void showPopupMenu(Stage primaryStage) {
+        // Create the pop-up stage
+        Stage popupStage = new Stage();
+        // Create the layout for the pop-up
+        VBox popupLayout = new VBox(10);
+        popupLayout.setAlignment(Pos.CENTER);
+        popupLayout.setPadding(new Insets(20));
 
+        // Add content to the pop-up layout
+        // Example: Add labels, buttons, or any other controls you want in the pop-up menu
+        Label popupLabel = new Label("This is a pop-up menu!");
+        Button closeButton = new Button("Close");
+        closeButton.setOnAction(e -> popupStage.close());
+
+        popupLayout.getChildren().addAll(popupLabel, closeButton);
+
+        // Create the scene for the pop-up
+        Scene popupScene = new Scene(popupLayout, 200, 150);
+
+        // Set the scene for the pop-up stage
+        popupStage.setScene(popupScene);
+
+        // Set modality to APPLICATION_MODAL to make the pop-up block interactions with other windows
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+
+        // Set the title for the pop-up stage
+        popupStage.setTitle("Pop-up Menu");
+
+        // Show the pop-up stage
+        popupStage.show();
+    }
 }
