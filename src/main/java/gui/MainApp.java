@@ -44,6 +44,7 @@ public class MainApp extends Application {
     primaryStage.setScene(chaosGameScene);
   }
 
+
   private void centerStage(Stage primaryStage) {
     Screen screen = Screen.getPrimary();
     Rectangle2D bounds = screen.getVisualBounds();
@@ -61,3 +62,4 @@ public class MainApp extends Application {
     launch(args);
   }
 }
+
