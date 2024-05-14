@@ -173,4 +173,30 @@ public class ChaosGameFileHandler {
       throw new IllegalArgumentException("Error writing to file");
     }
   }
+
+  public static void writeCustomFractal(List<String> values) {
+    try {
+      clearCustomFractal();
+      Path filePath = Paths.get("src/resources/customTransform.txt");
+      List<String> lines = Files.readAllLines(filePath);
+      values.forEach(System.out::println);
+      for (int i = 0; i < values.size(); i++) {
+        lines.add(i, values.get(i));
+      }
+      Files.write(filePath, lines);
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new IllegalArgumentException("Error writing to file");
+    }
+  }
+  public static void clearCustomFractal() {
+    try {
+      Path filePath = Paths.get("src/resources/customTransform.txt");
+      List<String> lines = Files.readAllLines(filePath);
+      lines.clear();
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new IllegalArgumentException("Error reading file");
+    }
+  }
 }
