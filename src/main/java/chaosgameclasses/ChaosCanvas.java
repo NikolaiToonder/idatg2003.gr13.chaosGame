@@ -13,6 +13,7 @@ import vectors.Vector2D;
 public class ChaosCanvas {
 
   private int[][] canvas;
+  private int[][] canvasHeatMap;
   private int width;
   private int height;
   private Vector2D minCoords;
@@ -37,16 +38,19 @@ public class ChaosCanvas {
     this.originalMaxCoords = maxCoords;
     this.maxCoords = maxCoords;
     this.canvas = new int[height][width];
+    this.canvasHeatMap = new int[height][width];
   }
 
   public void setWidth(int width) {
     this.width = width;
     this.canvas = new int[width][height];
+    this.canvasHeatMap = new int[width][height];
   }
 
   public void setHeight(int height) {
     this.height = height;
     this.canvas = new int[width][height];
+    this.canvasHeatMap = new int[width][height];
   }
 
   /**
@@ -77,6 +81,7 @@ public class ChaosCanvas {
       return;
     }
     canvas[xindex][yindex] = 1;
+    canvasHeatMap[xindex][yindex] += 1;
   }
 
   /**
@@ -139,5 +144,14 @@ public class ChaosCanvas {
   public void zoom(double scalar) {
     this.minCoords = this.originalMinCoords.multiply(1/scalar);
     this.maxCoords = this.originalMaxCoords.multiply(1/scalar);
+  }
+  public int[][] getCanvasHeatMap(){
+    for(int i = 0; i < canvasHeatMap.length; i++) {
+      for (int j = 0; j < canvasHeatMap[i].length; j++) {
+        System.out.print(canvasHeatMap[i][j]);
+      }
+      System.out.println();
+    }
+    return this.canvasHeatMap;
   }
 }

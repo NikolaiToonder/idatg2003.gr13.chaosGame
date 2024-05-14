@@ -152,4 +152,25 @@ public class ChaosGameFileHandler {
       throw new IllegalArgumentException("Error writing to file");
     }
   }
+  public void resetFractals(String path){
+    try {
+      Path filePath = Paths.get(path);
+      if(path.contains("pinski")){
+        Path standardFilePath = Paths.get("src/resources/sierpinskiTemplate.txt");
+        List<String> lines = Files.readAllLines(standardFilePath);
+        Files.write(filePath, lines);
+      } else if (path.contains("arnsley")) {
+        Path standardFilePath = Paths.get("src/resources/barnsleyTemplate.txt");
+        List<String> lines = Files.readAllLines(standardFilePath);
+        Files.write(filePath, lines);
+      } else if (path.contains("ulia")) {
+        Path standardFilePath = Paths.get("src/resources/juliaTemplate.txt");
+        List<String> lines = Files.readAllLines(standardFilePath);
+        Files.write(filePath, lines);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new IllegalArgumentException("Error writing to file");
+    }
+  }
 }

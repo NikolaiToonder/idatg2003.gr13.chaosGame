@@ -3,8 +3,6 @@ package gui;
 
 import chaosgameclasses.ChaosGame;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -34,7 +32,6 @@ import vectors.Vector2D;
 public class ChaosGameView {
 
 
-    private SimulationView simulationView;
     private final DescriptionFactory descriptionFactory = new DescriptionFactory();
     private final Vector2D standardizedView = new Vector2D(0.5, 0.5);
     private ChaosGame chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"), 500,
@@ -49,6 +46,7 @@ public class ChaosGameView {
     }
 
     public Parent createContent(Stage primaryStage) {
+        SimulationView simulationView;
         simulationView = new SimulationView();
         updateChoiceBoxMatrix();
         //runs because the first transformation is always affine
@@ -115,9 +113,9 @@ public class ChaosGameView {
             String typeOfTransform = choiceBox.getValue();
             String choiceToEdit = choiceBoxMatrix.getValue();
             List<TextField> textFieldsList = textFieldsBox.getChildren().stream()
-                    .filter(node -> node instanceof TextField)
-                    .map(node -> (TextField) node)
-                    .collect(Collectors.toList());
+                    .filter(TextField.class::isInstance)
+                    .map(TextField.class::cast)
+                    .toList();
             this.chaosGame.getDescription().writeToFile(typeOfTransform, choiceToEdit, textFieldsList);
             this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(choiceBox.getValue()), 500, 500,
                     standardizedView);
@@ -129,10 +127,27 @@ public class ChaosGameView {
             simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
         });
 
+        Button resetFractalsButton = new Button("Reset Fractal");
 
-        // New button for the pop-up menu
-        Button popupButton = new Button("Show Pop-up Menu");
-        popupButton.setOnAction(e -> showPopupMenu(primaryStage));
+
+        resetFractalsButton.setStyle("-fx-background-color: #ffbb00;");
+        resetFractalsButton.setTextFill(javafx.scene.paint.Color.WHITE);
+        resetFractalsButton.setOnAction(e -> {
+            this.chaosGame.getDescription().resetFractals();
+            this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(choiceBox.getValue()), 500, 500,
+                standardizedView);
+            if(choiceBox.getValue().equals("Julia")){
+                updateTextFieldsJulia();
+            } else {
+                updateTextFieldsAffine();
+            }
+            simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
+        });
+
+        Button popupButton = new Button("New Fractal");
+        popupButton.setStyle("-fx-background-color: #339922;");
+        popupButton.setOnAction(e -> NewFractalMenuView.showPopupMenu());
+
 
 
         // Back to Menu button
@@ -141,8 +156,7 @@ public class ChaosGameView {
         backToMenuButton.setStyle("-fx-background-color: #f55353;");
         backToMenuButton.setTextFill(javafx.scene.paint.Color.WHITE);
 
-
-        VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox,draw, backToMenuButton, popupButton); // Add all controls here
+        VBox controlsPane = new VBox(10, iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, choiceBox,draw, resetFractalsButton, popupButton, backToMenuButton); // Add all controls here
         controlsPane.setAlignment(Pos.CENTER); // Align controls to the right
         controlsPane.setPrefHeight(300);
 

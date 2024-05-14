@@ -271,4 +271,8 @@ public class ChaosGameDescription {
   public String getTypeOfTransformation() {
     return this.typeOfTransformation;
   }
+  public void resetFractals(){
+    ChaosGameFileHandler fileHandler = new ChaosGameFileHandler();
+    fileHandler.resetFractals(this.path);
+  }
 }
