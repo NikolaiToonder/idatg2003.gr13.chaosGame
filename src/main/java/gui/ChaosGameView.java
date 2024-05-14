@@ -142,14 +142,15 @@ public class ChaosGameView {
     controlsPane.setAlignment(Pos.CENTER); // Align controls to the right
     controlsPane.setPrefHeight(300);
 
-    textFieldsBox.setPadding(new Insets(20, 20, 20, 20));
+    //textFieldsBox.setPadding(new Insets(20, 20, 20, 20));
 
     VBox simulationAndInfoBox = new VBox(simulationView, textFieldsBox);
     VBox.setVgrow(simulationView, Priority.ALWAYS); // Allow simulationView to grow
 
     BorderPane root = new BorderPane();
-    root.setRight(controlsPane); // Set the controls pane on the right
     root.setCenter(simulationAndInfoBox); // Set simulationView and textFieldsBox wrapper in the center
+    root.setRight(controlsPane); // Set the controls pane on the right
+
 
     // Set background color for anchor pane
     root.setStyle("-fx-background-color: #2b2d31;");
@@ -261,5 +262,6 @@ public class ChaosGameView {
       }
     });
   }
+
 
 }

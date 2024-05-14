@@ -23,6 +23,7 @@ public class MainApp extends Application {
     primaryStage.setScene(startupScene);
     primaryStage.setMinWidth(MIN_WIDTH);
     primaryStage.setMinHeight(MIN_HEIGHT);
+    primaryStage.setFullScreen(true);
 
     centerStage(primaryStage);
     primaryStage.setTitle("Chaos Game");
@@ -40,7 +41,13 @@ public class MainApp extends Application {
 
   private void changeToChaosGameView(Stage primaryStage) {
     ChaosGameView chaosGameView = new ChaosGameView();
+
+    //Make chaosGameView to fit bounds to resize
+    //chaosGameView
     Scene chaosGameScene = new Scene(chaosGameView.createContent(primaryStage));
+
+
+    Screen screen = Screen.getPrimary();
     primaryStage.setScene(chaosGameScene);
   }
 
