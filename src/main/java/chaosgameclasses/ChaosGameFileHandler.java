@@ -192,8 +192,9 @@ public class ChaosGameFileHandler {
   public static void clearCustomFractal() {
     try {
       Path filePath = Paths.get("src/resources/customTransform.txt");
-      List<String> lines = Files.readAllLines(filePath);
-      lines.clear();
+
+      Files.write(filePath, "".getBytes());
+
     } catch (IOException e) {
       e.printStackTrace();
       throw new IllegalArgumentException("Error reading file");

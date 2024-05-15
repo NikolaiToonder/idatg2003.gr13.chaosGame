@@ -33,7 +33,7 @@ public class NewFractalMenuView {
   }
 
 
-  public void showPopupMenu() {
+  public void showPopupMenu(Consumer<List<String>> callback) {
     // Create the pop-up stage
     Stage popupStage = new Stage();
     // Create the layout for the pop-up
@@ -86,8 +86,10 @@ public class NewFractalMenuView {
     // Inside the saveButton.setOnAction method, call the callback
     saveButton.setOnAction(e -> {
       parseValues();
+      callback.accept(allValues);
       popupStage.close();
     });
+
   }
 
   public List<String> getAllValues(){
@@ -208,6 +210,7 @@ public class NewFractalMenuView {
         TextField textField = (TextField) gridPane.getChildren().get(j);
         line.append(textField.getText()).append(",");
       }
+      line.deleteCharAt(line.length()-1);
       allValues.add(line.toString());
     }
   }

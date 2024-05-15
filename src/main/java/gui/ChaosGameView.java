@@ -145,10 +145,7 @@ public class ChaosGameView {
         popupButton.setStyle("-fx-background-color: #339922;");
         popupButton.setOnAction(e -> {
             NewFractalMenuView fractalmenuView = new NewFractalMenuView();
-            fractalmenuView.showPopupMenu();
-            List<String> allValues = fractalmenuView.getAllValues();
-            allValues.forEach(System.out::println);
-            this.chaosGame.getDescription().writeToFileCustom(allValues);
+            fractalmenuView.showPopupMenu(this::handleNewFractalValues);
         });
 
 
@@ -282,6 +279,15 @@ public class ChaosGameView {
                 }
             }
         });
+    }
+
+    /**
+     * WRITTEN WITH CHATGPT
+     * @param values
+     */
+    private void handleNewFractalValues(List<String> values) {
+        // Handle the received values here
+        this.chaosGame.getDescription().writeToFileCustom(values);
     }
 
 }
