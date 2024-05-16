@@ -134,7 +134,6 @@ public class ChaosGameFileHandler {
       List<String> lines = Files.readAllLines(filePath);
       String lineToChange = lines.get(lineNumber).replaceAll("#.*", "");
       String[] values = lineToChange.split(",");
-      System.out.println(valuesToChange.size());
       if (valuesToChange.size() >3) {
         for (int i = 0; i < values.length - 2; i++) {
           values[i] = valuesToChange.get(i);

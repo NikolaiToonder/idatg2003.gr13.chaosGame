@@ -61,7 +61,7 @@ public class ChaosGameView {
         ChoiceBox<String> choiceBox = new ChoiceBox<>();
 
         // Add items to the ChoiceBox
-        choiceBox.getItems().addAll("Julia", "Sierpinski", "Barnsley");
+        choiceBox.getItems().addAll("Julia", "Sierpinski", "Barnsley", "Custom");
 
         // Set a default selection
         choiceBox.setValue("Sierpinski");
@@ -141,7 +141,7 @@ public class ChaosGameView {
             simulationView.updateSimulationView(chaosGame, (int) iterationSlider.getValue());
         });
 
-        Button popupButton = new Button("New Fractal");
+        Button popupButton = new Button("Edit Custom Fractal");
         popupButton.setStyle("-fx-background-color: #339922;");
         popupButton.setOnAction(e -> {
             NewFractalMenuView fractalmenuView = new NewFractalMenuView();
