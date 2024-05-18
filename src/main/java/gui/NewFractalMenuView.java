@@ -253,6 +253,7 @@ public class NewFractalMenuView {
         for (int j = 0; j < gridPane.getChildren().size(); j++) {
           TextField textField = (TextField) gridPane.getChildren().get(j);
           line.append(textField.getText()).append(",");
+          textField.setText("");
         }
         line.deleteCharAt(line.length() - 1);
         allMatrixValues.add(line.toString());

@@ -1,6 +1,7 @@
 package gui;
 
 import chaosgameclasses.ChaosGame;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,29 +19,39 @@ import vectors.Vector2D;
 public class SimulationView extends Pane {
   private final Canvas canvas;
 
+  /**
+   * Constructor of the class. Used to initialize and set up the class.
+   *
+   */
   public SimulationView() {
-    // Initialize the canvas with square dimensions
-    canvas = new Canvas(550, 650); // Set initial size to a square
-    this.getChildren().add(canvas); // Add canvas to pane
+    canvas = new Canvas(550, 650);
+    this.getChildren().add(canvas);
 
-    // Apply styles to the SimulationView for border and background
     this.setStyle("-fx-background-color: #2b2d31;");
 
-    // Ensure the SimulationView itself is prepared to maintain a square shape
-    // Here, we simply start with a square configuration, but see Step 1 for dynamic resizing
-    // Center the canvas within the pane; useful if the SimulationView's size changes but maintains square shape
+    this.setPadding(new Insets(10,10,10,10));
+
     StackPane.setAlignment(canvas, Pos.CENTER);
 
-    // Set initial current width and height based on the canvas size; these are kept for potential future use
-    //double currentHeight = canvas.getHeight();
-   // double currentWidth = canvas.getWidth();
   }
 
 
+  /**
+   * Method called to update the simulation view.
+   * Will only use the canvas to draw the fractal again.
+   * @param chaosGame chaosGame class to use
+   * @param iterations How many iterations the user wants.
+   */
   public void updateSimulationView(ChaosGame chaosGame, Number iterations) {
     drawFractal(chaosGame, iterations.intValue());
   }
 
+  /**
+   * Method to draw the fractals. Uses the graphicscontext of the canvas, and fills
+   * a pixel in at the coordinate needed.
+   * @param chaosGame
+   * @param iterations
+   */
   private void drawFractal(ChaosGame chaosGame, int iterations) {
     GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -82,10 +93,5 @@ public class SimulationView extends Pane {
         }
 
      */
-
-
   }
-
-
-
 }

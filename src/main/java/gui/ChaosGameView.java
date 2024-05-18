@@ -39,10 +39,12 @@ public class ChaosGameView {
     private boolean showVector = false;
     HBox textFieldsBox = createTextFieldsBox();
 
-    public ChaosGameView() {
-
-    }
-
+    /**
+     * Primary function of the class, and is responsible for creating and operating the gui.
+     * All contents of the gui will be created, and when interacted with, observers will be called.
+     * @param primaryStage
+     * @return
+     */
     public Parent createContent(Stage primaryStage) {
         SimulationView simulationView;
         simulationView = new SimulationView();
@@ -189,12 +191,21 @@ public class ChaosGameView {
         return root;
     }
 
+    /**
+     * Method to create a textField, created to save some lines of code by using promtText
+     * @param labelText Prompt text of the textField
+     * @return textField, the text field.
+     */
     private TextField createTextField(String labelText) {
         TextField textField = new TextField();
         textField.setPromptText(labelText);
         return textField;
     }
 
+    /**
+     * Method to create a horizontal box that contains TextFields
+     * @return textFieldsBox, a horizontal box containing all textFields.
+     */
     private HBox createTextFieldsBox() {
         TextField a00TextField = createTextField("a00");
         TextField a01TextField = createTextField("a01");
@@ -210,6 +221,7 @@ public class ChaosGameView {
     }
 
 
+
     private void updateChoiceBoxMatrix() {
         this.choiceBoxMatrix.getItems().clear();
         for (int i = 0; i < this.chaosGame.getDescription().getNumberOfTransforms(); i++) {
@@ -220,6 +232,10 @@ public class ChaosGameView {
         this.currentTransformation = 1;
     }
 
+    /**
+     * Method to update all TextFields in the gui to match the current transformations
+     * in place.
+     */
     private void updateTextFieldsAffine() {
         this.chaosGame.getDescription().setTypeOfTransformation("Affine");
         List<Matrix2x2> matrices = this.chaosGame.getDescription().getMatrixList();
@@ -261,6 +277,11 @@ public class ChaosGameView {
         }
     }
 
+    /**
+     * Method to update textfields for a julia transformation.
+     * This method will automatically update all fields to match the transformation the user has
+     * chosen
+     */
     private void updateTextFieldsJulia() {
         this.chaosGame.getDescription().setTypeOfTransformation("Julia");
         List<Complex> complexNumbers = this.chaosGame.getDescription().getComplexNumbers();
@@ -283,7 +304,9 @@ public class ChaosGameView {
 
     /**
      * WRITTEN WITH CHATGPT
-     * @param values
+     * Part of a series of methods written by ChatGPT in order to let the user create
+     * their own defined transformations
+     * @param values list of values to pass onto description class.
      */
     private void handleNewFractalValues(List<String> values) {
         // Handle the received values here

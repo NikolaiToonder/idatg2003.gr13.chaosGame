@@ -137,14 +137,28 @@ public class ChaosCanvas {
     return transformCoordsToIndices.transform(point);
   }
 
+  /**
+   * Getter for the field transformed
+   * @return Vector2D transformed
+   */
   public Vector2D getTransformed() {
     return this.transformed;
   }
 
+  /**
+   * Method to zoom into the fractal. Only scales the min and max coordinated of the program.
+   * So this is not a real zoom, because the program will redraw the whole fractal.
+   * @param scalar 1-10x scalar to zoom
+   */
   public void zoom(double scalar) {
     this.minCoords = this.originalMinCoords.multiply(1/scalar);
     this.maxCoords = this.originalMaxCoords.multiply(1/scalar);
   }
+
+  /**
+   * Getter for the HeatMap field.
+   * @return canvasHeatMap int[][]
+   */
   public int[][] getCanvasHeatMap(){
     for(int i = 0; i < canvasHeatMap.length; i++) {
       for (int j = 0; j < canvasHeatMap[i].length; j++) {

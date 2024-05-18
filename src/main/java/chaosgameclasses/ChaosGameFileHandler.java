@@ -151,7 +151,7 @@ public class ChaosGameFileHandler {
       throw new IllegalArgumentException("Error writing to file");
     }
   }
-  public void resetFractals(String path){
+  public static void resetFractals(String path){
     try {
       Path filePath = Paths.get(path);
       if(path.contains("pinski")){

@@ -29,18 +29,34 @@ public class Matrix2x2 {
     this.a11 = a11;
   }
 
+  /**
+   * Getter for the field a00.
+   * @return double a00
+   */
   public double getA00() {
     return a00;
   }
 
+  /**
+   * Getter for the field a01
+   * @return double a01
+   */
   public double getA01() {
     return a01;
   }
 
+  /**
+   * Getter for the field a10.
+   * @return double a10
+   */
   public double getA10() {
     return a10;
   }
 
+  /**
+   * Getter for the field a11
+   * @return double a11
+   */
   public double getA11() {
     return a11;
   }

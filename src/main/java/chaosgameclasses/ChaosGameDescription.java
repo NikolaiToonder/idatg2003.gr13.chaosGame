@@ -107,30 +107,48 @@ public class ChaosGameDescription {
     this.numberOfTransforms = values.size() - 3;
     for (int i = 3; i < values.size(); i++) {
       String[] value = values.get(i).split(",");
-      Matrix2x2 matrix = new Matrix2x2(Double.parseDouble(value[0]), Double.parseDouble(value[1]),
-              Double.parseDouble(value[2]), Double.parseDouble(value[3]));
-      Vector2D vector = new Vector2D(Double.parseDouble(value[4]), Double.parseDouble(value[5]));
-      transformations.add(new AffineTransform2D(matrix, vector));
-      matrix2x2List.add(matrix);
-      vector2DList.add(vector);
+      if(value.length > 0) {
+        Matrix2x2 matrix = new Matrix2x2(Double.parseDouble(value[0]), Double.parseDouble(value[1]),
+            Double.parseDouble(value[2]), Double.parseDouble(value[3]));
+        Vector2D vector = new Vector2D(Double.parseDouble(value[4]), Double.parseDouble(value[5]));
+        transformations.add(new AffineTransform2D(matrix, vector));
+        matrix2x2List.add(matrix);
+        vector2DList.add(vector);
+      }
     }
     setTransforms(transformations);
     setMatrixList(matrix2x2List);
     setVectorList(vector2DList);
   }
 
+  /**
+   * Setter for the matrixList field.
+   * @param matrixList list of matrix2x2
+   */
   public void setMatrixList(List<Matrix2x2> matrixList) {
     this.matrixList = matrixList;
   }
 
+  /**
+   * Setter for the vectorList field.
+   * @param vectorList list of vector2d
+   */
   public void setVectorList(List<Vector2D> vectorList) {
     this.vectorList = vectorList;
   }
 
+  /**
+   * Getter for the matrixList field
+   * @return matrixList, a list of matricies
+   */
   public List<Matrix2x2> getMatrixList() {
     return matrixList;
   }
 
+  /**
+   * Getter for the vectorList field.
+   * @return vectorList, a list of vectors.
+   */
   public List<Vector2D> getVectorList() {
     return vectorList;
   }
@@ -158,6 +176,11 @@ public class ChaosGameDescription {
 
   }
 
+  /**
+   * Setter for the typeOfTransformation field.
+   * @param typeOfTransformation type of transformation the user wants.
+   *                             Can either be Affine2D or Complex
+   */
   public void setTypeOfTransformation(String typeOfTransformation) {
     this.typeOfTransformation = typeOfTransformation;
   }
@@ -172,6 +195,10 @@ public class ChaosGameDescription {
     return minCoords;
   }
 
+  /**
+   * Returns the sign of the complex fractal.
+   * @return
+   */
   public int getSign() {
     return sign;
   }
@@ -243,6 +270,13 @@ public class ChaosGameDescription {
     ChaosGameFileHandler.writeToFile(values);
   }
 
+  /**
+   * Method to handle values from a list of textFields, and then pass it onto a fileWriter class.
+   * @param typeOfTransform What transformation the user wants.
+   * @param choiceString String of what line the user wants to edit,
+   *                    and if it is a vector or matrix.
+   * @param values all textFields in the program.
+   */
   public void writeToFile(String typeOfTransform, String choiceString, List<TextField> values){
     boolean isJulia = typeOfTransform.equals("Julia");
     if (isJulia) {
@@ -268,13 +302,29 @@ public class ChaosGameDescription {
       }
     }
   }
+
+  /**
+   * Getter for the typeOfTransformation field.
+   * @return typeOfTransformation String
+   */
   public String getTypeOfTransformation() {
     return this.typeOfTransformation;
   }
+
+  /**
+   * Used to reset the fractal chosen into a standard template included in the program.
+   *
+   */
   public void resetFractals(){
-    ChaosGameFileHandler fileHandler = new ChaosGameFileHandler();
-    fileHandler.resetFractals(this.path);
+    ChaosGameFileHandler.resetFractals(this.path);
   }
+
+  /**
+   * If the user wishes to create a custom fractal, this is the method the program uses to write
+   * the users chosen values to a file. Will take in a list of strings, where the lines corresponds
+   * to what you would see in the txt files containing the templates.
+   * @param values values the program wants to handle.
+   */
   public void writeToFileCustom(List<String> values){
    ChaosGameFileHandler.writeCustomFractal(values);
   }
