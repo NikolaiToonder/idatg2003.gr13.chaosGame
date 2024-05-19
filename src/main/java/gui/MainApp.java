@@ -1,5 +1,6 @@
 package gui;
 
+
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -44,7 +45,6 @@ public class MainApp extends Application {
     primaryStage.setScene(chaosGameScene);
   }
 
-
   private void centerStage(Stage primaryStage) {
     Screen screen = Screen.getPrimary();
     Rectangle2D bounds = screen.getVisualBounds();
@@ -57,9 +57,7 @@ public class MainApp extends Application {
     primaryStage.setY(centerY);
   }
 
-
   public static void main(String[] args) {
     launch(args);
   }
 }
-
