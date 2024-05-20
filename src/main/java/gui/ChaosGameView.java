@@ -16,6 +16,8 @@ import matrix.Matrix2x2;
 import vectors.Complex;
 import vectors.Vector2D;
 
+import java.util.function.UnaryOperator;
+
 public class ChaosGameView {
   private final ChoiceBox<String> fractalChoiceBox = new ChoiceBox<>();
   private final ChoiceBox<String> matrixChoiceBox = new ChoiceBox<>();
@@ -299,9 +301,6 @@ public class ChaosGameView {
 
     return textFieldsBox;
   }
-
-
-
 
   public void updateTextFields(ChaosGame chaosGame, int currentTransformation){
     if(chaosGame.getDescription().getTypeOfTransformation().equals("Julia")){

@@ -124,20 +124,28 @@ public class NewFractalMenuView {
     popupStage.show();
   }
 
-  public ChoiceBox configureChoiceBox(){
-    ChoiceBox<Object> choiceBox1 = new ChoiceBox<>();
+  public ChoiceBox<String> configureChoiceBox(){
+    ChoiceBox<String> choiceBox1 = new ChoiceBox<>();
     choiceBox1.getItems().addAll("Julia", "Affine2D");
     choiceBox1.setValue("Affine2D");
     return choiceBox1;
   }
 
-  public VBox createMatrixBox(String value) {
+  public static VBox createMatrixBox(String value){
+    UnaryOperator<Change> filter = change -> {
+      String newText = change.getControlNewText();
+      if (newText.matches("-?\\d*\\.?\\d*")) { // Allow digits and an optional decimal point
+        return change; // Accept the change
+      }
+      return null; // Reject the change
+    };
+
     VBox matrixBox = new VBox();
     GridPane gridPane = new GridPane();
     gridPane.setHgap(10);
     gridPane.setVgap(10);
+    if(value.equals("Affine2D")) {
 
-    if (value.equals("Affine2D")) {
       // Creating text fields for the matrix
       TextField aField = new TextField();
       TextField bField = new TextField();
@@ -147,10 +155,10 @@ public class NewFractalMenuView {
       TextField aVector = new TextField();
       TextField bVector = new TextField();
 
-      aField.setStyle(styleGreen);
-      bField.setStyle(styleGreen);
-      cField.setStyle(styleGreen);
-      dField.setStyle(styleGreen);
+      aField.setStyle("-fx-background-color: #449933;");
+      bField.setStyle("-fx-background-color: #449933;");
+      cField.setStyle("-fx-background-color: #449933;");
+      dField.setStyle("-fx-background-color: #449933;");
 
       aVector.setStyle("-fx-background-color: #444499;");
       bVector.setStyle("-fx-background-color: #444499;");
@@ -164,6 +172,7 @@ public class NewFractalMenuView {
       aVector.setPromptText("b0");
       bVector.setPromptText("b1");
 
+      // Apply text formatter to all text fields
       applyTextFormatter(aField, filter);
       applyTextFormatter(bField, filter);
       applyTextFormatter(cField, filter);
@@ -176,30 +185,32 @@ public class NewFractalMenuView {
       gridPane.add(bField, 1, 0);
       gridPane.add(cField, 0, 1);
       gridPane.add(dField, 1, 1);
-
       gridPane.add(aVector, 2, 0);
       gridPane.add(bVector, 2, 1);
 
-    } else if (value.equals("Julia")) {
-      // Creating text fields for the Julia set
+      // Adding grid pane to the matrix box
+      matrixBox.getChildren().add(gridPane);
+
+    } else {
       TextField c0Field = new TextField();
       TextField c1Field = new TextField();
-
       c0Field.setPromptText("c0");
       c0Field.setStyle("-fx-background-color: #449933;");
       c1Field.setPromptText("c1");
       c1Field.setStyle("-fx-background-color: #449933;");
 
+      // Apply text formatter to text fields
       applyTextFormatter(c0Field, filter);
       applyTextFormatter(c1Field, filter);
 
       gridPane.add(c0Field, 0, 0);
       gridPane.add(c1Field, 1, 0);
-    }
 
-    matrixBox.getChildren().add(gridPane);
+      matrixBox.getChildren().add(gridPane);
+    }
     return matrixBox;
   }
+
 
   private VBox createMinMaxFields(){
     TextField minx0 = new TextField("");
