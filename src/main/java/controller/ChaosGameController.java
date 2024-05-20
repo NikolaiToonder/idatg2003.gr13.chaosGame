@@ -37,12 +37,7 @@ public class ChaosGameController {
     view.addCloseButtonListener(e -> handleCloseButton());
 
     view.addDisplayVectorListener((observable, oldValue, newValue) -> {
-      boolean showVector = newValue;
-      if (view.getFractalChoiceBoxValue().equals("Julia")) {
-        view.updateTextFieldsJulia(chaosGame, currentTransformation);
-      } else {
-        view.updateTextFieldsAffine(chaosGame, currentTransformation, showVector);
-      }
+      view.updateTextFields(chaosGame,currentTransformation);
     });
   }
 
@@ -75,12 +70,7 @@ public class ChaosGameController {
     this.chaosGame.getDescription().setIsBarnsley(fractalType.equals("Barnsley"));
     chaosGame.zoom(view.getZoomSliderValue());
     view.updateSimulationView(chaosGame, (int) view.getIterationSliderValue());
-
-    if (fractalType.equals("Julia")) {
-      view.updateTextFieldsJulia(chaosGame, currentTransformation);
-    } else {
-      view.updateTextFieldsAffine(chaosGame, currentTransformation, view.getDisplayVectorValue());
-    }
+    view.updateTextFields(chaosGame,currentTransformation);
   }
 
 

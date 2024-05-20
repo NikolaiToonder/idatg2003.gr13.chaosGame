@@ -258,5 +258,14 @@ public class ChaosGameView {
     textFieldsBox.setPadding(new Insets(0, 0, 20, 0));
     return textFieldsBox;
   }
+
+
+  public void updateTextFields(ChaosGame chaosGame, int currentTransformation){
+    if(chaosGame.getDescription().getTypeOfTransformation().equals("Julia")){
+      updateTextFieldsJulia(chaosGame, currentTransformation);
+    } else {
+      updateTextFieldsAffine(chaosGame,currentTransformation,getDisplayVectorValue());
+    }
+  }
 }
 
