@@ -3,10 +3,13 @@ package gui;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -15,7 +18,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -26,14 +32,27 @@ public class NewFractalMenuView {
   private VBox matrixBox;
   private VBox minMaxBox;
   private ChoiceBox<String> choiceBox;
-  private List<String> allValues;
+  private List<String> allHeaderValues;
+  private List<String> allMatrixValues;
+  private List<String> allv;
+
+  //WITH CHATGPT vv
+  UnaryOperator<Change> filter = change -> {
+    String newText = change.getControlNewText();
+    if (newText.matches("-?\\d*\\.?\\d*")) { // Allow digits and an optional decimal point
+      return change; // Accept the change
+    }
+    return null; // Reject the change
+  };
 
   public NewFractalMenuView() {
-    this.allValues = new ArrayList<>();
+    this.allHeaderValues = new ArrayList<>();
+    this.allMatrixValues = new ArrayList<>();
+    this.allv = new ArrayList<>();
   }
 
 
-  public void showPopupMenu() {
+  public void showPopupMenu(Consumer<List<String>> callback) {
     // Create the pop-up stage
     Stage popupStage = new Stage();
     // Create the layout for the pop-up
@@ -54,6 +73,8 @@ public class NewFractalMenuView {
     this.minMaxBox = createMinMaxFields();
     this.matrixBox = createMatrixBox(choiceBox.getValue());
 
+
+
     choiceBox.setOnAction(e -> {
       matrixBox.getChildren().clear();
       matrixBox.getChildren().add(createMatrixBox(choiceBox.getValue()));
@@ -66,7 +87,14 @@ public class NewFractalMenuView {
     separator.setMaxWidth(Double.MAX_VALUE);
     separator.setStyle("-fx-background-color: white;");
 
-    popupLayout.getChildren().addAll(title, choiceBox, minMaxBox, separator, matrixBox, saveButton);
+    Button addNewLayer = new Button("New Transformation");
+    addNewLayer.setStyle("-fx-background-color: #4488ff");
+
+    HBox buttonBox = new HBox(saveButton, addNewLayer);
+    buttonBox.setSpacing(10);
+    buttonBox.setAlignment(Pos.CENTER);
+
+    popupLayout.getChildren().addAll(title, choiceBox, minMaxBox, separator, matrixBox, buttonBox);
 
     // Create the scene for the pop-up
     Scene popupScene = new Scene(popupLayout, 500, 400);
@@ -85,19 +113,34 @@ public class NewFractalMenuView {
 
     // Inside the saveButton.setOnAction method, call the callback
     saveButton.setOnAction(e -> {
+      parseHeaderValues();
       parseValues();
+      combineAllValues();
+      callback.accept(allv);
       popupStage.close();
+    });
+    addNewLayer.setOnAction(e -> {
+      /* Vis popup meny og vær sikker på at brukeren har fylt ut alle felt
+      Å trykke på denne knappen gjør at brukeren ikke kan endre på transformasjonen som var
+       */
+      parseValues();
     });
   }
 
-  public List<String> getAllValues(){
-    this.allValues.forEach(System.out::println);
-    System.out.println("hallo" + allValues.size());
-    return this.allValues;
+  public void validateAllFields() {
+    System.out.println(minMaxBox.getChildren().get(0).hasProperties());
   }
 
 
-  private static VBox createMatrixBox(String value){
+  public List<String> getAllValues(){
+    this.allv.forEach(System.out::println);
+    System.out.println("hallo" + allv.size());
+    return this.allv;
+  }
+
+
+  private VBox createMatrixBox(String value){
+
     VBox matrixBox = new VBox();
     GridPane gridPane = new GridPane();
     gridPane.setHgap(10);
@@ -130,6 +173,13 @@ public class NewFractalMenuView {
       aVector.setPromptText("b0");
       bVector.setPromptText("b1");
 
+      applyTextFormatter(aField, filter);
+      applyTextFormatter(bField, filter);
+      applyTextFormatter(cField, filter);
+      applyTextFormatter(dField, filter);
+      applyTextFormatter(aVector, filter);
+      applyTextFormatter(bVector, filter);
+
       // Creating a grid pane to organize the text fields in a square layout
 
       gridPane.add(aField, 0, 0);
@@ -151,6 +201,9 @@ public class NewFractalMenuView {
       c1Field.setPromptText("c1");
       c1Field.setStyle("-fx-background-color: #449933;");
 
+      applyTextFormatter(c0Field, filter);
+      applyTextFormatter(c1Field, filter);
+
       gridPane.add(c0Field, 0, 0);
       gridPane.add(c1Field, 1, 0);
 
@@ -159,7 +212,7 @@ public class NewFractalMenuView {
     return matrixBox;
   }
 
-  private static VBox createMinMaxFields(){
+  private VBox createMinMaxFields(){
     TextField minx0 = new TextField("");
     TextField minx1 = new TextField("");
 
@@ -176,6 +229,11 @@ public class NewFractalMenuView {
     maxx1.setStyle("-fx-background-color: #ff8888");
     maxx1.setPromptText("Max x1");
 
+    applyTextFormatter(minx0, filter);
+    applyTextFormatter(minx1, filter);
+    applyTextFormatter(maxx1,filter);
+    applyTextFormatter(maxx0,filter);
+
     GridPane gridPane = new GridPane();
     gridPane.setHgap(10);
     gridPane.setVgap(10);
@@ -188,29 +246,39 @@ public class NewFractalMenuView {
   }
 
   private void parseValues(){
-    // Get the selected value from the choiceBox
+      // Get values from matrixBox
+      for (int i = 0; i < matrixBox.getChildren().size(); i++) {
+        GridPane gridPane = (GridPane) matrixBox.getChildren().get(i);
+        StringBuilder line = new StringBuilder();
+        for (int j = 0; j < gridPane.getChildren().size(); j++) {
+          TextField textField = (TextField) gridPane.getChildren().get(j);
+          line.append(textField.getText()).append(",");
+          textField.setText("");
+        }
+        line.deleteCharAt(line.length() - 1);
+        allMatrixValues.add(line.toString());
+      }
+  }
+  private static void applyTextFormatter(TextField textField, UnaryOperator<Change> filter) {
+    textField.setTextFormatter(new TextFormatter<>(filter));
+  }
+
+  private void parseHeaderValues(){
     String transformationType = choiceBox.getValue();
-    allValues.add(transformationType);
+    allHeaderValues.add(transformationType);
 
     GridPane minMaxGridPane = (GridPane) minMaxBox.getChildren().get(0); // Assuming there's only one child (GridPane)
     TextField minx0 = (TextField) minMaxGridPane.getChildren().get(0);
     TextField minx1 = (TextField) minMaxGridPane.getChildren().get(1);
     TextField maxx0 = (TextField) minMaxGridPane.getChildren().get(2);
     TextField maxx1 = (TextField) minMaxGridPane.getChildren().get(3);
-    allValues.add(minx0.getText() + "," + minx1.getText());
-    allValues.add(maxx0.getText()+","+ maxx1.getText());
-
-    // Get values from matrixBox
-    for (int i = 0; i < matrixBox.getChildren().size(); i++) {
-      GridPane gridPane = (GridPane) matrixBox.getChildren().get(i);
-      StringBuilder line = new StringBuilder();
-      for (int j = 0; j < gridPane.getChildren().size(); j++) {
-        TextField textField = (TextField) gridPane.getChildren().get(j);
-        line.append(textField.getText()).append(",");
-      }
-      allValues.add(line.toString());
-    }
+    allHeaderValues.add(minx0.getText() + "," + minx1.getText());
+    allHeaderValues.add(maxx0.getText()+","+ maxx1.getText());
   }
 
+  private void combineAllValues(){
+    this.allv.addAll(allHeaderValues);
+    this.allv.addAll(allMatrixValues);
+  }
 
 }

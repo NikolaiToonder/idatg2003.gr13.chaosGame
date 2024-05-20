@@ -1,10 +1,21 @@
 package gui;
 
 import chaosgameclasses.ChaosGameDescription;
+import java.io.IOException;
 
-
+/**
+ * Factory class to create different transformations.
+ */
 public class DescriptionFactory {
-  public ChaosGameDescription createAffine2D(String chosenFractal) {
+
+  /**
+   * Factory method of the class.
+   * @param chosenFractal a string to represent the fractal the user wants.
+   *                      this will be chosen by a dropdown menu.
+   * @return ChaosGameDescription of the fractal the user wants. Or null if the program doesn't
+   * find anything
+   */
+  public ChaosGameDescription createAffine2D(String chosenFractal){
     switch (chosenFractal) {
       case "Barnsley" -> {
         return new ChaosGameDescription("src/resources/barnsleyTransform.txt");

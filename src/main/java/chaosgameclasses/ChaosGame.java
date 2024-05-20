@@ -163,18 +163,36 @@ public class ChaosGame {
             this.description.handleValuesForOutprint(this.canvas.getCanvasArray());
         }
     }
+
+    /**
+     * Used to run 1 singular step. Useful for drawing in the gui.
+     */
     public void runStep() {
         int randomIndex = this.random.nextInt(description.getTransforms().size());
         Transform2D transform = description.getTransforms().get(randomIndex);
         this.currentPoint = transform.transform(this.currentPoint);
         this.canvas.putPixel(currentPoint);
     }
+
+    /**
+     * Method to add an observer to the chaosGame
+     * @param observer observer to add.
+     */
     public void addSubscriber(ChaosGameObserver observer) {
         this.observers.add(observer);
     }
+
+    /**
+     * Method to clear the entire canvas.
+     */
     public void clearCanvas() {
         this.canvas.clear();
     }
+
+    /**
+     * Method to zoom, will just pass on a scalar to the canvas, done this way to decrease coupling.
+     * @param scalar
+     */
     public void zoom(double scalar) {
         this.canvas.zoom(scalar);
     }

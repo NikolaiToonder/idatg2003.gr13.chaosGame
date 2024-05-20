@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import java.util.function.Consumer;
 
 /**
- * Main Menu for the Chaos Game program.
+ * Startup page for the ChaosGame gui.
  */
 public class StartupPage {
 
@@ -23,6 +23,11 @@ public class StartupPage {
     private VBox vBox;
     private static final String DEFAULT_BACKGROUND_COLOR = "#2b2d31"; // Default background color
 
+    /**
+     *
+     * @param onStartGame
+     * @param primaryStage
+     */
     public StartupPage(Consumer<Stage> onStartGame, Stage primaryStage) {
         this.onStartGame = onStartGame;
         this.primaryStage = primaryStage;

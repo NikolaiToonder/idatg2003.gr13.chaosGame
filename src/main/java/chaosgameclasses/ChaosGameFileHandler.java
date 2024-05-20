@@ -134,7 +134,6 @@ public class ChaosGameFileHandler {
       List<String> lines = Files.readAllLines(filePath);
       String lineToChange = lines.get(lineNumber).replaceAll("#.*", "");
       String[] values = lineToChange.split(",");
-      System.out.println(valuesToChange.size());
       if (valuesToChange.size() >3) {
         for (int i = 0; i < values.length - 2; i++) {
           values[i] = valuesToChange.get(i);
@@ -152,7 +151,7 @@ public class ChaosGameFileHandler {
       throw new IllegalArgumentException("Error writing to file");
     }
   }
-  public void resetFractals(String path){
+  public static void resetFractals(String path){
     try {
       Path filePath = Paths.get(path);
       if(path.contains("pinski")){
@@ -192,8 +191,9 @@ public class ChaosGameFileHandler {
   public static void clearCustomFractal() {
     try {
       Path filePath = Paths.get("src/resources/customTransform.txt");
-      List<String> lines = Files.readAllLines(filePath);
-      lines.clear();
+
+      Files.write(filePath, "".getBytes());
+
     } catch (IOException e) {
       e.printStackTrace();
       throw new IllegalArgumentException("Error reading file");
