@@ -20,8 +20,8 @@ public class MainApp extends Application {
 
   @Override
   public void start(Stage primaryStage) {
-    Scene startupScene = createStartupScene(primaryStage);
-    primaryStage.setScene(startupScene);
+    Scene startupScene  = createStartupScene(primaryStage);
+    primaryStage.setScene(startupScene );
     primaryStage.setMinWidth(MIN_WIDTH);
     primaryStage.setMinHeight(MIN_HEIGHT);
 
