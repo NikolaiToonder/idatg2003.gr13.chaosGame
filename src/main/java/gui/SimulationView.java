@@ -23,13 +23,14 @@ public class SimulationView extends Pane {
    * Constructor of the class. Used to initialize and set up the class.
    */
   public SimulationView() {
-    canvas = new Canvas(550, 650);
-    GraphicsContext gc = canvas.getGraphicsContext2D();
-    gc.setFill(Color.rgb(43, 45, 49));
-    gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
+    canvas = new Canvas(500, 650);
     this.getChildren().add(canvas);
-    this.setPrefSize(550, 650);
+
+    this.setStyle("-fx-background-color: #2b2d31;");
+    this.setMaxHeight(700);
+    this.setMaxWidth(700);
+
 
     scaleTransform = new Scale(1, 1);
     canvas.getTransforms().add(scaleTransform);

@@ -32,6 +32,8 @@ public class ChaosGameDescription {
   private List<Complex> complexNumbers;
   private int sign;
 
+  private boolean isBarnsley;
+
   /**
    * Constructs a chaosGameClasses.ChaosGameDescription object with the provided list of transforms
    * and canvas coordinates.
@@ -277,7 +279,7 @@ public class ChaosGameDescription {
    *                    and if it is a vector or matrix.
    * @param values all textFields in the program.
    */
-  public void writeToFile(String typeOfTransform, String choiceString, List<String> values){
+  public void writeToFile(String typeOfTransform, String choiceString, boolean isMatrix, List<String> values){
     boolean isJulia = typeOfTransform.equals("Julia");
     if (isJulia) {
       List<String> juliaValues = List.of(values.get(0), values.get(1));
@@ -286,12 +288,9 @@ public class ChaosGameDescription {
       String row = choiceString.split(" ")[1];
       ChaosGameFileHandler.changeLine(this.path, juliaValues, Integer.parseInt(row) + 2);
     } else {
-      boolean isMatrix = choiceString.split(" ")[0].equals("Matrix");
       String row = choiceString.split(" ")[1];
 
-      if (isMatrix) {
-
-
+      if (!isMatrix) {
         ChaosGameFileHandler.changeLine(this.path, values, Integer.parseInt(row) + 2);
       } else {
         List<String> vectorValues = List.of(values.get(0), values.get(1));
@@ -325,5 +324,12 @@ public class ChaosGameDescription {
    */
   public void writeToFileCustom(List<String> values){
    ChaosGameFileHandler.writeCustomFractal(values);
+  }
+  public boolean getIsBarnsley(){
+    return isBarnsley;
+  }
+
+  public void setIsBarnsley(boolean barnsley) {
+    isBarnsley = barnsley;
   }
 }
