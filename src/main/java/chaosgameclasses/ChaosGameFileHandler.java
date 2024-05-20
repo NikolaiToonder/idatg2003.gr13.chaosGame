@@ -134,7 +134,6 @@ public class ChaosGameFileHandler {
       List<String> lines = Files.readAllLines(filePath);
       String lineToChange = lines.get(lineNumber).replaceAll("#.*", "");
       String[] values = lineToChange.split(",");
-      System.out.println(valuesToChange.size());
       if (valuesToChange.size() >3) {
         for (int i = 0; i < values.length - 2; i++) {
           values[i] = valuesToChange.get(i);
@@ -150,6 +149,54 @@ public class ChaosGameFileHandler {
     } catch (IOException e) {
       e.printStackTrace();
       throw new IllegalArgumentException("Error writing to file");
+    }
+  }
+  public static void resetFractals(String path){
+    try {
+      Path filePath = Paths.get(path);
+      if(path.contains("pinski")){
+        Path standardFilePath = Paths.get("src/resources/sierpinskiTemplate.txt");
+        List<String> lines = Files.readAllLines(standardFilePath);
+        Files.write(filePath, lines);
+      } else if (path.contains("arnsley")) {
+        Path standardFilePath = Paths.get("src/resources/barnsleyTemplate.txt");
+        List<String> lines = Files.readAllLines(standardFilePath);
+        Files.write(filePath, lines);
+      } else if (path.contains("ulia")) {
+        Path standardFilePath = Paths.get("src/resources/juliaTemplate.txt");
+        List<String> lines = Files.readAllLines(standardFilePath);
+        Files.write(filePath, lines);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new IllegalArgumentException("Error writing to file");
+    }
+  }
+
+  public static void writeCustomFractal(List<String> values) {
+    try {
+      clearCustomFractal();
+      Path filePath = Paths.get("src/resources/customTransform.txt");
+      List<String> lines = Files.readAllLines(filePath);
+      values.forEach(System.out::println);
+      for (int i = 0; i < values.size(); i++) {
+        lines.add(i, values.get(i));
+      }
+      Files.write(filePath, lines);
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new IllegalArgumentException("Error writing to file");
+    }
+  }
+  public static void clearCustomFractal() {
+    try {
+      Path filePath = Paths.get("src/resources/customTransform.txt");
+
+      Files.write(filePath, "".getBytes());
+
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new IllegalArgumentException("Error reading file");
     }
   }
 }

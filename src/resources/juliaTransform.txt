@@ -1,8 +1,4 @@
 Julia               # Type of transform
 -1.6, -1            # Lower left
 1.6, 1              # Upper right
-<<<<<<< HEAD
--0.6,-0.8
-=======
--0.456,-0.714
->>>>>>> d4cf7cbb26ebfb06ee09e0354cd7234c67b4b321
+-.74543, .11301     # Real and imaginary parts of the constant c
