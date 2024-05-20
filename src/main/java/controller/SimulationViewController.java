@@ -2,6 +2,8 @@ package controller;
 
 import gui.SimulationView;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Cursor;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -13,6 +15,8 @@ public class SimulationViewController {
   private double prevMouseX;
   private double prevMouseY;
   private boolean isScalingEnabled;
+  private boolean isAltPressed;
+
 
   private final double MIN_SCALE_X = 0.1;
   private final double MAX_SCALE_X = 1.8;
@@ -85,10 +89,19 @@ public class SimulationViewController {
   }
 
   private void handleKeyPressed(KeyEvent event) {
-    if (event.isAltDown()) {
-      isScalingEnabled = true;
+    if (event.getCode().equals(KeyCode.ALT)) {
+      isAltPressed = true;
+      simulationView.setCursor(Cursor.OPEN_HAND);
     }
   }
+
+  private void handleKeyReleased(KeyEvent event) {
+    if (event.getCode().equals(KeyCode.ALT)) {
+      isAltPressed = false;
+      simulationView.setCursor(Cursor.DEFAULT);
+    }
+  }
+
 
   /**
    * Handles the scaling of the canvas based on the size change of the SimulationView.

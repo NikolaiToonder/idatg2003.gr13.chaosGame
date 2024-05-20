@@ -27,6 +27,7 @@ public class ChaosGameView {
   private final Button resetButton = new Button("Reset Fractal");
   private final Button popupButton = new Button("Edit Custom Fractal");
   private final Button closeButton = new Button("Close application");
+  private final CheckBox displayVector = new CheckBox("Vector");
   private final HBox textFieldsBox = createTextFieldsBox();
   private final VBox controlsPane = new VBox(10);
   private final VBox simulationAndInfoBox = new VBox();
@@ -44,13 +45,16 @@ public class ChaosGameView {
     fractalChoiceBox.getItems().addAll("Julia", "Sierpinski", "Barnsley", "Custom");
     fractalChoiceBox.setValue("Sierpinski");
 
+
     iterationsLabel.setStyle("-fx-text-fill: white;");
     zoomInLabel.setStyle("-fx-text-fill: white;");
     resetButton.setStyle("-fx-background-color: #ffbb00;");
-    resetButton.setTextFill(javafx.scene.paint.Color.WHITE);
+    resetButton.setTextFill(javafx.scene.paint.Color.BLACK);
     popupButton.setStyle("-fx-background-color: #339922;");
     closeButton.setStyle("-fx-background-color: #f55353;");
-    closeButton.setTextFill(javafx.scene.paint.Color.WHITE);
+    closeButton.setTextFill(javafx.scene.paint.Color.BLACK);
+
+    displayVector.setStyle("-fx-text-fill: white");
 
     textFieldsBox.setPadding(new Insets(20, 20, 20, 20));
     controlsPane.setAlignment(Pos.CENTER);
@@ -115,8 +119,12 @@ public class ChaosGameView {
   }
 
   public void addCloseButtonListener(Consumer<Void> handler) {
-    closeButton.setOnAction(e -> this.controller.handleCloseButton());
+    closeButton.setOnAction(e -> handler.accept(null));
   }
+  public void addDisplayVectorListener(ChangeListener<Boolean> listener) {
+    displayVector.selectedProperty().addListener(listener);
+  }
+
 
   public double getIterationSliderValue() {
     return iterationSlider.getValue();
@@ -133,12 +141,19 @@ public class ChaosGameView {
   public String getMatrixChoiceBoxValue() {
     return matrixChoiceBox.getValue();
   }
+  public boolean getDisplayVectorValue(){
+    return this.displayVector.isSelected();
+  }
 
   public List<String> getTextFieldsValues() {
     return textFieldsBox.getChildren().stream()
         .filter(TextField.class::isInstance)
         .map(node -> ((TextField) node).getText())
         .toList();
+  }
+
+  public int getCurrentTransformation(){
+    return Integer.parseInt(this.getMatrixChoiceBoxValue().split(",")[1]);
   }
 
   public void updateIterationsLabel(int value) {
@@ -152,10 +167,9 @@ public class ChaosGameView {
   public void updateChoiceBoxMatrix(ChaosGame chaosGame) {
     matrixChoiceBox.getItems().clear();
     for (int i = 0; i < chaosGame.getDescription().getNumberOfTransforms(); i++) {
-      matrixChoiceBox.getItems().add("Matrix " + (i + 1));
-      matrixChoiceBox.getItems().add("Vector " + (i + 1));
+      matrixChoiceBox.getItems().add("Transformation " + (i + 1));
     }
-    matrixChoiceBox.setValue("Matrix 1");
+    matrixChoiceBox.setValue("Transformation 1");
   }
 
   public void updateTextFieldsAffine(ChaosGame chaosGame, int currentTransformation, boolean showVector) {
@@ -198,6 +212,8 @@ public class ChaosGameView {
     }
   }
 
+
+
   public void updateTextFieldsJulia(ChaosGame chaosGame, int currentTransformation) {
     chaosGame.getDescription().setTypeOfTransformation("Julia");
     List<Complex> complexNumbers = chaosGame.getDescription().getComplexNumbers();
@@ -237,8 +253,11 @@ public class ChaosGameView {
 
     // Create an HBox to hold the text fields
     HBox textFieldsBox = new HBox(10);
-    textFieldsBox.getChildren().addAll(a00TextField, a01TextField, a10TextField, a11TextField, this.matrixChoiceBox);
+    textFieldsBox.getChildren().addAll(a00TextField, a01TextField, a10TextField, a11TextField,
+        this.matrixChoiceBox, displayVector);
     textFieldsBox.setPadding(new Insets(0, 0, 20, 0));
     return textFieldsBox;
   }
+
+
 }

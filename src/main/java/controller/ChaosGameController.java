@@ -15,16 +15,18 @@ public class ChaosGameController {
   private ChaosGame chaosGame;
   private final DescriptionFactory descriptionFactory = new DescriptionFactory();
   private final Vector2D standardizedView = new Vector2D(0.5, 0.5);
+  private int currentTransformation = 1;
 
   public ChaosGameController(ChaosGameView view) {
     this.view = view;
-    this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"), 500, 500, standardizedView);
+    this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"),
+        650, 600, standardizedView);
     initView();
   }
 
   public void initView() {
     view.updateChoiceBoxMatrix(chaosGame);
-    view.updateTextFieldsAffine(chaosGame, 1, false);
+    view.updateTextFieldsAffine(chaosGame, 1, view.getDisplayVectorValue());
     view.addIterationSliderListener(createIterationSliderListener());
     view.addZoomSliderListener(createZoomSliderListener());
     view.addFractalChoiceBoxListener(createFractalChoiceBoxListener());
@@ -33,7 +35,55 @@ public class ChaosGameController {
     view.addResetButtonListener(e -> handleResetButton());
     view.addPopupButtonListener(e -> handlePopupButton());
     view.addCloseButtonListener(e -> handleCloseButton());
+
+    view.addDisplayVectorListener((observable, oldValue, newValue) -> {
+      boolean showVector = newValue;
+      if (view.getFractalChoiceBoxValue().equals("Julia")) {
+        view.updateTextFieldsJulia(chaosGame, currentTransformation);
+      } else {
+        view.updateTextFieldsAffine(chaosGame, currentTransformation, showVector);
+      }
+    });
   }
+
+  public ChangeListener<String> createFractalChoiceBoxListener() {
+    return (observable, oldValue, newValue) -> {
+      this.chaosGame.getDescription().setIsBarnsley(newValue.equals("Barnsley"));
+      updateChaosGameInstance(newValue);
+    };
+  }
+
+  public void handleDrawButton() {
+    String typeOfTransform = view.getFractalChoiceBoxValue();
+    String choiceToEdit = view.getMatrixChoiceBoxValue();
+    List<String> textFieldsValues = view.getTextFieldsValues();
+
+    // Update the existing description
+    this.chaosGame.getDescription().writeToFile(typeOfTransform, choiceToEdit,
+        view.getDisplayVectorValue(), textFieldsValues);
+
+    updateChaosGameInstance(typeOfTransform);
+  }
+
+  public void handleResetButton() {
+    this.chaosGame.getDescription().resetFractals();
+    updateChaosGameInstance(view.getFractalChoiceBoxValue());
+  }
+
+  private void updateChaosGameInstance(String fractalType) {
+    this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(fractalType), 500, 500, standardizedView);
+    this.chaosGame.getDescription().setIsBarnsley(fractalType.equals("Barnsley"));
+    chaosGame.zoom(view.getZoomSliderValue());
+    view.updateSimulationView(chaosGame, (int) view.getIterationSliderValue());
+
+    if (fractalType.equals("Julia")) {
+      view.updateTextFieldsJulia(chaosGame, currentTransformation);
+    } else {
+      view.updateTextFieldsAffine(chaosGame, currentTransformation, view.getDisplayVectorValue());
+    }
+  }
+
+
 
   public ChangeListener<Number> createIterationSliderListener() {
     return (observable, oldValue, newValue) -> {
@@ -50,57 +100,18 @@ public class ChaosGameController {
     };
   }
 
-  public ChangeListener<String> createFractalChoiceBoxListener() {
-    return (observable, oldValue, newValue) -> {
-      chaosGame = new ChaosGame(descriptionFactory.createAffine2D(newValue), 500, 500, standardizedView);
-      chaosGame.zoom(view.getZoomSliderValue());
-      view.updateSimulationView(chaosGame, (int) view.getIterationSliderValue());
-      boolean isJulia = newValue.equals("Julia");
-      view.updateChoiceBoxMatrix(chaosGame);
-      if (isJulia) {
-        view.updateTextFieldsJulia(chaosGame, 1);
-      } else {
-        view.updateTextFieldsAffine(chaosGame, 1, false);
-      }
-    };
-  }
-
   public ChangeListener<String> createMatrixChoiceBoxListener() {
     return (observable, oldValue, newValue) -> {
       if (newValue != null) {
         String[] parts = newValue.split(" ");
         if (parts.length > 1 && chaosGame.getDescription().getTypeOfTransformation().equals("Affine")) {
-          int currentTransformation = Integer.parseInt(parts[1]);
-          view.updateTextFieldsAffine(chaosGame, currentTransformation, parts[0].equals("Vector"));
+          this.currentTransformation = Integer.parseInt(parts[1]);
+          view.updateTextFieldsAffine(chaosGame, currentTransformation, view.getDisplayVectorValue());
         }
       }
     };
   }
 
-  public void handleDrawButton() {
-    String typeOfTransform = view.getFractalChoiceBoxValue();
-    String choiceToEdit = view.getMatrixChoiceBoxValue();
-    List<String> textFieldsValues = view.getTextFieldsValues();
-    chaosGame.getDescription().writeToFile(typeOfTransform, choiceToEdit, textFieldsValues);
-    chaosGame = new ChaosGame(descriptionFactory.createAffine2D(typeOfTransform), 500, 500, standardizedView);
-    if (typeOfTransform.equals("Julia")) {
-      view.updateTextFieldsJulia(chaosGame, 1);
-    } else {
-      view.updateTextFieldsAffine(chaosGame, 1, false);
-    }
-    view.updateSimulationView(chaosGame, (int) view.getIterationSliderValue());
-  }
-
-  public void handleResetButton() {
-    chaosGame.getDescription().resetFractals();
-    chaosGame = new ChaosGame(descriptionFactory.createAffine2D(view.getFractalChoiceBoxValue()), 500, 500, standardizedView);
-    if (view.getFractalChoiceBoxValue().equals("Julia")) {
-      view.updateTextFieldsJulia(chaosGame, 1);
-    } else {
-      view.updateTextFieldsAffine(chaosGame, 1, false);
-    }
-    view.updateSimulationView(chaosGame, (int) view.getIterationSliderValue());
-  }
 
   public void handlePopupButton() {
     NewFractalMenuView fractalMenuView = new NewFractalMenuView();

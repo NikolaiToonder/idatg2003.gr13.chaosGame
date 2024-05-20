@@ -168,26 +168,30 @@ public class ChaosGame {
      * Used to run 1 singular step. Useful for drawing in the gui.
      */
     public void runStep() {
-        int randomIndex = this.random.nextInt(description.getTransforms().size());
-        Transform2D transform = description.getTransforms().get(randomIndex);
-        this.currentPoint = transform.transform(this.currentPoint);
-        this.canvas.putPixel(currentPoint);
+        if (this.description.getIsBarnsley()) {
+            List<Double> cumulativeProbabilities = List.of(0.01, 0.85, 0.07, 0.07);
+            double rand = random.nextDouble();
+            int selectedTransformIndex;
+            if(rand <=0.01){
+                selectedTransformIndex = 0;
+            } else if (rand <= 0.07) {
+                selectedTransformIndex = 2;
+            } else if (rand <= 0.18) {
+                selectedTransformIndex = 3;
+            } else {
+                selectedTransformIndex = 1;
+            }
+            Transform2D transform = description.getTransforms().get(selectedTransformIndex);
+            this.currentPoint = transform.transform(this.currentPoint);
+            this.canvas.putPixel(currentPoint);
+        } else {
+            int randomIndex = this.random.nextInt(description.getTransforms().size());
+            Transform2D transform = description.getTransforms().get(randomIndex);
+            this.currentPoint = transform.transform(this.currentPoint);
+            this.canvas.putPixel(currentPoint);
+        }
     }
 
-    /**
-     * Method to add an observer to the chaosGame
-     * @param observer observer to add.
-     */
-    public void addSubscriber(ChaosGameObserver observer) {
-        this.observers.add(observer);
-    }
-
-    /**
-     * Method to clear the entire canvas.
-     */
-    public void clearCanvas() {
-        this.canvas.clear();
-    }
 
     /**
      * Method to zoom, will just pass on a scalar to the canvas, done this way to decrease coupling.
