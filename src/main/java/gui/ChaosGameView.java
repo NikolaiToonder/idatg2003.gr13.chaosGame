@@ -258,6 +258,5 @@ public class ChaosGameView {
     textFieldsBox.setPadding(new Insets(0, 0, 20, 0));
     return textFieldsBox;
   }
-
-
 }
+
