@@ -32,8 +32,6 @@ public class StartupPage {
         this.onStartGame = onStartGame;
         this.primaryStage = primaryStage;
         setupUI();
-
-        setScreenResolution(840, 720); // Set to your desired resolution
     }
 
     private void setupUI() {

@@ -23,13 +23,11 @@ public class SimulationView extends Pane {
    * Constructor of the class. Used to initialize and set up the class.
    */
   public SimulationView() {
-
-    canvas = new Canvas(500, 650);
+    canvas = new Canvas(600, 650);
     this.getChildren().add(canvas);
 
     this.setStyle("-fx-background-color: #2b2d31;");
-    this.setMaxHeight(700);
-    this.setMaxWidth(700);
+
 
 
     scaleTransform = new Scale(1, 1);
@@ -37,6 +35,7 @@ public class SimulationView extends Pane {
 
     controller = new SimulationViewController(this);
   }
+
 
   /**
    * Method called to update the simulation view. Will only use the canvas to draw the fractal

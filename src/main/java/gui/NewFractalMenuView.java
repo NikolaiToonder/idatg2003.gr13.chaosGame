@@ -1,5 +1,6 @@
 package gui;
 
+import controller.NewFractalMenuController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -30,7 +31,6 @@ public class NewFractalMenuView {
   public final Stage popupStage = new Stage();
   private final VBox popupLayout = new VBox(10);
   Scene popupScene = new Scene(popupLayout, 500, 400);
-
   private final Label title = new Label("Create New Fractal");
   private final VBox minMaxBox = createMinMaxFields();
   private final ChoiceBox<String> choiceBox = configureChoiceBox();
@@ -39,12 +39,11 @@ public class NewFractalMenuView {
   private final Separator separator = new Separator();
   private final Button addNewLayer = new Button("New Transformation");
   private final HBox buttonBox = new HBox(saveButton, addNewLayer);
-  private Consumer<List<String>> callback;
-
-
-  private List<String> allHeaderValues;
-  private List<String> allMatrixValues;
-  private List<String> allv;
+  private final String styleGreen = "-fx-background-color: #449933;";
+  NewFractalMenuController chaosGameController = new NewFractalMenuController(this);
+  private final List<String> allHeaderValues;
+  private final List<String> allMatrixValues;
+  private final List<String> allv;
 
   //WITH CHATGPT vv
   UnaryOperator<Change> filter = change -> {
@@ -66,27 +65,30 @@ public class NewFractalMenuView {
     styleElements();
     configureLayout();
 
-    saveButton.setOnAction(e -> {
+    // This method, for some reason, did not work in the controller class.
+    // This has to be here, even though it does not follow MWC principle.
+    saveButton.setOnAction(actionEvent -> {
       parseHeaderValues();
       parseValues();
       combineAllValues();
       callback.accept(allv);
       popupStage.close();
     });
-    addNewLayer.setOnAction(e -> {
-      /* Vis popup meny og vær sikker på at brukeren har fylt ut alle felt
-      Å trykke på denne knappen gjør at brukeren ikke kan endre på transformasjonen som var
-       */
-      parseValues();
-    });
-    choiceBox.setOnAction(e -> {
-      matrixBox.getChildren().clear();
-      matrixBox.getChildren().add(createMatrixBox(choiceBox.getValue()));
-    });
+
+    // Show the popup stage
+    popupStage.show();
   }
 
-  public void addSaveButtonListener(Consumer<Void> handler) {
-    saveButton.setOnAction(e -> handler.accept(null));
+  public void addSaveButtonListener(Consumer<List<String>> callback) {
+    saveButton.setOnAction(e -> handleSaveButton(callback));
+  }
+
+  private void handleSaveButton(Consumer<List<String>> callback) {
+    parseHeaderValues();
+    parseValues();
+    combineAllValues();
+    callback.accept(allv);
+    popupStage.close();
   }
 
   public void styleElements(){
@@ -124,17 +126,12 @@ public class NewFractalMenuView {
 
   public ChoiceBox configureChoiceBox(){
     ChoiceBox<Object> choiceBox1 = new ChoiceBox<>();
-    choiceBox1.getItems().addAll(new String[]{"Julia"}, new String[]{"Affine2D"});
+    choiceBox1.getItems().addAll("Julia", "Affine2D");
     choiceBox1.setValue("Affine2D");
     return choiceBox1;
   }
 
-  public void validateAllFields() {
-    System.out.println(minMaxBox.getChildren().get(0).hasProperties());
-  }
-
-
-  private VBox createMatrixBox(String value) {
+  public VBox createMatrixBox(String value) {
     VBox matrixBox = new VBox();
     GridPane gridPane = new GridPane();
     gridPane.setHgap(10);
@@ -150,10 +147,10 @@ public class NewFractalMenuView {
       TextField aVector = new TextField();
       TextField bVector = new TextField();
 
-      aField.setStyle("-fx-background-color: #449933;");
-      bField.setStyle("-fx-background-color: #449933;");
-      cField.setStyle("-fx-background-color: #449933;");
-      dField.setStyle("-fx-background-color: #449933;");
+      aField.setStyle(styleGreen);
+      bField.setStyle(styleGreen);
+      cField.setStyle(styleGreen);
+      dField.setStyle(styleGreen);
 
       aVector.setStyle("-fx-background-color: #444499;");
       bVector.setStyle("-fx-background-color: #444499;");
@@ -245,15 +242,6 @@ public class NewFractalMenuView {
     }
   }
 
-  public void setCallback(Consumer<List<String>> callback) {
-    this.callback = callback;
-  }
-
-  public Consumer<List<String>> getCallback(){
-    return this.callback;
-  }
-
-
   private void parseValuesAffine(){
     for (int i = 0; i < matrixBox.getChildren().size(); i++) {
       GridPane gridPane = (GridPane) matrixBox.getChildren().get(i);
@@ -305,11 +293,17 @@ public class NewFractalMenuView {
     this.allv.addAll(allMatrixValues);
   }
 
-  public List<String> getAllv(){
-    return this.allv;
+  public void addNewLayerButtonListener(Consumer<Void> handler){
+    addNewLayer.setOnAction(e->handler.accept(null));
   }
 
+  public void addChoiceBoxListener(ChangeListener<String> listener) {
+    choiceBox.valueProperty().addListener(listener);
+  }
 
+  public VBox getMatrixBox(){
+    return matrixBox;
+  }
 }
 
 

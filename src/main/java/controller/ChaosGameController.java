@@ -20,7 +20,7 @@ public class ChaosGameController {
   public ChaosGameController(ChaosGameView view) {
     this.view = view;
     this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D("Sierpinski"),
-        650, 600, standardizedView);
+        600, 650, standardizedView);
     initView();
   }
 
