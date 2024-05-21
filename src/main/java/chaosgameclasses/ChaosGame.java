@@ -76,23 +76,29 @@ public class ChaosGame {
     public void changePath() {
         printer.transformationChanging();
         String input = userInput.getInput();
-        switch (input) {
-            case "1" -> {
-                this.description = new ChaosGameDescription("src/resources/sierpinskiTriangle.txt");
-                this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
+        try {
+            switch (input) {
+                case "1" -> {
+                    this.description = new ChaosGameDescription(
+                        "src/resources/sierpinskiTriangle.txt");
+                    this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
                         description.getMinCoords(), description.getMaxCoords());
-            }
-            case "2" -> {
-                this.description = new ChaosGameDescription("src/resources/barnsleyTransform.txt");
-                this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
+                }
+                case "2" -> {
+                    this.description = new ChaosGameDescription(
+                        "src/resources/barnsleyTransform.txt");
+                    this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
                         description.getMinCoords(), description.getMaxCoords());
-            }
-            case "3" -> {
-                this.description = new ChaosGameDescription("src/resources/juliaTransform.txt");
-                this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
+                }
+                case "3" -> {
+                    this.description = new ChaosGameDescription("src/resources/juliaTransform.txt");
+                    this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
                         description.getMinCoords(), description.getMaxCoords());
+                }
+                default -> printer.invalidPath();
             }
-            default -> printer.invalidPath();
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Error reading file");
         }
     }
 

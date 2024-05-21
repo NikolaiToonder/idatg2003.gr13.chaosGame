@@ -28,6 +28,14 @@ import javafx.stage.Stage;
 
 public class NewFractalMenuView {
 
+  //WITH CHATGPT vv
+  private static final UnaryOperator<Change> filter = change -> {
+    String newText = change.getControlNewText();
+    if (newText.matches("-?\\d*\\.?\\d*")) { // Allow digits and an optional decimal point
+      return change; // Accept the change
+    }
+    return null; // Reject the change
+  };
   public final Stage popupStage = new Stage();
   private final VBox popupLayout = new VBox(10);
   Scene popupScene = new Scene(popupLayout, 500, 400);
@@ -45,14 +53,7 @@ public class NewFractalMenuView {
   private final List<String> allMatrixValues;
   private final List<String> allv;
 
-  //WITH CHATGPT vv
-  UnaryOperator<Change> filter = change -> {
-    String newText = change.getControlNewText();
-    if (newText.matches("-?\\d*\\.?\\d*")) { // Allow digits and an optional decimal point
-      return change; // Accept the change
-    }
-    return null; // Reject the change
-  };
+
 
   public NewFractalMenuView() {
     this.allHeaderValues = new ArrayList<>();
@@ -132,13 +133,6 @@ public class NewFractalMenuView {
   }
 
   public static VBox createMatrixBox(String value){
-    UnaryOperator<Change> filter = change -> {
-      String newText = change.getControlNewText();
-      if (newText.matches("-?\\d*\\.?\\d*")) { // Allow digits and an optional decimal point
-        return change; // Accept the change
-      }
-      return null; // Reject the change
-    };
 
     VBox matrixBox = new VBox();
     GridPane gridPane = new GridPane();

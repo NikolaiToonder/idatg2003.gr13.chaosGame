@@ -1,8 +1,6 @@
 package gui;
 
 
-import java.io.IOException;
-import java.util.SortedMap;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -16,10 +14,8 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
 
-
-  private static final double MIN_WIDTH = 700; // Minimum width
-  private static final double MIN_HEIGHT = 700; // Minimum height
-
+  private static final double MIN_WIDTH = 710; // Minimum width
+  private static final double MIN_HEIGHT = 600; // Minimum height
 
 
   @Override

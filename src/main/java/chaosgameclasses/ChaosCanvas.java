@@ -38,7 +38,7 @@ public class ChaosCanvas {
     this.originalMaxCoords = maxCoords;
     this.maxCoords = maxCoords;
     this.canvas = new int[height][width];
-    this.canvasHeatMap = new int[height][width];
+    this.canvasHeatMap = new int[width][height];
   }
 
   public void setWidth(int width) {
@@ -81,7 +81,7 @@ public class ChaosCanvas {
       return;
     }
     canvas[xindex][yindex] = 1;
-    canvasHeatMap[xindex][yindex] += 1;
+    canvasHeatMap[xindex][yindex]++;
   }
 
   /**
@@ -116,6 +116,7 @@ public class ChaosCanvas {
    */
   public void clear() {
     this.canvas = new int[width][height];
+    this.canvasHeatMap = new int[width][height];
   }
 
   /**
@@ -160,12 +161,6 @@ public class ChaosCanvas {
    * @return canvasHeatMap int[][]
    */
   public int[][] getCanvasHeatMap(){
-    for(int i = 0; i < canvasHeatMap.length; i++) {
-      for (int j = 0; j < canvasHeatMap[i].length; j++) {
-        System.out.print(canvasHeatMap[i][j]);
-      }
-      System.out.println();
-    }
     return this.canvasHeatMap;
   }
 }

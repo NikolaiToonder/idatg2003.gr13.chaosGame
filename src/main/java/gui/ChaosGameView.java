@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -19,9 +20,17 @@ import vectors.Vector2D;
 import java.util.function.UnaryOperator;
 
 public class ChaosGameView {
+
+  private static final UnaryOperator<Change> filter = change -> {
+    String newText = change.getControlNewText();
+    if (newText.matches("-?\\d*\\.?\\d*")) { // Allow digits and an optional decimal point
+      return change; // Accept the change
+    }
+    return null; // Reject the change
+  };
   private final ChoiceBox<String> fractalChoiceBox = new ChoiceBox<>();
   private final ChoiceBox<String> matrixChoiceBox = new ChoiceBox<>();
-  private final Slider iterationSlider = new Slider(100, 100000, 50000);
+  private final Slider iterationSlider = new Slider(100, 300000, 50000);
   private final Slider zoomSlider = new Slider(1, 10, 1);
   private final Label iterationsLabel = new Label("Iterations: ");
   private final Label zoomInLabel = new Label("Zoom In");
@@ -264,7 +273,12 @@ public class ChaosGameView {
     textField.setPromptText(labelText);
     textField.setMaxWidth(40); // Increase max width
     textField.setMaxHeight(40); // Increase max height
+    applyTextFormatter(textField, filter);
     return textField;
+  }
+
+  private static void applyTextFormatter(TextField textField, UnaryOperator<Change> filter) {
+    textField.setTextFormatter(new TextFormatter<>(filter));
   }
 
 
@@ -304,10 +318,24 @@ public class ChaosGameView {
 
   public void updateTextFields(ChaosGame chaosGame, int currentTransformation){
     if(chaosGame.getDescription().getTypeOfTransformation().equals("Julia")){
+      System.out.println("Julia");
       updateTextFieldsJulia(chaosGame, currentTransformation);
     } else {
       updateTextFieldsAffine(chaosGame,currentTransformation,getDisplayVectorValue());
     }
   }
+
+  public ChoiceBox<String> getMatrixChoiceBox() {
+    return matrixChoiceBox;
+  }
+
+  public void showErrorPopup(String title, String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
+  }
+
 }
 

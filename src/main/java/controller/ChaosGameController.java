@@ -26,7 +26,7 @@ public class ChaosGameController {
 
   public void initView() {
     view.updateChoiceBoxMatrix(chaosGame);
-    view.updateTextFieldsAffine(chaosGame, 1, view.getDisplayVectorValue());
+    view.updateTextFieldsAffine(chaosGame, currentTransformation, view.getDisplayVectorValue());
     view.addIterationSliderListener(createIterationSliderListener());
     view.addZoomSliderListener(createZoomSliderListener());
     view.addFractalChoiceBoxListener(createFractalChoiceBoxListener());
@@ -37,7 +37,7 @@ public class ChaosGameController {
     view.addCloseButtonListener(e -> handleCloseButton());
 
     view.addDisplayVectorListener((observable, oldValue, newValue) -> {
-      view.updateTextFields(chaosGame,currentTransformation);
+      view.updateTextFields(chaosGame, currentTransformation);
     });
   }
 
@@ -53,12 +53,19 @@ public class ChaosGameController {
     String choiceToEdit = view.getMatrixChoiceBoxValue();
     List<String> textFieldsValues = view.getTextFieldsValues();
 
+    // Check if any text field value is null or empty
+    if (textFieldsValues.stream().anyMatch(value -> value == null || value.isEmpty())) {
+      view.showErrorPopup("Error","Please fill in all text fields");
+      return;
+    }
+
     // Update the existing description
     this.chaosGame.getDescription().writeToFile(typeOfTransform, choiceToEdit,
         view.getDisplayVectorValue(), textFieldsValues);
 
     updateChaosGameInstance(typeOfTransform);
   }
+
 
   public void handleResetButton() {
     this.chaosGame.getDescription().resetFractals();
@@ -68,12 +75,12 @@ public class ChaosGameController {
   private void updateChaosGameInstance(String fractalType) {
     this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(fractalType), 500, 500, standardizedView);
     this.chaosGame.getDescription().setIsBarnsley(fractalType.equals("Barnsley"));
+    currentTransformation = 1; // Reset the transformation index to the first transformation
     chaosGame.zoom(view.getZoomSliderValue());
+    view.updateChoiceBoxMatrix(chaosGame); // Ensure the matrix choice box is updated
     view.updateSimulationView(chaosGame, (int) view.getIterationSliderValue());
-    view.updateTextFields(chaosGame,currentTransformation);
+    view.updateTextFields(chaosGame, currentTransformation); // Update text fields for the first transformation
   }
-
-
 
   public ChangeListener<Number> createIterationSliderListener() {
     return (observable, oldValue, newValue) -> {
@@ -95,13 +102,20 @@ public class ChaosGameController {
       if (newValue != null) {
         String[] parts = newValue.split(" ");
         if (parts.length > 1 && chaosGame.getDescription().getTypeOfTransformation().equals("Affine")) {
-          this.currentTransformation = Integer.parseInt(parts[1]);
-          view.updateTextFieldsAffine(chaosGame, currentTransformation, view.getDisplayVectorValue());
+          int newTransformation = Integer.parseInt(parts[1]);
+          if (newTransformation <= chaosGame.getDescription().getNumberOfTransforms()) {
+            this.currentTransformation = newTransformation;
+            view.updateTextFieldsAffine(chaosGame, currentTransformation, view.getDisplayVectorValue());
+          } else {
+            // Handle the case where the selected transformation exceeds available transformations
+            this.currentTransformation = 1;
+            view.getMatrixChoiceBox().setValue("Transformation 1");
+            view.updateTextFieldsAffine(chaosGame, currentTransformation, view.getDisplayVectorValue());
+          }
         }
       }
     };
   }
-
 
   public void handlePopupButton() {
     NewFractalMenuView fractalMenuView = new NewFractalMenuView();

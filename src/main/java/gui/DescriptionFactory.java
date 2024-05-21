@@ -15,23 +15,27 @@ public class DescriptionFactory {
    * @return ChaosGameDescription of the fractal the user wants. Or null if the program doesn't
    * find anything
    */
-  public ChaosGameDescription createAffine2D(String chosenFractal){
-    switch (chosenFractal) {
-      case "Barnsley" -> {
-        return new ChaosGameDescription("src/resources/barnsleyTransform.txt");
+  public ChaosGameDescription createAffine2D(String chosenFractal) throws IllegalArgumentException {
+    try {
+      switch (chosenFractal) {
+        case "Barnsley" -> {
+          return new ChaosGameDescription("src/resources/barnsleyTransform.txt");
+        }
+        case "Sierpinski" -> {
+          return new ChaosGameDescription("src/resources/sierpinskiTriangle.txt");
+        }
+        case "Julia" -> {
+          return new ChaosGameDescription("src/resources/juliaTransform.txt");
+        }
+        case "Custom" -> {
+          return new ChaosGameDescription("src/resources/customTransform.txt");
+        }
+        default -> {
+          return null;
+        }
       }
-      case "Sierpinski" -> {
-        return new ChaosGameDescription("src/resources/sierpinskiTriangle.txt");
-      }
-      case "Julia" -> {
-        return new ChaosGameDescription("src/resources/juliaTransform.txt");
-      }
-      case "Custom" -> {
-        return new ChaosGameDescription("src/resources/customTransform.txt");
-      }
-      default -> {
-        return null;
-      }
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Error reading file");
     }
   }
 }

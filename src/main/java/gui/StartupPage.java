@@ -87,14 +87,6 @@ public class StartupPage {
         exitButton.setOnAction(e -> Platform.exit());
     }
 
-    private void setScreenResolution(double width, double height) {
-        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        primaryStage.setX((primaryScreenBounds.getWidth() - width) / 2);
-        primaryStage.setY((primaryScreenBounds.getHeight() - height) / 2);
-        primaryStage.setWidth(width);
-        primaryStage.setHeight(height);
-    }
-
 
 
 }
