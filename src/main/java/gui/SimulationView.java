@@ -54,8 +54,11 @@ public class SimulationView extends Pane {
    * @param chaosGame  chaosGame class to use
    * @param iterations How many iterations the user wants.
    */
-  public void updateSimulationView(ChaosGame chaosGame, Number iterations) {
-    drawFractalHeatMap(chaosGame, iterations.intValue());
+  public void updateSimulationView(ChaosGame chaosGame, Number iterations, boolean heatMap) {
+    if(!heatMap)
+      drawFractal(chaosGame, iterations.intValue());
+    else
+      drawFractalHeatMap(chaosGame, iterations.intValue());
   }
 
   /**
@@ -114,7 +117,7 @@ public class SimulationView extends Pane {
   }
 
   private double mapIntensityToHue(int intensity) {
-    return intensity * (360.0 / 25); // Assuming intensity ranges from 0 to 25
+    return 240 - (intensity * (240.0 / 5)); // Assuming intensity ranges from 0 to 25
   }
 
 

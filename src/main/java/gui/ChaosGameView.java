@@ -39,6 +39,8 @@ public class ChaosGameView {
   private final Button popupButton = new Button("Edit Custom Fractal");
   private final Button closeButton = new Button("Close application");
   private final CheckBox displayVector = new CheckBox("Vector");
+  private final CheckBox displayHeatMap = new CheckBox("Heat Map");
+
   private final GridPane textFieldsBox = createTextFieldsBox();
   private final VBox controlsPane = new VBox(10);
   private final VBox simulationAndInfoBox = new VBox();
@@ -70,6 +72,7 @@ public class ChaosGameView {
     separator.setStyle("-fx-background-color: white");
 
     displayVector.setStyle("-fx-text-fill: white");
+    displayHeatMap.setStyle("-fx-text-fill: white");
 
     textFieldsBox.setPadding(new Insets(0, 0, 0, 15));
     controlsPane.setAlignment(Pos.CENTER);
@@ -77,7 +80,9 @@ public class ChaosGameView {
   }
 
   public void configureLayout() {
-    VBox textFieldsConfigBox = new VBox(textFieldsBox,matrixChoiceBox,displayVector);
+    HBox checkBoxes = new HBox(displayVector,displayHeatMap);
+    checkBoxes.setSpacing(5);
+    VBox textFieldsConfigBox = new VBox(textFieldsBox,matrixChoiceBox,checkBoxes);
     textFieldsConfigBox.setSpacing(5);
     controlsPane.getChildren().addAll(iterationsLabel, iterationSlider, zoomInLabel, zoomSlider,
         fractalChoiceBox, resetButton, popupButton, closeButton,drawButton,
@@ -161,6 +166,10 @@ public class ChaosGameView {
   }
   public void addDisplayVectorListener(ChangeListener<Boolean> listener) {
     displayVector.selectedProperty().addListener(listener);
+  }
+
+  public void addDisplayHeatmapListener(ChangeListener<Boolean> listener) {
+    displayHeatMap.selectedProperty().addListener(listener);
   }
 
 
@@ -283,7 +292,7 @@ public class ChaosGameView {
   }
 
   public void updateSimulationView(ChaosGame chaosGame, int iterations) {
-    simulationView.updateSimulationView(chaosGame,iterations);
+    simulationView.updateSimulationView(chaosGame,iterations, displayHeatMap.isSelected());
   }
 
   private TextField createTextField(String labelText) {

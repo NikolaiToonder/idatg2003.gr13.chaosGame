@@ -35,10 +35,11 @@ public class ChaosGameController {
     view.addResetButtonListener(e -> handleResetButton());
     view.addPopupButtonListener(e -> handlePopupButton());
     view.addCloseButtonListener(e -> handleCloseButton());
+    view.addDisplayHeatmapListener((observable, oldValue, newValue) ->
+        view.updateSimulationView(chaosGame, (int) view.getIterationSliderValue()));
 
-    view.addDisplayVectorListener((observable, oldValue, newValue) -> {
-      view.updateTextFields(chaosGame, currentTransformation);
-    });
+    view.addDisplayVectorListener((observable, oldValue, newValue) ->
+        view.updateTextFields(chaosGame, currentTransformation));
   }
 
   public ChangeListener<String> createFractalChoiceBoxListener() {
