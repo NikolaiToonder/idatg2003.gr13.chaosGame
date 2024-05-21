@@ -290,20 +290,20 @@ public class ChaosGameDescription {
    *                    and if it is a vector or matrix.
    * @param values all textFields in the program.
    */
-  public void writeToFile(String typeOfTransform, String choiceString, boolean isMatrix, List<String> values){
-    boolean isJulia = typeOfTransform.equals("Julia");
-    System.out.println("isJulia: " + isJulia);
+  public void writeToFile(String choiceString, boolean isMatrix, List<String> values){
+    boolean isJulia = typeOfTransformation.equals("Julia");
     if (isJulia) {
       List<String> juliaValues = List.of(values.get(0), values.get(1));
+
 
       String row = choiceString.split(" ")[1];
       ChaosGameFileHandler.changeLine(this.path, juliaValues, Integer.parseInt(row) + 2);
     } else {
       String row = choiceString.split(" ")[1];
-
       if (!isMatrix) {
         ChaosGameFileHandler.changeLine(this.path, values, Integer.parseInt(row) + 2);
       } else {
+        System.out.println(3);
         List<String> vectorValues = List.of(values.get(0), values.get(1));
 
         ChaosGameFileHandler.changeLine(this.path, vectorValues, Integer.parseInt(row) + 2);

@@ -54,17 +54,22 @@ public class ChaosGameController {
     String choiceToEdit = view.getMatrixChoiceBoxValue();
     List<String> textFieldsValues = view.getTextFieldsValues();
 
+
+
     // Check if any text field value is null or empty
     if (textFieldsValues.stream().anyMatch(value -> value == null || value.isEmpty())) {
       view.showErrorPopup("Error","Please fill in all text fields");
       return;
     }
 
+
     // Update the existing description
-    this.chaosGame.getDescription().writeToFile(typeOfTransform, choiceToEdit,
+    this.chaosGame.getDescription().writeToFile(choiceToEdit,
         view.getDisplayVectorValue(), textFieldsValues);
 
     updateChaosGameInstance(typeOfTransform);
+
+
   }
 
 

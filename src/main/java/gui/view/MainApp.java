@@ -25,6 +25,7 @@ public class MainApp extends Application {
     primaryStage.setMinWidth(MIN_WIDTH);
     primaryStage.setMinHeight(MIN_HEIGHT);
 
+
     centerStage(primaryStage);
     primaryStage.setTitle("Chaos Game");
 
