@@ -1,14 +1,14 @@
-package controller;
+package gui.controller;
 
 import chaosgameclasses.ChaosGame;
-import gui.ChaosGameView;
-import gui.DescriptionFactory;
-import gui.NewFractalMenuView;
+import gui.view.ChaosGameView;
+import gui.view.NewFractalMenuView;
+import factory.DescriptionFactory;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 
 import java.util.List;
-import vectors.Vector2D;
+import math.vectors.Vector2D;
 
 public class ChaosGameController {
   private final ChaosGameView view;

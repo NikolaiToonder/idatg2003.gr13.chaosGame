@@ -1,6 +1,6 @@
-package gui;
+package gui.view;
 
-import controller.NewFractalMenuController;
+import gui.controller.NewFractalMenuController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;

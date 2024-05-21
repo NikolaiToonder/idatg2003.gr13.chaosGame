@@ -1,8 +1,8 @@
 package chaosgameclasses;
 
-import matrix.Matrix2x2;
-import transformations.AffineTransform2D;
-import vectors.Vector2D;
+import math.matrix.Matrix2x2;
+import math.transformations.AffineTransform2D;
+import math.vectors.Vector2D;
 
 /**
  * Class responsible for making a canvas for the chaos game. The canvas is a 2D array of integers,

@@ -1,4 +1,4 @@
-package gui;
+package factory;
 
 import chaosgameclasses.ChaosGameDescription;
 import java.io.IOException;
@@ -19,16 +19,19 @@ public class DescriptionFactory {
     try {
       switch (chosenFractal) {
         case "Barnsley" -> {
-          return new ChaosGameDescription("src/resources/barnsleyTransform.txt");
+          return new ChaosGameDescription("src/main/resources/barnsleyTransform.txt");
         }
         case "Sierpinski" -> {
-          return new ChaosGameDescription("src/resources/sierpinskiTriangle.txt");
+          return new ChaosGameDescription("src/main/resources/sierpinskiTriangle.txt");
         }
         case "Julia" -> {
-          return new ChaosGameDescription("src/resources/juliaTransform.txt");
+          return new ChaosGameDescription("src/main/resources/juliaTransform.txt");
         }
         case "Custom" -> {
-          return new ChaosGameDescription("src/resources/customTransform.txt");
+          return new ChaosGameDescription("src/main/resources/customTransform.txt");
+        }
+        case "Snowflake" -> {
+          return new ChaosGameDescription("src/main/resources/snowflakeTransform.txt");
         }
         default -> {
           return null;

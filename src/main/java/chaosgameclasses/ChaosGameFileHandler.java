@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
-import matrix.Matrix2x2;
 
 /**
  * Class responsible for reading and writing to files.
@@ -155,17 +154,26 @@ public class ChaosGameFileHandler {
     try {
       Path filePath = Paths.get(path);
       if(path.contains("pinski")){
-        Path standardFilePath = Paths.get("src/resources/sierpinskiTemplate.txt");
+        Path standardFilePath = Paths.get("src/main/resources/sierpinskiTemplate.txt");
         List<String> lines = Files.readAllLines(standardFilePath);
         Files.write(filePath, lines);
       } else if (path.contains("arnsley")) {
-        Path standardFilePath = Paths.get("src/resources/barnsleyTemplate.txt");
+        Path standardFilePath = Paths.get("src/main/resources/barnsleyTemplate.txt");
         List<String> lines = Files.readAllLines(standardFilePath);
         Files.write(filePath, lines);
       } else if (path.contains("ulia")) {
-        Path standardFilePath = Paths.get("src/resources/juliaTemplate.txt");
+        Path standardFilePath = Paths.get("src/main/resources/juliaTemplate.txt");
         List<String> lines = Files.readAllLines(standardFilePath);
         Files.write(filePath, lines);
+      } else if (path.contains("nowflake")) {
+        Path standardFilePath = Paths.get("src/main/resources/snowflakeTemplate.txt");
+        List<String> lines = Files.readAllLines(standardFilePath);
+        Files.write(filePath, lines);
+      } else if (path.contains("ustom")) {
+        Path standardFilePath = Paths.get("src/main/resources/customTemplate.txt");
+        List<String> lines = Files.readAllLines(standardFilePath);
+        Files.write(filePath, lines);
+
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -176,7 +184,7 @@ public class ChaosGameFileHandler {
   public static void writeCustomFractal(List<String> values) {
     try {
       clearCustomFractal();
-      Path filePath = Paths.get("src/resources/customTransform.txt");
+      Path filePath = Paths.get("src/main/resources/customTransform.txt");
       List<String> lines = Files.readAllLines(filePath);
       values.forEach(System.out::println);
       for (int i = 0; i < values.size(); i++) {
@@ -190,7 +198,7 @@ public class ChaosGameFileHandler {
   }
   public static void clearCustomFractal() {
     try {
-      Path filePath = Paths.get("src/resources/customTransform.txt");
+      Path filePath = Paths.get("src/main/resources/customTransform.txt");
 
       Files.write(filePath, "".getBytes());
 

@@ -1,6 +1,6 @@
-package controller;
+package gui.controller;
 
-import gui.SimulationView;
+import gui.view.SimulationView;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Cursor;
 import javafx.scene.input.KeyCode;

@@ -1,4 +1,4 @@
-package vectors;
+package math.vectors;
 
 /**
  * A 2D vector class. Functionality includes addition and subtraction of vectors. Requires x and y

@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import transformations.Transform2D;
-import vectors.Vector2D;
+import math.transformations.Transform2D;
+import math.vectors.Vector2D;
 
 /**
  * Class responsible for testing the chaosGameClasses.ChaosGame class.
