@@ -38,6 +38,11 @@ public class ChaosGameView {
     initializeControls();
     configureLayout();
     configureStyle(primaryStage);
+
+    // Add listener to stage's width and height properties
+    primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> adjustAnchorPaneLayout());
+    primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> adjustAnchorPaneLayout());
+
     return createRootPane();
   }
 
@@ -266,5 +271,17 @@ public class ChaosGameView {
     } else {
       updateTextFieldsAffine(chaosGame,currentTransformation,getDisplayVectorValue());
     }
+  }
+
+  private void adjustAnchorPaneLayout() {
+    double parentWidth = simulationAndInfoBox.getWidth();
+    double parentHeight = simulationAndInfoBox.getHeight();
+
+    double centerX = (parentWidth - simulationView.getWidth()) / 2;
+    double centerY = (parentHeight - simulationView.getHeight()) / 2;
+
+    // Set the position of the SimulationView within the AnchorPane
+    simulationView.setLayoutX(centerX);
+    simulationView.setLayoutY(centerY);
   }
 }

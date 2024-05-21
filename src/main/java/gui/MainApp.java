@@ -22,11 +22,12 @@ public class MainApp extends Application {
 
   @Override
   public void start(Stage primaryStage) {
-    Scene startupScene  = createStartupScene(primaryStage);
-    primaryStage.setScene(startupScene );
+    Scene startupScene = createStartupScene(primaryStage);
+    primaryStage.setScene(startupScene);
     primaryStage.setMinWidth(MIN_WIDTH);
     primaryStage.setMinHeight(MIN_HEIGHT);
-    primaryStage.setFullScreen(true);
+
+    //addListenerToStage(primaryStage);
 
     centerStage(primaryStage);
     primaryStage.setTitle("Chaos Game");
@@ -44,13 +45,7 @@ public class MainApp extends Application {
 
   private void changeToChaosGameView(Stage primaryStage) {
     ChaosGameView chaosGameView = new ChaosGameView();
-
-    //Make chaosGameView to fit bounds to resize
-    //chaosGameView
     Scene chaosGameScene = new Scene(chaosGameView.createContent(primaryStage));
-
-
-    Screen screen = Screen.getPrimary();
     primaryStage.setScene(chaosGameScene);
   }
 
@@ -64,6 +59,13 @@ public class MainApp extends Application {
     // Set the position of the stage
     primaryStage.setX(centerX);
     primaryStage.setY(centerY);
+  }
+
+  private void addListenerToStage(Stage primaryStage) {
+    primaryStage.setOnCloseRequest(e -> {
+      e.consume();
+      primaryStage.close();
+    });
   }
 
   public static void main(String[] args) {
