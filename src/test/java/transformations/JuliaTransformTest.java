@@ -1,6 +1,8 @@
 package transformations;
 
 import math.transformations.JuliaTransform;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import math.vectors.Complex;
 import math.vectors.Vector2D;
@@ -11,59 +13,64 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JuliaTransformTest {
 
+  private Complex constant;
+  private Complex z;
+  private JuliaTransform transform;
+
+  @BeforeEach
+  void setUp() {
+    // Initialize common test values here
+    constant = new Complex(0.3, 0.6);
+    z = new Complex(0.4, 0.2);
+    transform = new JuliaTransform(constant, 1);
+  }
+
+  @AfterEach
+  void tearDown() {
+    // Cleanup after each test
+    constant = null;
+    z = null;
+    transform = null;
+  }
+
   @Test
   void testTransformPositive() {
-    Complex z = new Complex(0.4, 0.2);
-    JuliaTransform transform = new JuliaTransform(new Complex(0.3, 0.6),
-        1);
     Vector2D result = transform.transform(z);
-    assertEquals(0.51, Math.round(result.getX0()*100.0)*0.01);
-    assertEquals(-0.395, Math.round(result.getX1()*1000.0)*0.001);
+    assertEquals(0.51, Math.round(result.getX0() * 100.0) * 0.01);
+    assertEquals(-0.395, Math.round(result.getX1() * 1000.0) * 0.001);
   }
 
   @Test
   void testTransformNegative() {
-    Complex z = new Complex(0.4, 0.2);
-    JuliaTransform transform = new JuliaTransform(new Complex(0.3, 0.6), -1);
+    transform = new JuliaTransform(constant, -1);
     Vector2D result = transform.transform(z);
-    assertNotEquals(0.506+0.001, Math.round(result.getX0() * 1000.0) * 0.001);
-    assertNotEquals(-0.395-0.001, Math.round(result.getX1() * 1000.0) * 0.001);
-  }
-
-
-  @Test
-   void testSetSignValidPositive() {
-    Complex constant = new Complex(1, 1);
-    JuliaTransform juliaTransform = new JuliaTransform(constant, 1);
-    juliaTransform.setSign(-1);
-    assertEquals(-1, juliaTransform.getSign());
+    assertNotEquals(0.506 + 0.001, Math.round(result.getX0() * 1000.0) * 0.001);
+    assertNotEquals(-0.395 - 0.001, Math.round(result.getX1() * 1000.0) * 0.001);
   }
 
   @Test
-   void testSetSignValidNegative() {
-    Complex constant = new Complex(1, 1);
-    JuliaTransform juliaTransform = new JuliaTransform(constant, -1);
-    juliaTransform.setSign(1);
-    assertNotEquals(2, juliaTransform.getSign());
+  void testSetSignValidPositive() {
+    transform.setSign(-1);
+    assertEquals(-1, transform.getSign());
+  }
+
+  @Test
+  void testSetSignValidNegative() {
+    transform.setSign(1);
+    assertNotEquals(2, transform.getSign());
   }
 
   @Test
   void testSetSignInvalidPositive() {
-    Complex constant = new Complex(1, 1);
-    JuliaTransform juliaTransform = new JuliaTransform(constant, 1);
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-        juliaTransform.setSign(0));
+        transform.setSign(0));
     assertEquals("Sign must be 1 or -1", exception.getMessage());
   }
 
   @Test
   void testSetSignInvalidNegative() {
-    Complex constant = new Complex(1, 1);
-    JuliaTransform juliaTransform = new JuliaTransform(constant, 1);
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-        juliaTransform.setSign(2));
+        transform.setSign(2));
     assertNotEquals("This is not the exception message", exception.getMessage());
   }
-
 }
-
