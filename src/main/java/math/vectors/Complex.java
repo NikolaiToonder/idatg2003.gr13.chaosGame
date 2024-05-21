@@ -1,8 +1,8 @@
 package math.vectors;
 
 /**
- * Class to represent a complex number, used in this case to also respresent a
- * complex number in the julia transformation.
+ * Class to represent a complex number, used in this case to also respresent a complex number in the
+ * julia transformation.
  */
 public class Complex extends Vector2D {
 
@@ -37,7 +37,7 @@ public class Complex extends Vector2D {
    */
   public Complex add(Complex other) {
     return new Complex(getReal() + other.getReal(),
-            getImaginary() + other.getImaginary());
+        getImaginary() + other.getImaginary());
   }
 
   /**
@@ -68,7 +68,7 @@ public class Complex extends Vector2D {
   @Override
   public Complex subtract(Vector2D other) {
     return new Complex(this.getReal() - other.getX0(), getImaginary()
-            - other.getX1());
+        - other.getX1());
   }
 
   /**
@@ -81,7 +81,12 @@ public class Complex extends Vector2D {
     return this;
   }
 
-  public Complex multiply(int sign) {
-    return new Complex(sign*getReal(), sign * getImaginary());
+  /**
+   * Multiplies this complex number with a scalar.
+   *
+   * @param scalar The scalar to multiply with.
+   */
+  public Complex multiply(int scalar) {
+    return new Complex(scalar * getReal(), scalar * getImaginary());
   }
 }

@@ -31,6 +31,7 @@ public class Matrix2x2 {
 
   /**
    * Getter for the field a00.
+   *
    * @return double a00
    */
   public double getA00() {
@@ -38,7 +39,8 @@ public class Matrix2x2 {
   }
 
   /**
-   * Getter for the field a01
+   * Getter for the field a01.
+   *
    * @return double a01
    */
   public double getA01() {
@@ -47,6 +49,7 @@ public class Matrix2x2 {
 
   /**
    * Getter for the field a10.
+   *
    * @return double a10
    */
   public double getA10() {
@@ -54,7 +57,8 @@ public class Matrix2x2 {
   }
 
   /**
-   * Getter for the field a11
+   * Getter for the field a11.
+   *
    * @return double a11
    */
   public double getA11() {
@@ -69,6 +73,6 @@ public class Matrix2x2 {
    */
   public Vector2D multiply(Vector2D vector) {
     return new Vector2D(a00 * vector.getX0() + a01 * vector.getX1(),
-            a10 * vector.getX0() + a11 * vector.getX1());
+        a10 * vector.getX0() + a11 * vector.getX1());
   }
 }

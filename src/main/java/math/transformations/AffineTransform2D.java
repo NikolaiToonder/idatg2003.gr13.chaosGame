@@ -25,6 +25,11 @@ public class AffineTransform2D implements Transform2D {
     this.vector = vector;
   }
 
+  /**
+   * Getter for the matrix field.
+   *
+   * @return The matrix field
+   */
   public Matrix2x2 getMatrix() {
     return matrix;
   }

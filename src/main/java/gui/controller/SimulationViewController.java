@@ -8,6 +8,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
+/**
+ * Controller class for the SimulationView. Handles all events that happen in simulationView.
+ */
 public class SimulationViewController {
 
   private final SimulationView simulationView;
@@ -15,18 +18,26 @@ public class SimulationViewController {
   private double prevMouseX;
   private double prevMouseY;
   private boolean isScalingEnabled;
-  private boolean isAltPressed;
+  private final double minScaleX = 0.1;
+  private final double maxScaleX = 1.3;
+  private final double minScaleY = 0.1;
+  private final double maxScaleY = 1.5;
 
-  private final double MIN_SCALE_X = 0.1;
-  private final double MAX_SCALE_X = 1.3;
-  private final double MIN_SCALE_Y = 0.1;
-  private final double MAX_SCALE_Y = 1.5;
-
+  /**
+   * Constructor for the SimulationViewController class. Takes a SimulationView as a parameter.
+   * Initializes the SimulationView instance and sets up the view. Then it adds all the listeners to
+   * the view.
+   *
+   * @param simulationView The SimulationView instance.
+   */
   public SimulationViewController(SimulationView simulationView) {
     this.simulationView = simulationView;
     setListeners();
   }
 
+  /**
+   * Method to add listeners to all elements that needs listeners.
+   */
   private void setListeners() {
     simulationView.setOnScroll(this::handleScroll);
     simulationView.setOnMousePressed(this::handleMousePressed);
@@ -39,6 +50,11 @@ public class SimulationViewController {
     simulationView.heightProperty().addListener(this::handleSizeChange);
   }
 
+  /**
+   * Method to handle the scroll event. It scales the canvas based on the scroll event.
+   *
+   * @param event The scroll event.
+   */
   private void handleScroll(ScrollEvent event) {
     double scaleFactor = 1.05;
     if (event.getDeltaY() < 0) {
@@ -46,14 +62,19 @@ public class SimulationViewController {
     }
     double newScaleX = simulationView.getScaleTransform().getX() * scaleFactor;
     double newScaleY = simulationView.getScaleTransform().getY() * scaleFactor;
-    if (newScaleX >= MIN_SCALE_X && newScaleX <= MAX_SCALE_X &&
-        newScaleY >= MIN_SCALE_Y && newScaleY <= MAX_SCALE_Y) {
+    if (newScaleX >= minScaleX && newScaleX <= maxScaleX
+        && newScaleY >= minScaleY && newScaleY <= maxScaleY) {
       simulationView.getScaleTransform().setX(newScaleX);
       simulationView.getScaleTransform().setY(newScaleY);
     }
     event.consume();
   }
 
+  /**
+   * Method to handle the mouse pressed event. It enables scaling if the alt key is pressed.
+   *
+   * @param event The mouse pressed event.
+   */
   private void handleMousePressed(MouseEvent event) {
     if (event.isAltDown()) {
       isScalingEnabled = true;
@@ -62,6 +83,11 @@ public class SimulationViewController {
     }
   }
 
+  /**
+   * Method to handle the mouse dragged event. It scales the canvas based on the mouse drag event.
+   *
+   * @param event The mouse dragged event.
+   */
   private void handleMouseDragged(MouseEvent event) {
     if (isScalingEnabled) {
       double deltaX = event.getX() - prevMouseX;
@@ -73,8 +99,8 @@ public class SimulationViewController {
       double newScaleX = scaleX + deltaX / 100;
       double newScaleY = scaleY + deltaY / 100;
 
-      if (newScaleX >= MIN_SCALE_X && newScaleX <= MAX_SCALE_X &&
-          newScaleY >= MIN_SCALE_Y && newScaleY <= MAX_SCALE_Y) {
+      if (newScaleX >= minScaleX && newScaleX <= maxScaleX
+          && newScaleY >= minScaleY && newScaleY <= maxScaleY) {
         simulationView.getScaleTransform().setX(newScaleX);
         simulationView.getScaleTransform().setY(newScaleY);
       }
@@ -84,20 +110,34 @@ public class SimulationViewController {
     }
   }
 
+  /**
+   * Method to handle the mouse released event. It disables scaling.
+   *
+   * @param event The mouse released event.
+   */
   private void handleMouseReleased(MouseEvent event) {
     isScalingEnabled = false;
   }
 
+  /**
+   * Method to handle the key pressed event. It sets isAltPressed to true if the alt key is pressed.
+   *
+   * @param event The key pressed event.
+   */
   private void handleKeyPressed(KeyEvent event) {
     if (event.getCode().equals(KeyCode.ALT)) {
-      isAltPressed = true;
       simulationView.setCursor(Cursor.OPEN_HAND);
     }
   }
 
+  /**
+   * Method to handle the key released event. It sets isAltPressed to false if the alt key is
+   * released.
+   *
+   * @param event The key released event.
+   */
   private void handleKeyReleased(KeyEvent event) {
     if (event.getCode().equals(KeyCode.ALT)) {
-      isAltPressed = false;
       simulationView.setCursor(Cursor.DEFAULT);
     }
   }
@@ -105,17 +145,19 @@ public class SimulationViewController {
   /**
    * Handles the scaling of the canvas based on the size change of the SimulationView.
    *
-   * @param observable The ObservableValue being observed (in this case, the width or height property)
+   * @param observable The ObservableValue being observed (in this case, the width or height
+   *                   property)
    * @param oldValue   The old value of the property
    * @param newValue   The new value of the property
    */
-  private void handleSizeChange(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    double newScaleX = simulationView.getWidth() / simulationView.getSTARTING_WIDTH();
-    double newScaleY = simulationView.getHeight() / simulationView.getSTARTING_HEIGHT();
+  private void handleSizeChange(ObservableValue<? extends Number> observable, Number oldValue,
+      Number newValue) {
+    double newScaleX = simulationView.getWidth() / simulationView.getStartingWidth();
+    double newScaleY = simulationView.getHeight() / simulationView.getStartingHeight();
 
     // Ensure new scales are within allowed limits
-    newScaleX = Math.max(MIN_SCALE_X, Math.min(MAX_SCALE_X, newScaleX));
-    newScaleY = Math.max(MIN_SCALE_Y, Math.min(MAX_SCALE_Y, newScaleY));
+    newScaleX = Math.max(minScaleX, Math.min(maxScaleX, newScaleX));
+    newScaleY = Math.max(minScaleY, Math.min(maxScaleY, newScaleY));
 
     simulationView.getScaleTransform().setX(newScaleX);
     simulationView.getScaleTransform().setY(newScaleY);

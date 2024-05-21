@@ -10,23 +10,23 @@ import javafx.scene.transform.Scale;
 import math.vectors.Vector2D;
 
 /**
- * JavaFX class for the actual simulation view. Will be used with ChaosGameView to view the
- * chaos game.
+ * JavaFX class for the actual simulation view. Will be used with ChaosGameView to view the chaos
+ * game.
  */
 public class SimulationView extends Pane {
 
   private final Canvas canvas;
   private final Scale scaleTransform;
-  private final SimulationViewController controller;
 
-  private final double STARTING_HEIGHT = 605;
-  private final double STARTING_WIDTH = 605;
+
+  private final double startingHeight = 605;
+  private final double startingWidth = 605;
 
   /**
    * Constructor of the class. Used to initialize and set up the class.
    */
   public SimulationView() {
-    canvas = new Canvas(STARTING_WIDTH, STARTING_HEIGHT);
+    canvas = new Canvas(startingWidth, startingHeight);
     this.getChildren().add(canvas);
 
     this.setStyle("-fx-background-color: #2b2d31;");
@@ -34,37 +34,50 @@ public class SimulationView extends Pane {
     scaleTransform = new Scale(1, 1);
     canvas.getTransforms().add(scaleTransform);
 
-
-    controller = new SimulationViewController(this);
+    SimulationViewController controller = new SimulationViewController(this);
   }
 
-  public double getSTARTING_HEIGHT() {
-    return STARTING_HEIGHT;
+  /**
+   * Gets the starting height of the simulation view.
+   *
+   * @return The starting height of the simulation view.
+   */
+  public double getStartingHeight() {
+    return startingHeight;
   }
-  public double getSTARTING_WIDTH() {
-    return STARTING_WIDTH;
+
+  /**
+   * Gets the starting width of the simulation view.
+   *
+   * @return The starting width of the simulation view.
+   */
+  public double getStartingWidth() {
+    return startingWidth;
   }
 
   /**
    * Method called to update the simulation view. Will only use the canvas to draw the fractal
-   * again.
+   * again. Depending on what displayHeatMap checkbox is selected, it will draw the fractal with or
+   * without a heat map.
    *
    * @param chaosGame  chaosGame class to use
    * @param iterations How many iterations the user wants.
+   * @param displayHeatMap If the user wants to display a heat map or not.
    */
-  public void updateSimulationView(ChaosGame chaosGame, Number iterations, boolean heatMap) {
-    if(!heatMap)
+  public void updateSimulationView(ChaosGame chaosGame, Number iterations, boolean displayHeatMap) {
+    if (!displayHeatMap) {
       drawFractal(chaosGame, iterations.intValue());
-    else
+    } else {
       drawFractalHeatMap(chaosGame, iterations.intValue());
+    }
   }
 
   /**
    * Method to draw the fractals. Uses the graphics context of the canvas, and fills a pixel in at
    * the coordinate needed.
    *
-   * @param chaosGame
-   * @param iterations
+   * @param chaosGame The chaosGame instance to use.
+   * @param iterations The number of iterations to run.
    */
   private void drawFractal(ChaosGame chaosGame, int iterations) {
     chaosGame.getCanvas().clear();
@@ -80,6 +93,15 @@ public class SimulationView extends Pane {
       gc.fillOval(point.getX1(), point.getX0(), 1, 1);
     }
   }
+
+  /**
+   * Method to draw the fractal with a heat map. Will run through all iterations of the program
+   * so a heat map can be formed in ChaosCanvas. Then it will draw the heat map based on the values
+   * of the heatMapCanvas
+   *
+   * @param chaosGame The chaosGame instance to use.
+   * @param iterations The number of iterations to run.
+   */
   private void drawFractalHeatMap(ChaosGame chaosGame, int iterations) {
     GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -114,12 +136,23 @@ public class SimulationView extends Pane {
     }
   }
 
+  /**
+   * Method to map the intensity of a pixel to a hue value in the HSB color space.
+   *
+   * @param intensity The intensity of the pixel.
+   * @return The hue value in the range [0, 360].
+   */
   private double mapIntensityToHue(int intensity) {
     return 240 - (intensity * (240.0 / 5)); // Assuming intensity ranges from 0 to 25
   }
 
 
-  public Scale getScaleTransform(){
+  /**
+   * Method to get the scale transform of the canvas.
+   *
+   * @return The scale transform of the canvas.
+   */
+  public Scale getScaleTransform() {
     return this.scaleTransform;
   }
 }

@@ -72,13 +72,21 @@ public class ChaosGameDescription {
 
   }
 
+  /**
+   * Gets the path to the file containing the description.
+   *
+   * @return The path to the file containing the description
+   */
   public String getPath() {
     return path;
   }
 
-  public void setPath(String path) {
-    this.path = path;
-  }
+
+  /**
+   * Gets the number of transforms to be used.
+   *
+   * @return The number of transforms.
+   */
   public int getNumberOfTransforms() {
     return numberOfTransforms;
   }
@@ -92,8 +100,10 @@ public class ChaosGameDescription {
     try {
       String[] minCoords = values.get(1).split(",");
       String[] maxCoords = values.get(2).split(",");
-      setMinCoords(new Vector2D(Double.parseDouble(minCoords[0]), Double.parseDouble(minCoords[1])));
-      setMaxCoords(new Vector2D(Double.parseDouble(maxCoords[0]), Double.parseDouble(maxCoords[1])));
+      setMinCoords(
+          new Vector2D(Double.parseDouble(minCoords[0]), Double.parseDouble(minCoords[1])));
+      setMaxCoords(
+          new Vector2D(Double.parseDouble(maxCoords[0]), Double.parseDouble(maxCoords[1])));
     } catch (NumberFormatException e) {
       throw new IllegalArgumentException("Error parsing canvas coordinates: " + e.getMessage(), e);
     }
@@ -113,22 +123,24 @@ public class ChaosGameDescription {
     try {
       List<Transform2D> transformations = new ArrayList<>();
       List<Matrix2x2> matrix2x2List = new ArrayList<>();
-      List<Vector2D> vector2DList = new ArrayList<>();
+      List<Vector2D> vector2dList = new ArrayList<>();
       this.numberOfTransforms = values.size() - 3;
       for (int i = 3; i < values.size(); i++) {
         String[] value = values.get(i).split(",");
         if (value.length > 0) {
-          Matrix2x2 matrix = new Matrix2x2(Double.parseDouble(value[0]), Double.parseDouble(value[1]),
+          Matrix2x2 matrix = new Matrix2x2(Double.parseDouble(value[0]),
+              Double.parseDouble(value[1]),
               Double.parseDouble(value[2]), Double.parseDouble(value[3]));
-          Vector2D vector = new Vector2D(Double.parseDouble(value[4]), Double.parseDouble(value[5]));
+          Vector2D vector = new Vector2D(Double.parseDouble(value[4]),
+              Double.parseDouble(value[5]));
           transformations.add(new AffineTransform2D(matrix, vector));
           matrix2x2List.add(matrix);
-          vector2DList.add(vector);
+          vector2dList.add(vector);
         }
       }
       setTransforms(transformations);
       setMatrixList(matrix2x2List);
-      setVectorList(vector2DList);
+      setVectorList(vector2dList);
     } catch (NumberFormatException e) {
       throw new IllegalArgumentException("Error parsing transform values: " + e.getMessage(), e);
     }
@@ -136,6 +148,7 @@ public class ChaosGameDescription {
 
   /**
    * Setter for the matrixList field.
+   *
    * @param matrixList list of matrix2x2
    */
   public void setMatrixList(List<Matrix2x2> matrixList) {
@@ -144,6 +157,7 @@ public class ChaosGameDescription {
 
   /**
    * Setter for the vectorList field.
+   *
    * @param vectorList list of vector2d
    */
   public void setVectorList(List<Vector2D> vectorList) {
@@ -151,8 +165,9 @@ public class ChaosGameDescription {
   }
 
   /**
-   * Getter for the matrixList field
-   * @return matrixList, a list of matricies
+   * Getter for the matrixList field.
+   *
+   * @return matrixList, a list of matricies.
    */
   public List<Matrix2x2> getMatrixList() {
     return matrixList;
@@ -160,6 +175,7 @@ public class ChaosGameDescription {
 
   /**
    * Getter for the vectorList field.
+   *
    * @return vectorList, a list of vectors.
    */
   public List<Vector2D> getVectorList() {
@@ -183,7 +199,8 @@ public class ChaosGameDescription {
       sign = -1;
     }
 
-    List<Transform2D> transformations = List.of(new JuliaTransform(point, sign), new JuliaTransform(point, -sign));
+    List<Transform2D> transformations = List.of(new JuliaTransform(point, sign),
+        new JuliaTransform(point, -sign));
     this.complexNumbers = List.of(point);
     setTransforms(transformations);
 
@@ -191,8 +208,9 @@ public class ChaosGameDescription {
 
   /**
    * Setter for the typeOfTransformation field.
-   * @param typeOfTransformation type of transformation the user wants.
-   *                             Can either be Affine2D or Complex
+   *
+   * @param typeOfTransformation type of transformation the user wants. Can either be Affine2D or
+   *                             Complex
    */
   public void setTypeOfTransformation(String typeOfTransformation) {
     this.typeOfTransformation = typeOfTransformation;
@@ -210,12 +228,18 @@ public class ChaosGameDescription {
 
   /**
    * Returns the sign of the complex fractal.
-   * @return
+   *
+   * @return The sign of the complex fractal
    */
   public int getSign() {
     return sign;
   }
 
+  /**
+   * Gets the list of complex numbers.
+   *
+   * @return The list of complex numbers
+   */
   public List<Complex> getComplexNumbers() {
     return this.complexNumbers;
   }
@@ -285,16 +309,16 @@ public class ChaosGameDescription {
 
   /**
    * Method to handle values from a list of textFields, and then pass it onto a fileWriter class.
-   * @param typeOfTransform What transformation the user wants.
-   * @param choiceString String of what line the user wants to edit,
-   *                    and if it is a vector or matrix.
-   * @param values all textFields in the program.
+   *
+   * @param choiceString    String of what line the user wants to edit, and if it is a vector or
+   *                        matrix.
+   * @param isMatrix       boolean to check if the user wants to edit a matrix or a vector.
+   * @param values          all textFields in the program.
    */
-  public void writeToFile(String choiceString, boolean isMatrix, List<String> values){
+  public void writeToFile(String choiceString, boolean isMatrix, List<String> values) {
     boolean isJulia = typeOfTransformation.equals("Julia");
     if (isJulia) {
       List<String> juliaValues = List.of(values.get(0), values.get(1));
-
 
       String row = choiceString.split(" ")[1];
       ChaosGameFileHandler.changeLine(this.path, juliaValues, Integer.parseInt(row) + 2);
@@ -313,6 +337,7 @@ public class ChaosGameDescription {
 
   /**
    * Getter for the typeOfTransformation field.
+   *
    * @return typeOfTransformation String
    */
   public String getTypeOfTransformation() {
@@ -321,25 +346,36 @@ public class ChaosGameDescription {
 
   /**
    * Used to reset the fractal chosen into a standard template included in the program.
-   *
    */
-  public void resetFractals(){
+  public void resetFractals() {
     ChaosGameFileHandler.resetFractals(this.path);
   }
 
   /**
-   * If the user wishes to create a custom fractal, this is the method the program uses to write
-   * the users chosen values to a file. Will take in a list of strings, where the lines corresponds
-   * to what you would see in the txt files containing the templates.
+   * If the user wishes to create a custom fractal, this is the method the program uses to write the
+   * users chosen values to a file. Will take in a list of strings, where the lines corresponds to
+   * what you would see in the txt files containing the templates.
+   *
    * @param values values the program wants to handle.
    */
-  public void writeToFileCustom(List<String> values){
+  public void writeToFileCustom(List<String> values) {
     ChaosGameFileHandler.writeCustomFractal(values);
   }
-  public boolean getIsBarnsley(){
+
+  /**
+   * Getter for the isBarnsley field.
+   *
+   * @return isBarnsley boolean
+   */
+  public boolean getIsBarnsley() {
     return isBarnsley;
   }
 
+  /**
+   * Setter for the isBarnsley field.
+   *
+   * @param barnsley boolean
+   */
   public void setIsBarnsley(boolean barnsley) {
     isBarnsley = barnsley;
   }

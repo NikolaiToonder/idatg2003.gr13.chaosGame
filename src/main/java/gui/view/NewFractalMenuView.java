@@ -8,16 +8,13 @@ import java.util.function.UnaryOperator;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.GridPane;
@@ -27,10 +24,15 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * JavaFX class for the new fractal menu view. Will be used to create a new custom fractal.
+ *
+ * @author Nikolai Engelsen Tønder
+ * @version 1.0
+ */
 public class NewFractalMenuView {
-
-  //WITH CHATGPT vv
   private static final UnaryOperator<Change> filter = change -> {
+    //WITH CHATGPT, used to filter out unwanted characters.
     String newText = change.getControlNewText();
     if (newText.matches("-?\\d*\\.?\\d*")) { // Allow digits and an optional decimal point
       return change; // Accept the change
@@ -48,21 +50,28 @@ public class NewFractalMenuView {
   private final Separator separator = new Separator();
   private final Button addNewLayer = new Button("New Transformation");
   private final HBox buttonBox = new HBox(saveButton, addNewLayer);
-  private final String styleGreen = "-fx-background-color: #449933;";
   NewFractalMenuController chaosGameController = new NewFractalMenuController(this);
   private final List<String> allHeaderValues;
   private final List<String> allMatrixValues;
-  private final List<String> allv;
+  private final List<String> allValues;
 
 
-
+  /**
+   * Constructor for the NewFractalMenuView class. Initializes the lists for
+   * the header values, matrix values, and all values.
+   */
   public NewFractalMenuView() {
     this.allHeaderValues = new ArrayList<>();
     this.allMatrixValues = new ArrayList<>();
-    this.allv = new ArrayList<>();
+    this.allValues = new ArrayList<>();
   }
 
 
+  /**
+   * Method to show the popup menu. It will show the popup stage and configure the layout.
+   *
+   * @param callback The callback function to call when the save button is pressed.
+   */
   public void showPopupMenu(Consumer<List<String>> callback) {
     styleElements();
     configureLayout();
@@ -76,7 +85,7 @@ public class NewFractalMenuView {
         parseHeaderValues();
         parseValues();
         combineAllValues();
-        callback.accept(allv);
+        callback.accept(allValues);
         popupStage.close();
       }
     });
@@ -85,42 +94,36 @@ public class NewFractalMenuView {
     popupStage.show();
   }
 
-  public void addSaveButtonListener(Consumer<List<String>> callback) {
-    saveButton.setOnAction(e -> handleSaveButton(callback));
-  }
-
-  private void handleSaveButton(Consumer<List<String>> callback) {
-    if (areFieldsEmpty()) {
-      showWarningPopup("Please fill in all the fields.");
-    } else {
-      parseHeaderValues();
-      parseValues();
-      combineAllValues();
-      callback.accept(allv);
-      popupStage.close();
-    }
-  }
-
+  /**
+   * Method to check if the text fields are empty.
+   *
+   * @return True if the text fields are empty, false otherwise.
+   */
   private boolean areFieldsEmpty() {
     boolean areMinMaxFieldsEmpty = minMaxBox.getChildren().stream()
-        .filter(node -> node instanceof GridPane)
+        .filter(GridPane.class::isInstance)
         .map(GridPane.class::cast)
         .flatMap(gridPane -> gridPane.getChildren().stream())
-        .filter(node -> node instanceof TextField)
+        .filter(TextField.class::isInstance)
         .map(TextField.class::cast)
         .anyMatch(textField -> textField.getText() == null || textField.getText().trim().isEmpty());
 
     boolean areMatrixFieldsEmpty = matrixBox.getChildren().stream()
-        .filter(node -> node instanceof GridPane)
+        .filter(GridPane.class::isInstance)
         .map(GridPane.class::cast)
         .flatMap(gridPane -> gridPane.getChildren().stream())
-        .filter(node -> node instanceof TextField)
+        .filter(TextField.class::isInstance)
         .map(TextField.class::cast)
         .anyMatch(textField -> textField.getText() == null || textField.getText().trim().isEmpty());
 
     return areMinMaxFieldsEmpty || areMatrixFieldsEmpty;
   }
 
+  /**
+   * Method to show a warning popup.
+   *
+   * @param message The message to display in the popup.
+   */
   private void showWarningPopup(String message) {
     Alert alert = new Alert(Alert.AlertType.WARNING);
     alert.setTitle("Warning");
@@ -129,7 +132,10 @@ public class NewFractalMenuView {
     alert.showAndWait();
   }
 
-  public void styleElements(){
+  /**
+   * Method to style the elements in the popup menu.
+   */
+  public void styleElements() {
     popupLayout.setAlignment(Pos.CENTER);
     popupLayout.setPadding(new Insets(20));
     popupLayout.setStyle("-fx-background-color: #2b2d31;");
@@ -148,7 +154,10 @@ public class NewFractalMenuView {
     buttonBox.setAlignment(Pos.CENTER);
   }
 
-  public void configureLayout(){
+  /**
+   * Method to configure the layout of the popup menu.
+   */
+  public void configureLayout() {
     popupLayout.getChildren().addAll(title, choiceBox, minMaxBox, separator, matrixBox, buttonBox);
 
     popupStage.setScene(popupScene);
@@ -162,20 +171,31 @@ public class NewFractalMenuView {
     popupStage.show();
   }
 
-  public ChoiceBox<String> configureChoiceBox(){
-    ChoiceBox<String> choiceBox1 = new ChoiceBox<>();
-    choiceBox1.getItems().addAll("Julia", "Affine2D");
-    choiceBox1.setValue("Affine2D");
-    return choiceBox1;
+  /**
+   * Method to create a choice box for the transformation type.
+   *
+   * @return A choice box for the transformation type.
+   */
+  public ChoiceBox<String> configureChoiceBox() {
+    ChoiceBox<String> choiceBox = new ChoiceBox<>();
+    choiceBox.getItems().addAll("Julia", "Affine2D");
+    choiceBox.setValue("Affine2D");
+    return choiceBox;
   }
 
-  public static VBox createMatrixBox(String value){
+  /**
+   * Method to create a matrix box for the transformation matrix.
+   *
+   * @param value The value of the choice box.
+   * @return A VBox containing the matrix box.
+   */
+  public static VBox createMatrixBox(String value) {
 
     VBox matrixBox = new VBox();
     GridPane gridPane = new GridPane();
     gridPane.setHgap(10);
     gridPane.setVgap(10);
-    if(value.equals("Affine2D")) {
+    if (value.equals("Affine2D")) {
 
       // Creating text fields for the matrix
       TextField aField = new TextField();
@@ -243,7 +263,12 @@ public class NewFractalMenuView {
   }
 
 
-  private VBox createMinMaxFields(){
+  /**
+   * Method to create a VBox containing the min and max fields.
+   *
+   * @return A VBox containing the min and max fields.
+   */
+  private VBox createMinMaxFields() {
     TextField minx0 = new TextField("");
     TextField minx1 = new TextField("");
 
@@ -262,8 +287,8 @@ public class NewFractalMenuView {
 
     applyTextFormatter(minx0, filter);
     applyTextFormatter(minx1, filter);
-    applyTextFormatter(maxx1,filter);
-    applyTextFormatter(maxx0,filter);
+    applyTextFormatter(maxx1, filter);
+    applyTextFormatter(maxx0, filter);
 
     GridPane gridPane = new GridPane();
     gridPane.setHgap(10);
@@ -276,15 +301,21 @@ public class NewFractalMenuView {
     return new VBox(gridPane);
   }
 
-  public void parseValues(){
-    if(choiceBox.getValue().equalsIgnoreCase("Affine2D")){
+  /**
+   * Method to parse the values from the text fields.
+   */
+  public void parseValues() {
+    if (choiceBox.getValue().equalsIgnoreCase("Affine2D")) {
       parseValuesAffine();
     } else {
       parseValuesJulia();
     }
   }
 
-  private void parseValuesAffine(){
+  /**
+   * Method to parse the values from the affine transformation text fields.
+   */
+  private void parseValuesAffine() {
     for (int i = 0; i < matrixBox.getChildren().size(); i++) {
       GridPane gridPane = (GridPane) matrixBox.getChildren().get(i);
       StringBuilder line = new StringBuilder();
@@ -298,12 +329,15 @@ public class NewFractalMenuView {
     }
   }
 
+  /**
+   * Method to parse the values from the Julia transformation text fields.
+   */
   private void parseValuesJulia() {
     for (int i = 0; i < matrixBox.getChildren().size(); i++) {
       VBox gridPane = (VBox) matrixBox.getChildren().get(i);
       StringBuilder line = new StringBuilder();
       GridPane gridPane1 = (GridPane) gridPane.getChildren().get(0);
-      for(int j = 0; j < gridPane1.getChildren().size(); j++){
+      for (int j = 0; j < gridPane1.getChildren().size(); j++) {
         TextField textField = (TextField) gridPane1.getChildren().get(j);
         line.append(textField.getText()).append(",");
         textField.setText("");
@@ -313,37 +347,64 @@ public class NewFractalMenuView {
     }
   }
 
+  /**
+   * Method to apply a text formatter to a text field.
+   *
+   * @param textField The text field to apply the text formatter to.
+   * @param filter    The filter to apply to the text field.
+   */
   private static void applyTextFormatter(TextField textField, UnaryOperator<Change> filter) {
     textField.setTextFormatter(new TextFormatter<>(filter));
   }
 
-  public void parseHeaderValues(){
+  /**
+   * Method to parse the header values from the text fields.
+   */
+  public void parseHeaderValues() {
     String transformationType = choiceBox.getValue();
     allHeaderValues.add(transformationType);
 
-    GridPane minMaxGridPane = (GridPane) minMaxBox.getChildren().get(0); // Assuming there's only one child (GridPane)
+    GridPane minMaxGridPane = (GridPane) minMaxBox.getChildren().get(0);
     TextField minx0 = (TextField) minMaxGridPane.getChildren().get(0);
     TextField minx1 = (TextField) minMaxGridPane.getChildren().get(1);
     TextField maxx0 = (TextField) minMaxGridPane.getChildren().get(2);
     TextField maxx1 = (TextField) minMaxGridPane.getChildren().get(3);
     allHeaderValues.add(minx0.getText() + "," + minx1.getText());
-    allHeaderValues.add(maxx0.getText()+","+ maxx1.getText());
+    allHeaderValues.add(maxx0.getText() + "," + maxx1.getText());
   }
 
-  public void combineAllValues(){
-    this.allv.addAll(allHeaderValues);
-    this.allv.addAll(allMatrixValues);
+  /**
+   * Method to combine all values into one list.
+   */
+  public void combineAllValues() {
+    this.allValues.addAll(allHeaderValues);
+    this.allValues.addAll(allMatrixValues);
   }
 
-  public void addNewLayerButtonListener(Consumer<Void> handler){
-    addNewLayer.setOnAction(e->handler.accept(null));
+  /**
+   * Method to add a new layer to the transformation matrix.
+   *
+   * @param handler The handler to add.
+   */
+  public void addNewLayerButtonListener(Consumer<Void> handler) {
+    addNewLayer.setOnAction(e -> handler.accept(null));
   }
 
+  /**
+   * Method to add a listener to the choice box.
+   *
+   * @param listener The listener to add.
+   */
   public void addChoiceBoxListener(ChangeListener<String> listener) {
     choiceBox.valueProperty().addListener(listener);
   }
 
-  public VBox getMatrixBox(){
+  /**
+   * Method to get the matrix box.
+   *
+   * @return The matrix box.
+   */
+  public VBox getMatrixBox() {
     return matrixBox;
   }
 }

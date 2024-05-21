@@ -1,10 +1,5 @@
 package utilities;
 
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 /**
  * Used to get input from the console. Will only be used when CLI is used.
  */

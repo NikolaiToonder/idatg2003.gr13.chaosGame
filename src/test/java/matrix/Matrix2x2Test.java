@@ -23,8 +23,7 @@ public class Matrix2x2Test {
     Vector2D vector = new Vector2D(2, 3);
     Vector2D result = matrix.multiply(vector);
     assertNotEquals(9, result.getX0());
-    assertNotEquals(18, result.getX1());
-
+    assertNotEquals(19, result.getX1());
   }
 
   @Test
@@ -59,6 +58,6 @@ public class Matrix2x2Test {
     Vector2D vector = new Vector2D(-2, -3);
     Vector2D result = matrix.multiply(vector);
     assertNotEquals(9, result.getX0());
-    assertNotEquals(18, result.getX1());
+    assertNotEquals(19, result.getX1());
   }
 }

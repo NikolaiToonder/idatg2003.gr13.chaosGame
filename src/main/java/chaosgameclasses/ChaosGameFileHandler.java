@@ -14,8 +14,6 @@ import java.util.List;
  *
  * @version 1.0
  */
-
-
 public class ChaosGameFileHandler {
 
   /**
@@ -127,20 +125,27 @@ public class ChaosGameFileHandler {
     }
   }
 
+  /**
+   * Changes a line in a file. The line is changed to the values in the list.
+   *
+   * @param path           The path to the file.
+   * @param valuesToChange The values to change the line to.
+   * @param lineNumber     The line number to change.
+   */
   public static void changeLine(String path, List<String> valuesToChange, int lineNumber) {
     try {
       Path filePath = Paths.get(path);
       List<String> lines = Files.readAllLines(filePath);
       String lineToChange = lines.get(lineNumber).replaceAll("#.*", "");
       String[] values = lineToChange.split(",");
-      if (valuesToChange.size() >3) {
+      if (valuesToChange.size() > 3) {
         for (int i = 0; i < values.length - 2; i++) {
           values[i] = valuesToChange.get(i);
         }
       } else {
-        int lastIndex = values.length -1;
+        int lastIndex = values.length - 1;
         values[lastIndex] = valuesToChange.get(1);
-        values[lastIndex-1] = valuesToChange.get(0);
+        values[lastIndex - 1] = valuesToChange.get(0);
       }
       lines.set(lineNumber, String.join(",", values));
 
@@ -150,10 +155,16 @@ public class ChaosGameFileHandler {
       throw new IllegalArgumentException("Error writing to file");
     }
   }
-  public static void resetFractals(String path){
+
+  /**
+   * Resets the fractals to their original state.
+   *
+   * @param path The path to the file.
+   */
+  public static void resetFractals(String path) {
     try {
       Path filePath = Paths.get(path);
-      if(path.contains("pinski")){
+      if (path.contains("pinski")) {
         Path standardFilePath = Paths.get("src/main/resources/sierpinskiTemplate.txt");
         List<String> lines = Files.readAllLines(standardFilePath);
         Files.write(filePath, lines);
@@ -181,6 +192,11 @@ public class ChaosGameFileHandler {
     }
   }
 
+  /**
+   * Writes a custom fractal to a file.
+   *
+   * @param values The values to write to the file.
+   */
   public static void writeCustomFractal(List<String> values) {
     try {
       clearCustomFractal();
@@ -196,6 +212,10 @@ public class ChaosGameFileHandler {
       throw new IllegalArgumentException("Error writing to file");
     }
   }
+
+  /**
+   * Clears the custom fractal file.
+   */
   public static void clearCustomFractal() {
     try {
       Path filePath = Paths.get("src/main/resources/customTransform.txt");

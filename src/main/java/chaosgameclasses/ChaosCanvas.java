@@ -41,12 +41,22 @@ public class ChaosCanvas {
     this.canvasHeatMap = new int[width][height];
   }
 
+  /**
+   * Sets the width of the canvas.
+   *
+   * @param width The width of the canvas
+   */
   public void setWidth(int width) {
     this.width = width;
     this.canvas = new int[width][height];
     this.canvasHeatMap = new int[width][height];
   }
 
+  /**
+   * Sets the height of the canvas.
+   *
+   * @param height The height of the canvas
+   */
   public void setHeight(int height) {
     this.height = height;
     this.canvas = new int[width][height];
@@ -127,19 +137,20 @@ public class ChaosCanvas {
    */
   public Vector2D transformCoordsToIndices(Vector2D point) {
     Matrix2x2 a = new Matrix2x2(0,
-            (width - 1) / (minCoords.getX1() - maxCoords.getX1()),
-            (height - 1) / (maxCoords.getX0() - minCoords.getX0()),
-            0);
+        (width - 1) / (minCoords.getX1() - maxCoords.getX1()),
+        (height - 1) / (maxCoords.getX0() - minCoords.getX0()),
+        0);
     Vector2D b = new Vector2D(
-            ((width - 1) * maxCoords.getX1()) / (maxCoords.getX1() - minCoords.getX1()),
-            ((height - 1) * minCoords.getX0()) / (minCoords.getX0() - maxCoords.getX0()));
+        ((width - 1) * maxCoords.getX1()) / (maxCoords.getX1() - minCoords.getX1()),
+        ((height - 1) * minCoords.getX0()) / (minCoords.getX0() - maxCoords.getX0()));
 
     AffineTransform2D transformCoordsToIndices = new AffineTransform2D(a, b);
     return transformCoordsToIndices.transform(point);
   }
 
   /**
-   * Getter for the field transformed
+   * Getter for the field transformed.
+   *
    * @return Vector2D transformed
    */
   public Vector2D getTransformed() {
@@ -147,20 +158,22 @@ public class ChaosCanvas {
   }
 
   /**
-   * Method to zoom into the fractal. Only scales the min and max coordinated of the program.
-   * So this is not a real zoom, because the program will redraw the whole fractal.
+   * Method to zoom into the fractal. Only scales the min and max coordinated of the program. So
+   * this is not a real zoom, because the program will redraw the whole fractal.
+   *
    * @param scalar 1-10x scalar to zoom
    */
   public void zoom(double scalar) {
-    this.minCoords = this.originalMinCoords.multiply(1/scalar);
-    this.maxCoords = this.originalMaxCoords.multiply(1/scalar);
+    this.minCoords = this.originalMinCoords.multiply(1 / scalar);
+    this.maxCoords = this.originalMaxCoords.multiply(1 / scalar);
   }
 
   /**
    * Getter for the HeatMap field.
+   *
    * @return canvasHeatMap int[][]
    */
-  public int[][] getCanvasHeatMap(){
+  public int[][] getCanvasHeatMap() {
     return this.canvasHeatMap;
   }
 }

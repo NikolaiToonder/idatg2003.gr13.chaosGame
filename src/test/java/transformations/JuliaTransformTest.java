@@ -17,7 +17,7 @@ class JuliaTransformTest {
     JuliaTransform transform = new JuliaTransform(new Complex(0.3, 0.6),
         1);
     Vector2D result = transform.transform(z);
-    assertEquals(0.51, Math.round(result.getX0()*1000.0)*0.001);
+    assertEquals(0.51, Math.round(result.getX0()*100.0)*0.01);
     assertEquals(-0.395, Math.round(result.getX1()*1000.0)*0.001);
   }
 

@@ -76,12 +76,18 @@ public class Vector2D {
     return new Vector2D(x0 - other.x0, x1 - other.x1);
   }
 
+  /**
+   * Turns the vector into a complex number.
+   *
+   * @return The complex number
+   */
   public Complex toComplex() {
     return new Complex(this.getX0(), this.getX1());
   }
 
   /**
    * Multiply a vector by a scalar. Will be used for the zoom function in the program.
+   *
    * @param scalar The scalar to multiply the vector by
    * @return The new vector
    */
