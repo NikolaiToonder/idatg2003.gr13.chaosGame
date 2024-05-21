@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 
@@ -69,11 +70,15 @@ public class NewFractalMenuView {
     // This method, for some reason, did not work in the controller class.
     // This has to be here, even though it does not follow MWC principle.
     saveButton.setOnAction(actionEvent -> {
-      parseHeaderValues();
-      parseValues();
-      combineAllValues();
-      callback.accept(allv);
-      popupStage.close();
+      if (areFieldsEmpty()) {
+        showWarningPopup("Please fill in all the fields.");
+      } else {
+        parseHeaderValues();
+        parseValues();
+        combineAllValues();
+        callback.accept(allv);
+        popupStage.close();
+      }
     });
 
     // Show the popup stage
@@ -85,11 +90,43 @@ public class NewFractalMenuView {
   }
 
   private void handleSaveButton(Consumer<List<String>> callback) {
-    parseHeaderValues();
-    parseValues();
-    combineAllValues();
-    callback.accept(allv);
-    popupStage.close();
+    if (areFieldsEmpty()) {
+      showWarningPopup("Please fill in all the fields.");
+    } else {
+      parseHeaderValues();
+      parseValues();
+      combineAllValues();
+      callback.accept(allv);
+      popupStage.close();
+    }
+  }
+
+  private boolean areFieldsEmpty() {
+    boolean areMinMaxFieldsEmpty = minMaxBox.getChildren().stream()
+        .filter(node -> node instanceof GridPane)
+        .map(GridPane.class::cast)
+        .flatMap(gridPane -> gridPane.getChildren().stream())
+        .filter(node -> node instanceof TextField)
+        .map(TextField.class::cast)
+        .anyMatch(textField -> textField.getText() == null || textField.getText().trim().isEmpty());
+
+    boolean areMatrixFieldsEmpty = matrixBox.getChildren().stream()
+        .filter(node -> node instanceof GridPane)
+        .map(GridPane.class::cast)
+        .flatMap(gridPane -> gridPane.getChildren().stream())
+        .filter(node -> node instanceof TextField)
+        .map(TextField.class::cast)
+        .anyMatch(textField -> textField.getText() == null || textField.getText().trim().isEmpty());
+
+    return areMinMaxFieldsEmpty || areMatrixFieldsEmpty;
+  }
+
+  private void showWarningPopup(String message) {
+    Alert alert = new Alert(Alert.AlertType.WARNING);
+    alert.setTitle("Warning");
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
   }
 
   public void styleElements(){
@@ -310,5 +347,3 @@ public class NewFractalMenuView {
     return matrixBox;
   }
 }
-
-

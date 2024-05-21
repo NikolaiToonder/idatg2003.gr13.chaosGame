@@ -345,7 +345,6 @@ public class ChaosGameView {
 
   public void updateTextFields(ChaosGame chaosGame, int currentTransformation){
     if(chaosGame.getDescription().getTypeOfTransformation().equals("Julia")){
-      System.out.println("Julia");
       updateTextFieldsJulia(chaosGame, currentTransformation);
     } else {
       updateTextFieldsAffine(chaosGame,currentTransformation,getDisplayVectorValue());
