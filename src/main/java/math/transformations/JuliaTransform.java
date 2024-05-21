@@ -1,7 +1,7 @@
-package transformations;
+package math.transformations;
 
-import vectors.Complex;
-import vectors.Vector2D;
+import math.vectors.Complex;
+import math.vectors.Vector2D;
 
 /**
  * Class representing a Julia transformation in 2D. The transformation is represented by a complex

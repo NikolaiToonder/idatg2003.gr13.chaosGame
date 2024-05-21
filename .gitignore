@@ -1,4 +1,4 @@
 .idea
 *.iml
 target/
-src/resources/out.txt
+src/main/resources/out.txt

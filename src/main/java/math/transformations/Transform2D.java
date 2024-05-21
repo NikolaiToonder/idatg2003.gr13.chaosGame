@@ -1,8 +1,6 @@
-package transformations;
+package math.transformations;
 
-import java.util.List;
-import matrix.Matrix2x2;
-import vectors.Vector2D;
+import math.vectors.Vector2D;
 
 /**
  * Interface for 2D transformations.

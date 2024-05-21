@@ -1,4 +1,4 @@
-package vectors;
+package math.vectors;
 
 /**
  * Class to represent a complex number, used in this case to also respresent a

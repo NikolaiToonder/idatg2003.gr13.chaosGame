@@ -1,8 +1,7 @@
-package transformations;
+package math.transformations;
 
-import java.util.List;
-import matrix.Matrix2x2;
-import vectors.Vector2D;
+import math.matrix.Matrix2x2;
+import math.vectors.Vector2D;
 
 /**
  * Class representing an affine transformation in 2D. The transformation is represented by a 2x2

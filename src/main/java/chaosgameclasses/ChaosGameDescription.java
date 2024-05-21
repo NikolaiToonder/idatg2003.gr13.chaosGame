@@ -2,15 +2,12 @@ package chaosgameclasses;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import javafx.scene.Node;
-import javafx.scene.control.TextField;
-import matrix.Matrix2x2;
-import transformations.AffineTransform2D;
-import transformations.JuliaTransform;
-import transformations.Transform2D;
-import vectors.Complex;
-import vectors.Vector2D;
+import math.matrix.Matrix2x2;
+import math.transformations.AffineTransform2D;
+import math.transformations.JuliaTransform;
+import math.transformations.Transform2D;
+import math.vectors.Complex;
+import math.vectors.Vector2D;
 
 /**
  * Class representing the description of a chaos game. The description includes the transforms to be

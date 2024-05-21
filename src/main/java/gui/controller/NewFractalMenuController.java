@@ -1,15 +1,8 @@
-package controller;
+package gui.controller;
 
-import gui.NewFractalMenuView;
+import gui.view.NewFractalMenuView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 
 public class NewFractalMenuController {
 

@@ -1,6 +1,6 @@
-package matrix;
+package math.matrix;
 
-import vectors.Vector2D;
+import math.vectors.Vector2D;
 
 /**
  * Class representing a 2x2 matrix. Has the functionality to multiply a 2D vector with a
