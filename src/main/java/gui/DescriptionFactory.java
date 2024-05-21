@@ -30,6 +30,9 @@ public class DescriptionFactory {
         case "Custom" -> {
           return new ChaosGameDescription("src/resources/customTransform.txt");
         }
+        case "Snowflake" -> {
+          return new ChaosGameDescription("src/resources/snowflakeTransform.txt");
+        }
         default -> {
           return null;
         }

@@ -166,6 +166,15 @@ public class ChaosGameFileHandler {
         Path standardFilePath = Paths.get("src/resources/juliaTemplate.txt");
         List<String> lines = Files.readAllLines(standardFilePath);
         Files.write(filePath, lines);
+      } else if (path.contains("nowflake")) {
+        Path standardFilePath = Paths.get("src/resources/snowflakeTemplate.txt");
+        List<String> lines = Files.readAllLines(standardFilePath);
+        Files.write(filePath, lines);
+      } else if (path.contains("ustom")) {
+        Path standardFilePath = Paths.get("src/resources/customTemplate.txt");
+        List<String> lines = Files.readAllLines(standardFilePath);
+        Files.write(filePath, lines);
+
       }
     } catch (IOException e) {
       e.printStackTrace();

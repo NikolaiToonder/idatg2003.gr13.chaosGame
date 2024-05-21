@@ -55,7 +55,7 @@ public class ChaosGameView {
   }
 
   public void initializeControls() {
-    fractalChoiceBox.getItems().addAll("Julia", "Sierpinski", "Barnsley", "Custom");
+    fractalChoiceBox.getItems().addAll("Julia", "Sierpinski", "Barnsley", "Snowflake", "Custom");
     fractalChoiceBox.setValue("Sierpinski");
 
     iterationsLabel.setStyle("-fx-text-fill: white;");
