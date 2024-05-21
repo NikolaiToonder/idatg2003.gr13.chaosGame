@@ -40,7 +40,7 @@ public class ChaosGameDescription {
    * @param maxCoords  The maximum coordinates of the canvas.
    */
   public ChaosGameDescription(List<Transform2D> transforms, Vector2D minCoords,
-                              Vector2D maxCoords) {
+      Vector2D maxCoords) {
     setMaxCoords(maxCoords);
     setMinCoords(minCoords);
     setTransforms(transforms);
@@ -334,7 +334,7 @@ public class ChaosGameDescription {
    * @param values values the program wants to handle.
    */
   public void writeToFileCustom(List<String> values){
-   ChaosGameFileHandler.writeCustomFractal(values);
+    ChaosGameFileHandler.writeCustomFractal(values);
   }
   public boolean getIsBarnsley(){
     return isBarnsley;
