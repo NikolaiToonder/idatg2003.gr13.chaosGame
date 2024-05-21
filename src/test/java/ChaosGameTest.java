@@ -1,15 +1,15 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import chaosgameclasses.ChaosGame;
-import chaosgameclasses.ChaosGameDescription;
+import modul.chaosgameclasses.ChaosGame;
+import modul.chaosgameclasses.ChaosGameDescription;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import math.transformations.Transform2D;
-import math.vectors.Vector2D;
+import modul.math.transformations.Transform2D;
+import modul.math.vectors.Vector2D;
 
 class ChaosGameTest {
   private ChaosGameDescription description;

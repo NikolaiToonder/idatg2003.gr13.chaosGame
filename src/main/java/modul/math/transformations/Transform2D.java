@@ -1,6 +1,6 @@
-package math.transformations;
+package modul.math.transformations;
 
-import math.vectors.Vector2D;
+import modul.math.vectors.Vector2D;
 
 /**
  * Interface for 2D transformations.

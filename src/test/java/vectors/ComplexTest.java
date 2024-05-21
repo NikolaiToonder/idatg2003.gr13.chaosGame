@@ -2,7 +2,7 @@ package vectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import math.vectors.Complex;
+import modul.math.vectors.Complex;
 import org.junit.jupiter.api.Test;
 import java.lang.Math;
 

@@ -1,4 +1,4 @@
-package utilities;
+package modul.utilities;
 
 /**
  * Used to get input from the console. Will only be used when CLI is used.

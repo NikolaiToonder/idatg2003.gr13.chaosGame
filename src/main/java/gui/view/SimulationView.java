@@ -1,13 +1,13 @@
 package gui.view;
 
-import chaosgameclasses.ChaosGame;
+import modul.chaosgameclasses.ChaosGame;
 import gui.controller.SimulationViewController;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
-import math.vectors.Vector2D;
+import modul.math.vectors.Vector2D;
 
 /**
  * JavaFX class for the actual simulation view. Will be used with ChaosGameView to view the chaos

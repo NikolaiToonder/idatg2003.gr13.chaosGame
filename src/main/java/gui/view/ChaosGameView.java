@@ -1,6 +1,6 @@
 package gui.view;
 
-import chaosgameclasses.ChaosGame;
+import modul.chaosgameclasses.ChaosGame;
 import gui.controller.ChaosGameController;
 import java.util.List;
 import java.util.function.Consumer;
@@ -13,9 +13,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import math.matrix.Matrix2x2;
-import math.vectors.Complex;
-import math.vectors.Vector2D;
+import modul.math.matrix.Matrix2x2;
+import modul.math.vectors.Complex;
+import modul.math.vectors.Vector2D;
 
 
 /**

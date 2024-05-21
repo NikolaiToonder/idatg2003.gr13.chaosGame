@@ -1,13 +1,13 @@
 package gui.controller;
 
-import chaosgameclasses.ChaosGame;
-import factory.DescriptionFactory;
+import modul.chaosgameclasses.ChaosGame;
+import modul.factory.DescriptionFactory;
 import gui.view.ChaosGameView;
 import gui.view.NewFractalMenuView;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
-import math.vectors.Vector2D;
+import modul.math.vectors.Vector2D;
 
 /**
  * Controller class for the Chaos Game. Handles all the events in the program, and calls

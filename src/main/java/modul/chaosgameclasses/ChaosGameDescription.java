@@ -1,13 +1,13 @@
-package chaosgameclasses;
+package modul.chaosgameclasses;
 
 import java.util.ArrayList;
 import java.util.List;
-import math.matrix.Matrix2x2;
-import math.transformations.AffineTransform2D;
-import math.transformations.JuliaTransform;
-import math.transformations.Transform2D;
-import math.vectors.Complex;
-import math.vectors.Vector2D;
+import modul.math.matrix.Matrix2x2;
+import modul.math.transformations.AffineTransform2D;
+import modul.math.transformations.JuliaTransform;
+import modul.math.transformations.Transform2D;
+import modul.math.vectors.Complex;
+import modul.math.vectors.Vector2D;
 
 /**
  * Class representing the description of a chaos game. The description includes the transforms to be

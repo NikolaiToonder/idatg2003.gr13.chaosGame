@@ -1,7 +1,7 @@
-package math.transformations;
+package modul.math.transformations;
 
-import math.matrix.Matrix2x2;
-import math.vectors.Vector2D;
+import modul.math.matrix.Matrix2x2;
+import modul.math.vectors.Vector2D;
 
 /**
  * Class representing an affine transformation in 2D. The transformation is represented by a 2x2

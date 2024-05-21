@@ -1,4 +1,4 @@
-package chaosgameclasses;
+package modul.chaosgameclasses;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -108,7 +108,7 @@ public class ChaosGameFileHandler {
    * @param values The canvas to be written to a file.
    */
   public static void writeToFile(int[][] values) {
-    try (BufferedWriter writer = Files.newBufferedWriter(Path.of("src/resources/out.txt"))) {
+    try (BufferedWriter writer = Files.newBufferedWriter(Path.of("src/main/resources/out.txt"))) {
       for (int[] row : values) {
         for (int column : row) {
           if (column == 1) {
