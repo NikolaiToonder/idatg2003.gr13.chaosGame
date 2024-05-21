@@ -1,10 +1,11 @@
 package chaosgameclasses;
 
 import java.util.Random;
-import transformations.Transform2D;
+import math.transformations.Transform2D;
+import math.vectors.Vector2D;
 import utilities.Printer;
 import utilities.UserInput;
-import vectors.Vector2D;
+
 
 /**
  * Class responsible for running the chaos game.
@@ -28,8 +29,8 @@ public class ChaosGame {
    * @param description  The description of the chaos game
    * @param width        The width of the canvas
    * @param height       The height of the canvas
-   * @param currentPoint The starting point & the current point for the chaos game (will be updated
-   *                     as the game iterates)
+   * @param currentPoint The starting point and the current point for the chaos game (will be
+   *                     updated the game iterates)
    */
   public ChaosGame(ChaosGameDescription description, int height, int width, Vector2D currentPoint) {
     setDescription(description);
@@ -71,23 +72,29 @@ public class ChaosGame {
   public void changePath() {
     printer.transformationChanging();
     String input = userInput.getInput();
-    switch (input) {
-      case "1" -> {
-        this.description = new ChaosGameDescription("src/resources/sierpinskiTriangle.txt");
-        this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
-            description.getMinCoords(), description.getMaxCoords());
+    try {
+      switch (input) {
+        case "1" -> {
+          this.description = new ChaosGameDescription(
+              "src/main/resources/sierpinskiTriangle.txt");
+          this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
+              description.getMinCoords(), description.getMaxCoords());
+        }
+        case "2" -> {
+          this.description = new ChaosGameDescription(
+              "src/main/resources/barnsleyTransform.txt");
+          this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
+              description.getMinCoords(), description.getMaxCoords());
+        }
+        case "3" -> {
+          this.description = new ChaosGameDescription("src/main/resources/juliaTransform.txt");
+          this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
+              description.getMinCoords(), description.getMaxCoords());
+        }
+        default -> printer.invalidPath();
       }
-      case "2" -> {
-        this.description = new ChaosGameDescription("src/resources/barnsleyTransform.txt");
-        this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
-            description.getMinCoords(), description.getMaxCoords());
-      }
-      case "3" -> {
-        this.description = new ChaosGameDescription("src/resources/juliaTransform.txt");
-        this.canvas = new ChaosCanvas(canvas.getHeight(), canvas.getWidth(),
-            description.getMinCoords(), description.getMaxCoords());
-      }
-      default -> printer.invalidPath();
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Error reading file");
     }
   }
 
@@ -147,15 +154,53 @@ public class ChaosGame {
       printer.errorMessage();
 
     } else {
-      this.currentPoint = description.getMinCoords();
+      //default starting point for this program.
+      this.currentPoint = new Vector2D(0.5, 0.5);
       for (int i = 0; i < steps; i++) {
         int randomIndex = this.random.nextInt(description.getTransforms().size());
         Transform2D transform = description.getTransforms().get(randomIndex);
         this.currentPoint = transform.transform(this.currentPoint);
         this.canvas.putPixel(currentPoint);
       }
-      printer.printCanvasToTerminal(this.canvas);
       this.description.handleValuesForOutprint(this.canvas.getCanvasArray());
+      printer.printCanvasToTerminal(this.canvas);
     }
+  }
+
+  /**
+   * Used to run 1 singular step. Useful for drawing in the gui.
+   */
+  public void runStep() {
+    if (this.description.getIsBarnsley()) {
+      double rand = random.nextDouble();
+      int selectedTransformIndex;
+      if (rand <= 0.01) {
+        selectedTransformIndex = 0;
+      } else if (rand <= 0.07) {
+        selectedTransformIndex = 2;
+      } else if (rand <= 0.18) {
+        selectedTransformIndex = 3;
+      } else {
+        selectedTransformIndex = 1;
+      }
+      Transform2D transform = description.getTransforms().get(selectedTransformIndex);
+      this.currentPoint = transform.transform(this.currentPoint);
+      this.canvas.putPixel(currentPoint);
+    } else {
+      int randomIndex = this.random.nextInt(description.getTransforms().size());
+      Transform2D transform = description.getTransforms().get(randomIndex);
+      this.currentPoint = transform.transform(this.currentPoint);
+      this.canvas.putPixel(currentPoint);
+    }
+  }
+
+
+  /**
+   * Method to zoom, will just pass on a scalar to the canvas, done this way to decrease coupling.
+   *
+   * @param scalar The scalar to zoom
+   */
+  public void zoom(double scalar) {
+    this.canvas.zoom(scalar);
   }
 }

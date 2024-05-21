@@ -1,4 +1,4 @@
-package vectors;
+package math.vectors;
 
 /**
  * A 2D vector class. Functionality includes addition and subtraction of vectors. Requires x and y
@@ -76,7 +76,22 @@ public class Vector2D {
     return new Vector2D(x0 - other.x0, x1 - other.x1);
   }
 
+  /**
+   * Turns the vector into a complex number.
+   *
+   * @return The complex number
+   */
   public Complex toComplex() {
     return new Complex(this.getX0(), this.getX1());
+  }
+
+  /**
+   * Multiply a vector by a scalar. Will be used for the zoom function in the program.
+   *
+   * @param scalar The scalar to multiply the vector by
+   * @return The new vector
+   */
+  public Vector2D multiply(double scalar) {
+    return new Vector2D(this.getX0() * scalar, this.getX1() * scalar);
   }
 }

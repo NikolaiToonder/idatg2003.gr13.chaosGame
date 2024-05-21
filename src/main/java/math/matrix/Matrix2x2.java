@@ -1,6 +1,6 @@
-package matrix;
+package math.matrix;
 
-import vectors.Vector2D;
+import math.vectors.Vector2D;
 
 /**
  * Class representing a 2x2 matrix. Has the functionality to multiply a 2D vector with a
@@ -27,6 +27,42 @@ public class Matrix2x2 {
     this.a01 = a01;
     this.a10 = a10;
     this.a11 = a11;
+  }
+
+  /**
+   * Getter for the field a00.
+   *
+   * @return double a00
+   */
+  public double getA00() {
+    return a00;
+  }
+
+  /**
+   * Getter for the field a01.
+   *
+   * @return double a01
+   */
+  public double getA01() {
+    return a01;
+  }
+
+  /**
+   * Getter for the field a10.
+   *
+   * @return double a10
+   */
+  public double getA10() {
+    return a10;
+  }
+
+  /**
+   * Getter for the field a11.
+   *
+   * @return double a11
+   */
+  public double getA11() {
+    return a11;
   }
 
   /**

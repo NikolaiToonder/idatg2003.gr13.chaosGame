@@ -1,14 +1,14 @@
-package transformations;
+package math.transformations;
 
-import vectors.Complex;
-import vectors.Vector2D;
+import math.vectors.Complex;
+import math.vectors.Vector2D;
 
 /**
  * Class representing a Julia transformation in 2D. The transformation is represented by a complex
  * number and a sign.
  *
  * @version 1.0
-  */
+ */
 
 
 public class JuliaTransform implements Transform2D {
@@ -26,6 +26,7 @@ public class JuliaTransform implements Transform2D {
     this.constant = constant;
     setSign(sign);
   }
+
 
   /**
    * Setter for sign. The sign must be 1 or -1.

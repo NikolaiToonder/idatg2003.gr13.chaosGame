@@ -1,12 +1,13 @@
 package chaosgameclasses;
 
+import java.util.ArrayList;
 import java.util.List;
-import matrix.Matrix2x2;
-import transformations.AffineTransform2D;
-import transformations.JuliaTransform;
-import transformations.Transform2D;
-import vectors.Complex;
-import vectors.Vector2D;
+import math.matrix.Matrix2x2;
+import math.transformations.AffineTransform2D;
+import math.transformations.JuliaTransform;
+import math.transformations.Transform2D;
+import math.vectors.Complex;
+import math.vectors.Vector2D;
 
 /**
  * Class representing the description of a chaos game. The description includes the transforms to be
@@ -21,6 +22,14 @@ public class ChaosGameDescription {
   private Vector2D maxCoords;
   private List<Transform2D> transforms;
   private String path;
+  private int numberOfTransforms;
+  private List<Matrix2x2> matrixList;
+  private List<Vector2D> vectorList;
+  private String typeOfTransformation;
+  private List<Complex> complexNumbers;
+  private int sign;
+
+  private boolean isBarnsley;
 
   /**
    * Constructs a chaosGameClasses.ChaosGameDescription object with the provided list of transforms
@@ -47,22 +56,39 @@ public class ChaosGameDescription {
   public ChaosGameDescription(String path) {
     ChaosGameFileHandler fileHandler = new ChaosGameFileHandler();
     this.path = path;
-    List<String> values = fileHandler.readFromFile(path);
-    if (values.get(0).equals("Julia")) {
-      setCanvasCoordsFromFile(values);
-      setTransformsFromFileJulia(values);
-    } else {
-      setCanvasCoordsFromFile(values);
-      setTransformsFromFileAffine(values);
+    try {
+      List<String> values = fileHandler.readFromFile(path);
+      this.typeOfTransformation = values.get(0);
+      if (this.typeOfTransformation.equals("Julia")) {
+        setCanvasCoordsFromFile(values);
+        setTransformsFromFileJulia(values);
+      } else {
+        setCanvasCoordsFromFile(values);
+        setTransformsFromFileAffine(values);
+      }
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException();
     }
+
   }
 
+  /**
+   * Gets the path to the file containing the description.
+   *
+   * @return The path to the file containing the description
+   */
   public String getPath() {
     return path;
   }
 
-  public void setPath(String path) {
-    this.path = path;
+
+  /**
+   * Gets the number of transforms to be used.
+   *
+   * @return The number of transforms.
+   */
+  public int getNumberOfTransforms() {
+    return numberOfTransforms;
   }
 
   /**
@@ -71,11 +97,18 @@ public class ChaosGameDescription {
    * @param values The values to set the minimum coordinates of the canvas
    */
   public void setCanvasCoordsFromFile(List<String> values) {
-    String[] minCoords = values.get(1).split(",");
-    String[] maxCoords = values.get(2).split(",");
-    setMinCoords(new Vector2D(Double.parseDouble(minCoords[0]), Double.parseDouble(minCoords[1])));
-    setMaxCoords(new Vector2D(Double.parseDouble(maxCoords[0]), Double.parseDouble(maxCoords[1])));
+    try {
+      String[] minCoords = values.get(1).split(",");
+      String[] maxCoords = values.get(2).split(",");
+      setMinCoords(
+          new Vector2D(Double.parseDouble(minCoords[0]), Double.parseDouble(minCoords[1])));
+      setMaxCoords(
+          new Vector2D(Double.parseDouble(maxCoords[0]), Double.parseDouble(maxCoords[1])));
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("Error parsing canvas coordinates: " + e.getMessage(), e);
+    }
   }
+
 
   /**
    * Sets the transforms to be used from a file. The file should contain information about the
@@ -87,16 +120,66 @@ public class ChaosGameDescription {
    * @param values The values from the file to set the transforms to be used.
    */
   public void setTransformsFromFileAffine(List<String> values) {
-    List<Transform2D> transformations = new java.util.ArrayList<>(List.of());
-    for (int i = 3; i < values.size(); i++) {
-      String[] value = values.get(i).split(",");
-
-      Matrix2x2 matrix = new Matrix2x2(Double.parseDouble(value[0]), Double.parseDouble(value[1]),
-          Double.parseDouble(value[2]), Double.parseDouble(value[3]));
-      Vector2D vector = new Vector2D(Double.parseDouble(value[4]), Double.parseDouble(value[5]));
-      transformations.add(new AffineTransform2D(matrix, vector));
+    try {
+      List<Transform2D> transformations = new ArrayList<>();
+      List<Matrix2x2> matrix2x2List = new ArrayList<>();
+      List<Vector2D> vector2dList = new ArrayList<>();
+      this.numberOfTransforms = values.size() - 3;
+      for (int i = 3; i < values.size(); i++) {
+        String[] value = values.get(i).split(",");
+        if (value.length > 0) {
+          Matrix2x2 matrix = new Matrix2x2(Double.parseDouble(value[0]),
+              Double.parseDouble(value[1]),
+              Double.parseDouble(value[2]), Double.parseDouble(value[3]));
+          Vector2D vector = new Vector2D(Double.parseDouble(value[4]),
+              Double.parseDouble(value[5]));
+          transformations.add(new AffineTransform2D(matrix, vector));
+          matrix2x2List.add(matrix);
+          vector2dList.add(vector);
+        }
+      }
+      setTransforms(transformations);
+      setMatrixList(matrix2x2List);
+      setVectorList(vector2dList);
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("Error parsing transform values: " + e.getMessage(), e);
     }
-    setTransforms(transformations);
+  }
+
+  /**
+   * Setter for the matrixList field.
+   *
+   * @param matrixList list of matrix2x2
+   */
+  public void setMatrixList(List<Matrix2x2> matrixList) {
+    this.matrixList = matrixList;
+  }
+
+  /**
+   * Setter for the vectorList field.
+   *
+   * @param vectorList list of vector2d
+   */
+  public void setVectorList(List<Vector2D> vectorList) {
+    this.vectorList = vectorList;
+  }
+
+  /**
+   * Getter for the matrixList field.
+   *
+   * @return matrixList, a list of matricies.
+   */
+  public List<Matrix2x2> getMatrixList() {
+    return matrixList;
+  }
+
+  /**
+   * Getter for the vectorList field.
+   *
+   * @return vectorList, a list of vectors.
+   */
+  public List<Vector2D> getVectorList() {
+    return vectorList;
   }
 
   /**
@@ -109,15 +192,28 @@ public class ChaosGameDescription {
    */
   public void setTransformsFromFileJulia(List<String> values) {
     String[] value = values.get(3).split(",");
+    this.numberOfTransforms = 1;
     Complex point = new Complex(Double.parseDouble(value[0]), Double.parseDouble(value[1]));
     int sign = 1;
     if (point.getImaginary() < 0) {
       sign = -1;
     }
 
-    List<Transform2D> transformations = List.of(new JuliaTransform(point, sign), new JuliaTransform(point, -sign));
+    List<Transform2D> transformations = List.of(new JuliaTransform(point, sign),
+        new JuliaTransform(point, -sign));
+    this.complexNumbers = List.of(point);
     setTransforms(transformations);
 
+  }
+
+  /**
+   * Setter for the typeOfTransformation field.
+   *
+   * @param typeOfTransformation type of transformation the user wants. Can either be Affine2D or
+   *                             Complex
+   */
+  public void setTypeOfTransformation(String typeOfTransformation) {
+    this.typeOfTransformation = typeOfTransformation;
   }
 
 
@@ -128,6 +224,24 @@ public class ChaosGameDescription {
    */
   public Vector2D getMinCoords() {
     return minCoords;
+  }
+
+  /**
+   * Returns the sign of the complex fractal.
+   *
+   * @return The sign of the complex fractal
+   */
+  public int getSign() {
+    return sign;
+  }
+
+  /**
+   * Gets the list of complex numbers.
+   *
+   * @return The list of complex numbers
+   */
+  public List<Complex> getComplexNumbers() {
+    return this.complexNumbers;
   }
 
   /**
@@ -191,5 +305,78 @@ public class ChaosGameDescription {
    */
   public void handleValuesForOutprint(int[][] values) {
     ChaosGameFileHandler.writeToFile(values);
+  }
+
+  /**
+   * Method to handle values from a list of textFields, and then pass it onto a fileWriter class.
+   *
+   * @param choiceString    String of what line the user wants to edit, and if it is a vector or
+   *                        matrix.
+   * @param isMatrix       boolean to check if the user wants to edit a matrix or a vector.
+   * @param values          all textFields in the program.
+   */
+  public void writeToFile(String choiceString, boolean isMatrix, List<String> values) {
+    boolean isJulia = typeOfTransformation.equals("Julia");
+    if (isJulia) {
+      List<String> juliaValues = List.of(values.get(0), values.get(1));
+
+      String row = choiceString.split(" ")[1];
+      ChaosGameFileHandler.changeLine(this.path, juliaValues, Integer.parseInt(row) + 2);
+    } else {
+      String row = choiceString.split(" ")[1];
+      if (!isMatrix) {
+        ChaosGameFileHandler.changeLine(this.path, values, Integer.parseInt(row) + 2);
+      } else {
+        System.out.println(3);
+        List<String> vectorValues = List.of(values.get(0), values.get(1));
+
+        ChaosGameFileHandler.changeLine(this.path, vectorValues, Integer.parseInt(row) + 2);
+      }
+    }
+  }
+
+  /**
+   * Getter for the typeOfTransformation field.
+   *
+   * @return typeOfTransformation String
+   */
+  public String getTypeOfTransformation() {
+    return this.typeOfTransformation;
+  }
+
+  /**
+   * Used to reset the fractal chosen into a standard template included in the program.
+   */
+  public void resetFractals() {
+    ChaosGameFileHandler.resetFractals(this.path);
+  }
+
+  /**
+   * If the user wishes to create a custom fractal, this is the method the program uses to write the
+   * users chosen values to a file. Will take in a list of strings, where the lines corresponds to
+   * what you would see in the txt files containing the templates.
+   *
+   * @param values values the program wants to handle.
+   */
+  public void writeToFileCustom(List<String> values) {
+    ChaosGameFileHandler.writeCustomFractal(values);
+  }
+
+  /**
+   * Getter for the isBarnsley field.
+   *
+   * @return isBarnsley boolean
+   */
+  public boolean getIsBarnsley() {
+    return isBarnsley;
+  }
+
+  /**
+   * Setter for the isBarnsley field.
+   *
+   * @param barnsley boolean
+   */
+  public void setIsBarnsley(boolean barnsley) {
+    isBarnsley = barnsley;
   }
 }

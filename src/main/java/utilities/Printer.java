@@ -1,7 +1,7 @@
 package utilities;
 
 import chaosgameclasses.ChaosCanvas;
-import vectors.Vector2D;
+import math.vectors.Vector2D;
 
 /**
  * Class for printing to the terminal.
@@ -47,7 +47,7 @@ public class Printer {
   public void printCanvasToTerminal(ChaosCanvas canvas) {
     for (int i = 0; i < canvas.getWidth(); i++) {
       for (int j = 0; j < canvas.getHeight(); j++) {
-        if (canvas.getPixel(new Vector2D(i,j)) == 1) {
+        if (canvas.getPixel(new Vector2D(i, j)) == 1) {
           System.out.print("*");
         } else {
           System.out.print(" ");
