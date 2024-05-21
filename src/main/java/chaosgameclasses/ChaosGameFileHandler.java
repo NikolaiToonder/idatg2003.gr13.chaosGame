@@ -29,7 +29,7 @@ public class ChaosGameFileHandler {
     Path filePath = Paths.get(path);
     try (BufferedReader reader = Files.newBufferedReader(filePath)) {
       String transform = reader.readLine().replaceAll("#.*", "")
-              .replaceAll("\\s", "");
+          .replaceAll("\\s", "");
 
       if (transform.contains("Affine2D")) {
         return readAffineTransform(reader, transform);
@@ -56,11 +56,11 @@ public class ChaosGameFileHandler {
   public List<String> readJuliaTransform(BufferedReader reader, String transform) {
     try {
       String lowerLeft = reader.readLine().replaceAll("#.*", "")
-              .replaceAll("\\s", "");
+          .replaceAll("\\s", "");
       String lowerRight = reader.readLine().replaceAll("#.*", "")
-              .replaceAll("\\s", "");
+          .replaceAll("\\s", "");
       String complexNumber = reader.readLine().replaceAll("#.*", "")
-              .replaceAll("\\s", "");
+          .replaceAll("\\s", "");
       return List.of(transform, lowerLeft, lowerRight, complexNumber);
     } catch (Exception e) {
       e.printStackTrace();
@@ -81,9 +81,9 @@ public class ChaosGameFileHandler {
   public List<String> readAffineTransform(BufferedReader reader, String transform) {
     try {
       String lowerLeft = reader.readLine().replaceAll("#.*", "")
-              .replaceAll("\\s", "");
+          .replaceAll("\\s", "");
       String lowerRight = reader.readLine().replaceAll("#.*", "")
-              .replaceAll("\\s", "");
+          .replaceAll("\\s", "");
       List<String> values = new java.util.ArrayList<>(List.of(transform, lowerLeft, lowerRight));
       boolean stop = false;
       while (!stop) {
@@ -92,7 +92,7 @@ public class ChaosGameFileHandler {
           stop = true;
         } else {
           line = line.replaceAll("#.*", "")
-                  .replaceAll("\\s", "");
+              .replaceAll("\\s", "");
           values.add(line);
         }
       }
