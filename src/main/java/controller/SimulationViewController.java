@@ -18,9 +18,9 @@ public class SimulationViewController {
   private boolean isAltPressed;
 
   private final double MIN_SCALE_X = 0.1;
-  private final double MAX_SCALE_X = 2.3;
+  private final double MAX_SCALE_X = 1.3;
   private final double MIN_SCALE_Y = 0.1;
-  private final double MAX_SCALE_Y = 2.3;
+  private final double MAX_SCALE_Y = 1.5;
 
   public SimulationViewController(SimulationView simulationView) {
     this.simulationView = simulationView;

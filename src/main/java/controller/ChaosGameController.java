@@ -73,7 +73,7 @@ public class ChaosGameController {
   }
 
   private void updateChaosGameInstance(String fractalType) {
-    this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(fractalType), 500, 500, standardizedView);
+    this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(fractalType), 600, 600, standardizedView);
     this.chaosGame.getDescription().setIsBarnsley(fractalType.equals("Barnsley"));
     currentTransformation = 1; // Reset the transformation index to the first transformation
     chaosGame.zoom(view.getZoomSliderValue());

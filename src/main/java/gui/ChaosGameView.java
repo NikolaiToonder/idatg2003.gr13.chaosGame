@@ -104,9 +104,27 @@ public class ChaosGameView {
 
   public BorderPane createRootPane() {
     BorderPane root = new BorderPane();
-    root.setRight(controlsPane);
-    root.setLeft(simulationAndInfoBox);
+
+    HBox mainContent = new HBox();
+
+    // Wrap simulationAndInfoBox and controlsPane in HBox
+    mainContent.getChildren().addAll(simulationAndInfoBox, controlsPane);
+
+    mainContent.setSpacing(10); // Adjust the spacing as needed
+
+
+    // Set the width proportions
+    HBox.setHgrow(simulationAndInfoBox, Priority.ALWAYS);
+    HBox.setHgrow(controlsPane, Priority.NEVER);
+
+    // Adjust the preferred width to reflect the 70-30% distribution
+    simulationAndInfoBox.setPrefWidth(0.6 * 1000); // Example value, adjust as needed
+    controlsPane.setPrefWidth(0.15 * 1000);        // Example value, adjust as needed
+    controlsPane.setMinWidth(0.14 * 1000);        // Example value, adjust as needed
+
+    root.setCenter(mainContent);
     root.setStyle("-fx-background-color: #2b2d31;");
+
     return root;
   }
 

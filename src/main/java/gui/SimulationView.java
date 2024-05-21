@@ -21,8 +21,8 @@ public class SimulationView extends Pane {
   private final Scale scaleTransform;
   private final SimulationViewController controller;
 
-  private final double STARTING_HEIGHT = 600;
-  private final double STARTING_WIDTH = 550;
+  private final double STARTING_HEIGHT = 605;
+  private final double STARTING_WIDTH = 605;
 
   /**
    * Constructor of the class. Used to initialize and set up the class.
