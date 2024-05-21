@@ -59,15 +59,20 @@ public class ChaosGameDescription {
   public ChaosGameDescription(String path) {
     ChaosGameFileHandler fileHandler = new ChaosGameFileHandler();
     this.path = path;
-    List<String> values = fileHandler.readFromFile(path);
-    this.typeOfTransformation = values.get(0);
-    if (this.typeOfTransformation.equals("Julia")) {
-      setCanvasCoordsFromFile(values);
-      setTransformsFromFileJulia(values);
-    } else {
-      setCanvasCoordsFromFile(values);
-      setTransformsFromFileAffine(values);
+    try {
+      List<String> values = fileHandler.readFromFile(path);
+      this.typeOfTransformation = values.get(0);
+      if (this.typeOfTransformation.equals("Julia")) {
+        setCanvasCoordsFromFile(values);
+        setTransformsFromFileJulia(values);
+      } else {
+        setCanvasCoordsFromFile(values);
+        setTransformsFromFileAffine(values);
+      }
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException();
     }
+
   }
 
   public String getPath() {
@@ -87,11 +92,16 @@ public class ChaosGameDescription {
    * @param values The values to set the minimum coordinates of the canvas
    */
   public void setCanvasCoordsFromFile(List<String> values) {
-    String[] minCoords = values.get(1).split(",");
-    String[] maxCoords = values.get(2).split(",");
-    setMinCoords(new Vector2D(Double.parseDouble(minCoords[0]), Double.parseDouble(minCoords[1])));
-    setMaxCoords(new Vector2D(Double.parseDouble(maxCoords[0]), Double.parseDouble(maxCoords[1])));
+    try {
+      String[] minCoords = values.get(1).split(",");
+      String[] maxCoords = values.get(2).split(",");
+      setMinCoords(new Vector2D(Double.parseDouble(minCoords[0]), Double.parseDouble(minCoords[1])));
+      setMaxCoords(new Vector2D(Double.parseDouble(maxCoords[0]), Double.parseDouble(maxCoords[1])));
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("Error parsing canvas coordinates: " + e.getMessage(), e);
+    }
   }
+
 
   /**
    * Sets the transforms to be used from a file. The file should contain information about the
@@ -103,24 +113,28 @@ public class ChaosGameDescription {
    * @param values The values from the file to set the transforms to be used.
    */
   public void setTransformsFromFileAffine(List<String> values) {
-    List<Transform2D> transformations = new java.util.ArrayList<>(List.of());
-    List<Matrix2x2> matrix2x2List = new java.util.ArrayList<>(List.of());
-    List<Vector2D> vector2DList = new java.util.ArrayList<>(List.of());
-    this.numberOfTransforms = values.size() - 3;
-    for (int i = 3; i < values.size(); i++) {
-      String[] value = values.get(i).split(",");
-      if(value.length > 0) {
-        Matrix2x2 matrix = new Matrix2x2(Double.parseDouble(value[0]), Double.parseDouble(value[1]),
-            Double.parseDouble(value[2]), Double.parseDouble(value[3]));
-        Vector2D vector = new Vector2D(Double.parseDouble(value[4]), Double.parseDouble(value[5]));
-        transformations.add(new AffineTransform2D(matrix, vector));
-        matrix2x2List.add(matrix);
-        vector2DList.add(vector);
+    try {
+      List<Transform2D> transformations = new ArrayList<>();
+      List<Matrix2x2> matrix2x2List = new ArrayList<>();
+      List<Vector2D> vector2DList = new ArrayList<>();
+      this.numberOfTransforms = values.size() - 3;
+      for (int i = 3; i < values.size(); i++) {
+        String[] value = values.get(i).split(",");
+        if (value.length > 0) {
+          Matrix2x2 matrix = new Matrix2x2(Double.parseDouble(value[0]), Double.parseDouble(value[1]),
+              Double.parseDouble(value[2]), Double.parseDouble(value[3]));
+          Vector2D vector = new Vector2D(Double.parseDouble(value[4]), Double.parseDouble(value[5]));
+          transformations.add(new AffineTransform2D(matrix, vector));
+          matrix2x2List.add(matrix);
+          vector2DList.add(vector);
+        }
       }
+      setTransforms(transformations);
+      setMatrixList(matrix2x2List);
+      setVectorList(vector2DList);
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("Error parsing transform values: " + e.getMessage(), e);
     }
-    setTransforms(transformations);
-    setMatrixList(matrix2x2List);
-    setVectorList(vector2DList);
   }
 
   /**
@@ -281,9 +295,9 @@ public class ChaosGameDescription {
    */
   public void writeToFile(String typeOfTransform, String choiceString, boolean isMatrix, List<String> values){
     boolean isJulia = typeOfTransform.equals("Julia");
+    System.out.println("isJulia: " + isJulia);
     if (isJulia) {
       List<String> juliaValues = List.of(values.get(0), values.get(1));
-
 
       String row = choiceString.split(" ")[1];
       ChaosGameFileHandler.changeLine(this.path, juliaValues, Integer.parseInt(row) + 2);

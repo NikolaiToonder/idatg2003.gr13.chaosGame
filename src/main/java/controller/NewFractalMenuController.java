@@ -1,29 +1,42 @@
 package controller;
 
 import gui.NewFractalMenuView;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class NewFractalMenuController {
-  private NewFractalMenuView newFractalMenuView;
+
+  NewFractalMenuView newFractalMenuView;
 
   public NewFractalMenuController(NewFractalMenuView fractalMenuView){
     this.newFractalMenuView = fractalMenuView;
     initView();
   }
-
   public void initView() {
-    newFractalMenuView.setCallback(this::handleSaveButton);
-    newFractalMenuView.addSaveButtonListener(e -> handleSaveButton());
+    newFractalMenuView.addNewLayerButtonListener(e->handleNewLayerButton());
+    newFractalMenuView.addChoiceBoxListener(createChoiceBoxListener()); // Update this line
   }
 
-  private void handleSaveButton(List<String> strings) {
+  public ChangeListener<String> createChoiceBoxListener() {
+    return (ObservableValue<? extends String> observableValue, String oldValue, String newValue) -> {
+      newFractalMenuView.getMatrixBox().getChildren().clear();
+      newFractalMenuView.getMatrixBox().getChildren().add(
+          newFractalMenuView.createMatrixBox(newValue));
+    };
   }
 
-  public void handleSaveButton(){
-    newFractalMenuView.parseHeaderValues();
+
+  public void handleNewLayerButton() {
     newFractalMenuView.parseValues();
-    newFractalMenuView.combineAllValues();
-    newFractalMenuView.getCallback().accept(newFractalMenuView.getAllv());
-    newFractalMenuView.popupStage.close();
   }
+
+
+
 }
