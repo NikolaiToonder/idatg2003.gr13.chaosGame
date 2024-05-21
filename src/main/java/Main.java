@@ -1,6 +1,6 @@
-import chaosgameclasses.ChaosGame;
-import chaosgameclasses.ChaosGameDescription;
-import math.vectors.Vector2D;
+import model.chaosgameclasses.ChaosGame;
+import model.chaosgameclasses.ChaosGameDescription;
+import model.math.vectors.Vector2D;
 
 /**
  * Main class for the program.

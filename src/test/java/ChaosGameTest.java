@@ -1,14 +1,14 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import chaosgameclasses.ChaosGame;
-import chaosgameclasses.ChaosGameDescription;
+import model.chaosgameclasses.ChaosGame;
+import model.chaosgameclasses.ChaosGameDescription;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import math.transformations.Transform2D;
-import math.vectors.Vector2D;
+import model.math.transformations.Transform2D;
+import model.math.vectors.Vector2D;
 
 /**
  * Class responsible for testing the chaosGameClasses.ChaosGame class.

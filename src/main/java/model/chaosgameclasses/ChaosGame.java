@@ -1,13 +1,12 @@
-package chaosgameclasses;
+package model.chaosgameclasses;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import math.transformations.Transform2D;
-import utilities.Printer;
-import utilities.UserInput;
-import math.vectors.Vector2D;
+import model.math.transformations.Transform2D;
+import model.utilities.Printer;
+import model.utilities.UserInput;
+import model.math.vectors.Vector2D;
 
 /**
  * Class responsible for running the chaos game.

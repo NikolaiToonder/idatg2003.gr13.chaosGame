@@ -1,9 +1,9 @@
 package transformations;
 
-import math.transformations.JuliaTransform;
+import model.math.transformations.JuliaTransform;
 import org.junit.jupiter.api.Test;
-import math.vectors.Complex;
-import math.vectors.Vector2D;
+import model.math.vectors.Complex;
+import model.math.vectors.Vector2D;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;

@@ -1,6 +1,6 @@
 package gui.view;
 
-import chaosgameclasses.ChaosGame;
+import model.chaosgameclasses.ChaosGame;
 import gui.controller.ChaosGameController;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
@@ -13,9 +13,9 @@ import javafx.stage.Stage;
 
 import java.util.List;
 import java.util.function.Consumer;
-import math.matrix.Matrix2x2;
-import math.vectors.Complex;
-import math.vectors.Vector2D;
+import model.math.matrix.Matrix2x2;
+import model.math.vectors.Complex;
+import model.math.vectors.Vector2D;
 
 import java.util.function.UnaryOperator;
 

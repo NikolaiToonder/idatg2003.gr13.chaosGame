@@ -1,4 +1,4 @@
-package utilities;
+package model.utilities;
 
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;

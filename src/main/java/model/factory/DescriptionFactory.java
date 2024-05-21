@@ -1,7 +1,6 @@
-package factory;
+package model.factory;
 
-import chaosgameclasses.ChaosGameDescription;
-import java.io.IOException;
+import model.chaosgameclasses.ChaosGameDescription;
 
 /**
  * Factory class to create different transformations.

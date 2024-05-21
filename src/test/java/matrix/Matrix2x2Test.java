@@ -1,8 +1,8 @@
 package matrix;
 
-import math.matrix.Matrix2x2;
+import model.math.matrix.Matrix2x2;
 import org.junit.jupiter.api.Test;
-import math.vectors.Vector2D;
+import model.math.vectors.Vector2D;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 

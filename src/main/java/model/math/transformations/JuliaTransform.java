@@ -1,7 +1,7 @@
-package math.transformations;
+package model.math.transformations;
 
-import math.vectors.Complex;
-import math.vectors.Vector2D;
+import model.math.vectors.Complex;
+import model.math.vectors.Vector2D;
 
 /**
  * Class representing a Julia transformation in 2D. The transformation is represented by a complex

@@ -1,4 +1,4 @@
-package chaosgameclasses;
+package model.chaosgameclasses;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
