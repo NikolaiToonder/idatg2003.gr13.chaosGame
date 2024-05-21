@@ -1,5 +1,6 @@
-package gui;
+package gui.view;
 
+import gui.controller.NewFractalMenuController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -9,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 
@@ -27,10 +29,17 @@ import javafx.stage.Stage;
 
 public class NewFractalMenuView {
 
+  //WITH CHATGPT vv
+  private static final UnaryOperator<Change> filter = change -> {
+    String newText = change.getControlNewText();
+    if (newText.matches("-?\\d*\\.?\\d*")) { // Allow digits and an optional decimal point
+      return change; // Accept the change
+    }
+    return null; // Reject the change
+  };
   public final Stage popupStage = new Stage();
   private final VBox popupLayout = new VBox(10);
   Scene popupScene = new Scene(popupLayout, 500, 400);
-
   private final Label title = new Label("Create New Fractal");
   private final VBox minMaxBox = createMinMaxFields();
   private final ChoiceBox<String> choiceBox = configureChoiceBox();
@@ -39,21 +48,13 @@ public class NewFractalMenuView {
   private final Separator separator = new Separator();
   private final Button addNewLayer = new Button("New Transformation");
   private final HBox buttonBox = new HBox(saveButton, addNewLayer);
-  private Consumer<List<String>> callback;
+  private final String styleGreen = "-fx-background-color: #449933;";
+  NewFractalMenuController chaosGameController = new NewFractalMenuController(this);
+  private final List<String> allHeaderValues;
+  private final List<String> allMatrixValues;
+  private final List<String> allv;
 
 
-  private List<String> allHeaderValues;
-  private List<String> allMatrixValues;
-  private List<String> allv;
-
-  //WITH CHATGPT vv
-  UnaryOperator<Change> filter = change -> {
-    String newText = change.getControlNewText();
-    if (newText.matches("-?\\d*\\.?\\d*")) { // Allow digits and an optional decimal point
-      return change; // Accept the change
-    }
-    return null; // Reject the change
-  };
 
   public NewFractalMenuView() {
     this.allHeaderValues = new ArrayList<>();
@@ -66,27 +67,66 @@ public class NewFractalMenuView {
     styleElements();
     configureLayout();
 
-    saveButton.setOnAction(e -> {
+    // This method, for some reason, did not work in the controller class.
+    // This has to be here, even though it does not follow MWC principle.
+    saveButton.setOnAction(actionEvent -> {
+      if (areFieldsEmpty()) {
+        showWarningPopup("Please fill in all the fields.");
+      } else {
+        parseHeaderValues();
+        parseValues();
+        combineAllValues();
+        callback.accept(allv);
+        popupStage.close();
+      }
+    });
+
+    // Show the popup stage
+    popupStage.show();
+  }
+
+  public void addSaveButtonListener(Consumer<List<String>> callback) {
+    saveButton.setOnAction(e -> handleSaveButton(callback));
+  }
+
+  private void handleSaveButton(Consumer<List<String>> callback) {
+    if (areFieldsEmpty()) {
+      showWarningPopup("Please fill in all the fields.");
+    } else {
       parseHeaderValues();
       parseValues();
       combineAllValues();
       callback.accept(allv);
       popupStage.close();
-    });
-    addNewLayer.setOnAction(e -> {
-      /* Vis popup meny og vær sikker på at brukeren har fylt ut alle felt
-      Å trykke på denne knappen gjør at brukeren ikke kan endre på transformasjonen som var
-       */
-      parseValues();
-    });
-    choiceBox.setOnAction(e -> {
-      matrixBox.getChildren().clear();
-      matrixBox.getChildren().add(createMatrixBox(choiceBox.getValue()));
-    });
+    }
   }
 
-  public void addSaveButtonListener(Consumer<Void> handler) {
-    saveButton.setOnAction(e -> handler.accept(null));
+  private boolean areFieldsEmpty() {
+    boolean areMinMaxFieldsEmpty = minMaxBox.getChildren().stream()
+        .filter(node -> node instanceof GridPane)
+        .map(GridPane.class::cast)
+        .flatMap(gridPane -> gridPane.getChildren().stream())
+        .filter(node -> node instanceof TextField)
+        .map(TextField.class::cast)
+        .anyMatch(textField -> textField.getText() == null || textField.getText().trim().isEmpty());
+
+    boolean areMatrixFieldsEmpty = matrixBox.getChildren().stream()
+        .filter(node -> node instanceof GridPane)
+        .map(GridPane.class::cast)
+        .flatMap(gridPane -> gridPane.getChildren().stream())
+        .filter(node -> node instanceof TextField)
+        .map(TextField.class::cast)
+        .anyMatch(textField -> textField.getText() == null || textField.getText().trim().isEmpty());
+
+    return areMinMaxFieldsEmpty || areMatrixFieldsEmpty;
+  }
+
+  private void showWarningPopup(String message) {
+    Alert alert = new Alert(Alert.AlertType.WARNING);
+    alert.setTitle("Warning");
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
   }
 
   public void styleElements(){
@@ -122,25 +162,21 @@ public class NewFractalMenuView {
     popupStage.show();
   }
 
-  public ChoiceBox configureChoiceBox(){
-    ChoiceBox<Object> choiceBox1 = new ChoiceBox<>();
-    choiceBox1.getItems().addAll(new String[]{"Julia"}, new String[]{"Affine2D"});
+  public ChoiceBox<String> configureChoiceBox(){
+    ChoiceBox<String> choiceBox1 = new ChoiceBox<>();
+    choiceBox1.getItems().addAll("Julia", "Affine2D");
     choiceBox1.setValue("Affine2D");
     return choiceBox1;
   }
 
-  public void validateAllFields() {
-    System.out.println(minMaxBox.getChildren().get(0).hasProperties());
-  }
+  public static VBox createMatrixBox(String value){
 
-
-  private VBox createMatrixBox(String value) {
     VBox matrixBox = new VBox();
     GridPane gridPane = new GridPane();
     gridPane.setHgap(10);
     gridPane.setVgap(10);
+    if(value.equals("Affine2D")) {
 
-    if (value.equals("Affine2D")) {
       // Creating text fields for the matrix
       TextField aField = new TextField();
       TextField bField = new TextField();
@@ -167,6 +203,7 @@ public class NewFractalMenuView {
       aVector.setPromptText("b0");
       bVector.setPromptText("b1");
 
+      // Apply text formatter to all text fields
       applyTextFormatter(aField, filter);
       applyTextFormatter(bField, filter);
       applyTextFormatter(cField, filter);
@@ -179,30 +216,32 @@ public class NewFractalMenuView {
       gridPane.add(bField, 1, 0);
       gridPane.add(cField, 0, 1);
       gridPane.add(dField, 1, 1);
-
       gridPane.add(aVector, 2, 0);
       gridPane.add(bVector, 2, 1);
 
-    } else if (value.equals("Julia")) {
-      // Creating text fields for the Julia set
+      // Adding grid pane to the matrix box
+      matrixBox.getChildren().add(gridPane);
+
+    } else {
       TextField c0Field = new TextField();
       TextField c1Field = new TextField();
-
       c0Field.setPromptText("c0");
       c0Field.setStyle("-fx-background-color: #449933;");
       c1Field.setPromptText("c1");
       c1Field.setStyle("-fx-background-color: #449933;");
 
+      // Apply text formatter to text fields
       applyTextFormatter(c0Field, filter);
       applyTextFormatter(c1Field, filter);
 
       gridPane.add(c0Field, 0, 0);
       gridPane.add(c1Field, 1, 0);
-    }
 
-    matrixBox.getChildren().add(gridPane);
+      matrixBox.getChildren().add(gridPane);
+    }
     return matrixBox;
   }
+
 
   private VBox createMinMaxFields(){
     TextField minx0 = new TextField("");
@@ -244,15 +283,6 @@ public class NewFractalMenuView {
       parseValuesJulia();
     }
   }
-
-  public void setCallback(Consumer<List<String>> callback) {
-    this.callback = callback;
-  }
-
-  public Consumer<List<String>> getCallback(){
-    return this.callback;
-  }
-
 
   private void parseValuesAffine(){
     for (int i = 0; i < matrixBox.getChildren().size(); i++) {
@@ -305,11 +335,15 @@ public class NewFractalMenuView {
     this.allv.addAll(allMatrixValues);
   }
 
-  public List<String> getAllv(){
-    return this.allv;
+  public void addNewLayerButtonListener(Consumer<Void> handler){
+    addNewLayer.setOnAction(e->handler.accept(null));
   }
 
+  public void addChoiceBoxListener(ChangeListener<String> listener) {
+    choiceBox.valueProperty().addListener(listener);
+  }
 
+  public VBox getMatrixBox(){
+    return matrixBox;
+  }
 }
-
-

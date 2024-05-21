@@ -1,6 +1,6 @@
-package controller;
+package gui.controller;
 
-import gui.SimulationView;
+import gui.view.SimulationView;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Cursor;
 import javafx.scene.input.KeyCode;
@@ -17,11 +17,10 @@ public class SimulationViewController {
   private boolean isScalingEnabled;
   private boolean isAltPressed;
 
-
   private final double MIN_SCALE_X = 0.1;
-  private final double MAX_SCALE_X = 1.8;
+  private final double MAX_SCALE_X = 1.3;
   private final double MIN_SCALE_Y = 0.1;
-  private final double MAX_SCALE_Y = 1;
+  private final double MAX_SCALE_Y = 1.5;
 
   public SimulationViewController(SimulationView simulationView) {
     this.simulationView = simulationView;
@@ -34,6 +33,7 @@ public class SimulationViewController {
     simulationView.setOnMouseDragged(this::handleMouseDragged);
     simulationView.setOnMouseReleased(this::handleMouseReleased);
     simulationView.setOnKeyPressed(this::handleKeyPressed);
+    simulationView.setOnKeyReleased(this::handleKeyReleased);
 
     simulationView.widthProperty().addListener(this::handleSizeChange);
     simulationView.heightProperty().addListener(this::handleSizeChange);
@@ -102,7 +102,6 @@ public class SimulationViewController {
     }
   }
 
-
   /**
    * Handles the scaling of the canvas based on the size change of the SimulationView.
    *
@@ -111,11 +110,15 @@ public class SimulationViewController {
    * @param newValue   The new value of the property
    */
   private void handleSizeChange(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    // Calculate the new scale based on the size of the SimulationView
-    double scaleX = simulationView.getWidth() / 650.0; // Initial canvas width is 550
-    double scaleY = simulationView.getHeight() / 680.0; // Initial canvas height is 650
+    double newScaleX = simulationView.getWidth() / simulationView.getSTARTING_WIDTH();
+    double newScaleY = simulationView.getHeight() / simulationView.getSTARTING_HEIGHT();
 
-    simulationView.getScaleTransform().setX(scaleX);
-    simulationView.getScaleTransform().setY(scaleY);
+    // Ensure new scales are within allowed limits
+    newScaleX = Math.max(MIN_SCALE_X, Math.min(MAX_SCALE_X, newScaleX));
+    newScaleY = Math.max(MIN_SCALE_Y, Math.min(MAX_SCALE_Y, newScaleY));
+
+    simulationView.getScaleTransform().setX(newScaleX);
+    simulationView.getScaleTransform().setY(newScaleY);
   }
+
 }

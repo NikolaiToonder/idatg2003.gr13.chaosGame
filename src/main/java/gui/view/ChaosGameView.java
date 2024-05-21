@@ -1,25 +1,36 @@
-package gui;
+package gui.view;
 
 import chaosgameclasses.ChaosGame;
-import controller.ChaosGameController;
+import gui.controller.ChaosGameController;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.util.List;
 import java.util.function.Consumer;
-import matrix.Matrix2x2;
-import vectors.Complex;
-import vectors.Vector2D;
+import math.matrix.Matrix2x2;
+import math.vectors.Complex;
+import math.vectors.Vector2D;
+
+import java.util.function.UnaryOperator;
 
 public class ChaosGameView {
+
+  private static final UnaryOperator<Change> filter = change -> {
+    String newText = change.getControlNewText();
+    if (newText.matches("-?\\d*\\.?\\d*")) { // Allow digits and an optional decimal point
+      return change; // Accept the change
+    }
+    return null; // Reject the change
+  };
   private final ChoiceBox<String> fractalChoiceBox = new ChoiceBox<>();
   private final ChoiceBox<String> matrixChoiceBox = new ChoiceBox<>();
-  private final Slider iterationSlider = new Slider(100, 100000, 50000);
+  private final Slider iterationSlider = new Slider(100, 300000, 50000);
   private final Slider zoomSlider = new Slider(1, 10, 1);
   private final Label iterationsLabel = new Label("Iterations: ");
   private final Label zoomInLabel = new Label("Zoom In");
@@ -28,28 +39,26 @@ public class ChaosGameView {
   private final Button popupButton = new Button("Edit Custom Fractal");
   private final Button closeButton = new Button("Close application");
   private final CheckBox displayVector = new CheckBox("Vector");
-  private final HBox textFieldsBox = createTextFieldsBox();
+  private final CheckBox displayHeatMap = new CheckBox("Heat Map");
+
+  private final GridPane textFieldsBox = createTextFieldsBox();
   private final VBox controlsPane = new VBox(10);
   private final VBox simulationAndInfoBox = new VBox();
   private SimulationView simulationView = new SimulationView();
   private final ChaosGameController controller = new ChaosGameController(this);
+  private final Separator separator = new Separator();
+
 
   public Parent createContent(Stage primaryStage) {
     initializeControls();
     configureLayout();
     configureStyle(primaryStage);
-
-    // Add listener to stage's width and height properties
-    primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> adjustAnchorPaneLayout());
-    primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> adjustAnchorPaneLayout());
-
     return createRootPane();
   }
 
   public void initializeControls() {
-    fractalChoiceBox.getItems().addAll("Julia", "Sierpinski", "Barnsley", "Custom");
+    fractalChoiceBox.getItems().addAll("Julia", "Sierpinski", "Barnsley", "Snowflake", "Custom");
     fractalChoiceBox.setValue("Sierpinski");
-
 
     iterationsLabel.setStyle("-fx-text-fill: white;");
     zoomInLabel.setStyle("-fx-text-fill: white;");
@@ -59,18 +68,29 @@ public class ChaosGameView {
     closeButton.setStyle("-fx-background-color: #f55353;");
     closeButton.setTextFill(javafx.scene.paint.Color.BLACK);
 
-    displayVector.setStyle("-fx-text-fill: white");
+    separator.setMaxWidth(Double.MAX_VALUE);
+    separator.setStyle("-fx-background-color: white");
 
-    textFieldsBox.setPadding(new Insets(20, 20, 20, 20));
+    displayVector.setStyle("-fx-text-fill: white");
+    displayHeatMap.setStyle("-fx-text-fill: white");
+
+    textFieldsBox.setPadding(new Insets(0, 0, 0, 15));
     controlsPane.setAlignment(Pos.CENTER);
     controlsPane.setPrefHeight(300);
   }
 
   public void configureLayout() {
-    controlsPane.getChildren().addAll(iterationsLabel, iterationSlider, zoomInLabel, zoomSlider, fractalChoiceBox, drawButton, resetButton, popupButton, closeButton);
+    HBox checkBoxes = new HBox(displayVector,displayHeatMap);
+    checkBoxes.setSpacing(5);
+    VBox textFieldsConfigBox = new VBox(textFieldsBox,matrixChoiceBox,checkBoxes);
+    textFieldsConfigBox.setSpacing(5);
+    controlsPane.getChildren().addAll(iterationsLabel, iterationSlider, zoomInLabel, zoomSlider,
+        fractalChoiceBox, resetButton, popupButton, closeButton,drawButton,
+        separator,textFieldsConfigBox);
     simulationView = new SimulationView();
-    simulationAndInfoBox.getChildren().addAll(simulationView, textFieldsBox);
+    simulationAndInfoBox.getChildren().addAll(simulationView);
     VBox.setVgrow(simulationView, Priority.ALWAYS);
+    VBox.setMargin(matrixChoiceBox, new Insets(5, 0, 0, 0)); // Top margin of 5 pixels
   }
 
   public void configureStyle(Stage primaryStage) {
@@ -89,9 +109,27 @@ public class ChaosGameView {
 
   public BorderPane createRootPane() {
     BorderPane root = new BorderPane();
-    root.setRight(controlsPane);
-    root.setCenter(simulationAndInfoBox);
+
+    HBox mainContent = new HBox();
+
+    // Wrap simulationAndInfoBox and controlsPane in HBox
+    mainContent.getChildren().addAll(simulationAndInfoBox, controlsPane);
+
+    mainContent.setSpacing(10); // Adjust the spacing as needed
+
+
+    // Set the width proportions
+    HBox.setHgrow(simulationAndInfoBox, Priority.ALWAYS);
+    HBox.setHgrow(controlsPane, Priority.NEVER);
+
+    // Adjust the preferred width to reflect the 70-30% distribution
+    simulationAndInfoBox.setPrefWidth(0.6 * 1000); // Example value, adjust as needed
+    controlsPane.setPrefWidth(0.15 * 1000);        // Example value, adjust as needed
+    controlsPane.setMinWidth(0.14 * 1000);        // Example value, adjust as needed
+
+    root.setCenter(mainContent);
     root.setStyle("-fx-background-color: #2b2d31;");
+
     return root;
   }
 
@@ -128,6 +166,10 @@ public class ChaosGameView {
   }
   public void addDisplayVectorListener(ChangeListener<Boolean> listener) {
     displayVector.selectedProperty().addListener(listener);
+  }
+
+  public void addDisplayHeatmapListener(ChangeListener<Boolean> listener) {
+    displayHeatMap.selectedProperty().addListener(listener);
   }
 
 
@@ -190,14 +232,18 @@ public class ChaosGameView {
         if (node instanceof TextField textField) {
           if (textField.getPromptText().equals("a00")) {
             textField.setText(String.valueOf(matrix.getA00()));
+            textField.setStyle("-fx-background-color: #449933;");
           } else if (textField.getPromptText().equals("a01")) {
             textField.setText(String.valueOf(matrix.getA01()));
+            textField.setStyle("-fx-background-color: #449933;");
           } else if (textField.getPromptText().equals("a10")) {
             textField.disableProperty().set(false);
             textField.setText(String.valueOf(matrix.getA10()));
+            textField.setStyle("-fx-background-color: #449933;");
           } else if (textField.getPromptText().equals("a11")) {
             textField.setText(String.valueOf(matrix.getA11()));
             textField.disableProperty().set(false);
+            textField.setStyle("-fx-background-color: #449933;");
           }
         }
       });
@@ -206,11 +252,14 @@ public class ChaosGameView {
         if (node instanceof TextField textField) {
           if (textField.getPromptText().equals("a00")) {
             textField.setText(String.valueOf(vector.getX0()));
+            textField.setStyle("-fx-background-color: #5566AA;");
           } else if (textField.getPromptText().equals("a01")) {
             textField.setText(String.valueOf(vector.getX1()));
+            textField.setStyle("-fx-background-color: #5566AA;");
           } else if (textField.getPromptText().equals("a10") || textField.getPromptText().equals("a11")) {
             textField.setText("-");
             textField.disableProperty().set(true);
+            textField.setStyle(null);
           }
         }
       });
@@ -229,41 +278,70 @@ public class ChaosGameView {
       if (node instanceof TextField textField) {
         if (textField.getPromptText().equals("a00")) {
           textField.setText(String.valueOf(complex.getReal()));
+          textField.setStyle("-fx-background-color: #5566AA;");
         } else if (textField.getPromptText().equals("a01")) {
           textField.setText(String.valueOf(complex.getImaginary()));
+          textField.setStyle("-fx-background-color: #5566AA;");
         } else if (textField.getPromptText().equals("a10") || textField.getPromptText().equals("a11")) {
           textField.setText("-");
           textField.disableProperty().set(true);
+          textField.setStyle(null);
         }
       }
     });
   }
 
   public void updateSimulationView(ChaosGame chaosGame, int iterations) {
-    simulationView.updateSimulationView(chaosGame,iterations);
+    simulationView.updateSimulationView(chaosGame,iterations, displayHeatMap.isSelected());
   }
 
   private TextField createTextField(String labelText) {
     TextField textField = new TextField();
     textField.setPromptText(labelText);
+    textField.setMaxWidth(40); // Increase max width
+    textField.setMaxHeight(40); // Increase max height
+    applyTextFormatter(textField, filter);
     return textField;
   }
 
-  private HBox createTextFieldsBox() {
+  private static void applyTextFormatter(TextField textField, UnaryOperator<Change> filter) {
+    textField.setTextFormatter(new TextFormatter<>(filter));
+  }
+
+
+  private GridPane createTextFieldsBox() {
     TextField a00TextField = createTextField("a00");
     TextField a01TextField = createTextField("a01");
     TextField a10TextField = createTextField("a10");
     TextField a11TextField = createTextField("a11");
 
+    a00TextField.setStyle("-fx-background-color: #449933;");
+    a01TextField.setStyle("-fx-background-color: #449933;");
+    a10TextField.setStyle("-fx-background-color: #449933;");
+    a11TextField.setStyle("-fx-background-color: #449933;");
 
-    // Create an HBox to hold the text fields
-    HBox textFieldsBox = new HBox(10);
-    textFieldsBox.getChildren().addAll(a00TextField, a01TextField, a10TextField, a11TextField,
-        this.matrixChoiceBox, displayVector);
-    textFieldsBox.setPadding(new Insets(0, 0, 20, 0));
+    GridPane textFieldsBox = new GridPane();
+    textFieldsBox.add(a00TextField, 0, 0);
+    textFieldsBox.add(a01TextField, 1, 0);
+    textFieldsBox.add(a10TextField, 0, 1);
+    textFieldsBox.add(a11TextField, 1, 1);
+
+    // Set equal sizes for all cells
+    ColumnConstraints columnConstraints = new ColumnConstraints();
+    columnConstraints.setPercentWidth(40); // 40% width for each column
+
+    RowConstraints rowConstraints = new RowConstraints();
+    rowConstraints.setPercentHeight(40); // 40% height for each row
+
+    textFieldsBox.getColumnConstraints().addAll(columnConstraints, columnConstraints);
+    textFieldsBox.getRowConstraints().addAll(rowConstraints, rowConstraints);
+
+    textFieldsBox.setHgap(5);
+    textFieldsBox.setVgap(5);
+    textFieldsBox.setMaxWidth(200); // Increased max width to accommodate larger text fields
+
     return textFieldsBox;
   }
-
 
   public void updateTextFields(ChaosGame chaosGame, int currentTransformation){
     if(chaosGame.getDescription().getTypeOfTransformation().equals("Julia")){
@@ -273,15 +351,16 @@ public class ChaosGameView {
     }
   }
 
-  private void adjustAnchorPaneLayout() {
-    double parentWidth = simulationAndInfoBox.getWidth();
-    double parentHeight = simulationAndInfoBox.getHeight();
-
-    double centerX = (parentWidth - simulationView.getWidth()) / 2;
-    double centerY = (parentHeight - simulationView.getHeight()) / 2;
-
-    // Set the position of the SimulationView within the AnchorPane
-    simulationView.setLayoutX(centerX);
-    simulationView.setLayoutY(centerY);
+  public ChoiceBox<String> getMatrixChoiceBox() {
+    return matrixChoiceBox;
   }
+
+  public void showErrorPopup(String title, String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
+  }
+
 }

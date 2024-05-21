@@ -1,4 +1,4 @@
-package gui;
+package gui.view;
 
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -32,8 +32,6 @@ public class StartupPage {
         this.onStartGame = onStartGame;
         this.primaryStage = primaryStage;
         setupUI();
-
-        setScreenResolution(840, 720); // Set to your desired resolution
     }
 
     private void setupUI() {
@@ -87,14 +85,6 @@ public class StartupPage {
     private void configureButtons(Button startButton, Button exitButton) {
         startButton.setOnAction(e -> onStartGame.accept(primaryStage));
         exitButton.setOnAction(e -> Platform.exit());
-    }
-
-    private void setScreenResolution(double width, double height) {
-        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        primaryStage.setX((primaryScreenBounds.getWidth() - width) / 2);
-        primaryStage.setY((primaryScreenBounds.getHeight() - height) / 2);
-        primaryStage.setWidth(width);
-        primaryStage.setHeight(height);
     }
 
 

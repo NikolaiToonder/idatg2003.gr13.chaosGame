@@ -1,4 +1,4 @@
-package gui;
+package gui.view;
 
 
 import javafx.application.Application;
@@ -14,20 +14,17 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
 
-
-  private static final double MIN_WIDTH = 700; // Minimum width
-  private static final double MIN_HEIGHT = 700; // Minimum height
-
+  private static final double MIN_WIDTH = 500; // Minimum width
+  private static final double MIN_HEIGHT = 500; // Minimum height
 
 
   @Override
   public void start(Stage primaryStage) {
-    Scene startupScene = createStartupScene(primaryStage);
-    primaryStage.setScene(startupScene);
+    Scene startupScene  = createStartupScene(primaryStage);
+    primaryStage.setScene(startupScene );
     primaryStage.setMinWidth(MIN_WIDTH);
     primaryStage.setMinHeight(MIN_HEIGHT);
 
-    //addListenerToStage(primaryStage);
 
     centerStage(primaryStage);
     primaryStage.setTitle("Chaos Game");
@@ -59,13 +56,6 @@ public class MainApp extends Application {
     // Set the position of the stage
     primaryStage.setX(centerX);
     primaryStage.setY(centerY);
-  }
-
-  private void addListenerToStage(Stage primaryStage) {
-    primaryStage.setOnCloseRequest(e -> {
-      e.consume();
-      primaryStage.close();
-    });
   }
 
   public static void main(String[] args) {

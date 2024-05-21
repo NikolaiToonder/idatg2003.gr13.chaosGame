@@ -2,11 +2,10 @@ package transformations;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import matrix.Matrix2x2;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import math.matrix.Matrix2x2;
+import math.transformations.AffineTransform2D;
 import org.junit.jupiter.api.Test;
-import vectors.Vector2D;
+import math.vectors.Vector2D;
 
 class AffineTransform2DTest {
 

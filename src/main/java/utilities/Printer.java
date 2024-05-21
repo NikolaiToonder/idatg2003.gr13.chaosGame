@@ -1,7 +1,7 @@
 package utilities;
 
 import chaosgameclasses.ChaosCanvas;
-import vectors.Vector2D;
+import math.vectors.Vector2D;
 
 /**
  * Class for printing to the terminal.
