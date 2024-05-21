@@ -1,7 +1,6 @@
 package chaosgameclasses;
 
-import gui.controller.Observer;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Random;
 import math.transformations.Transform2D;
@@ -23,7 +22,7 @@ public class ChaosGame {
     private final UserInput userInput = new UserInput();
     private boolean closeApp = false;
     private final Printer printer = new Printer();
-    private List<Observer> observers = new ArrayList<>();
+
 
 
     /**
