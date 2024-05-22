@@ -1,6 +1,6 @@
-package factory;
+package modul.factory;
 
-import chaosgameclasses.ChaosGameDescription;
+import modul.chaosgameclasses.ChaosGameDescription;
 
 /**
  * Factory class to create different transformations.

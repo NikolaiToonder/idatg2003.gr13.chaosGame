@@ -1,7 +1,7 @@
-package utilities;
+package modul.utilities;
 
-import chaosgameclasses.ChaosCanvas;
-import math.vectors.Vector2D;
+import modul.chaosgameclasses.ChaosCanvas;
+import modul.math.vectors.Vector2D;
 
 /**
  * Class for printing to the terminal.

@@ -2,7 +2,7 @@ package vectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import math.vectors.Vector2D;
+import modul.math.vectors.Vector2D;
 
 class Vector2DTest {
 

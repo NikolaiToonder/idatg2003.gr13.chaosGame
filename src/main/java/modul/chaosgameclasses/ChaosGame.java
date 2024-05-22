@@ -1,10 +1,10 @@
-package chaosgameclasses;
+package modul.chaosgameclasses;
 
 import java.util.Random;
-import math.transformations.Transform2D;
-import math.vectors.Vector2D;
-import utilities.Printer;
-import utilities.UserInput;
+import modul.math.transformations.Transform2D;
+import modul.math.vectors.Vector2D;
+import modul.utilities.Printer;
+import modul.utilities.UserInput;
 
 
 /**

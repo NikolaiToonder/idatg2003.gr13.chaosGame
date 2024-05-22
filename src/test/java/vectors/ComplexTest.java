@@ -2,11 +2,12 @@ package vectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import math.vectors.Complex;
+import modul.math.vectors.Complex;
 import org.junit.jupiter.api.Test;
 import java.lang.Math;
 
 class ComplexTest {
+
 
   @Test
   void sqrtPositive() {
@@ -86,5 +87,6 @@ class ComplexTest {
     Complex result = complex1.subtract(complex2);
     assertNotEquals(2.0, result.getReal());
     assertNotEquals(1.0, result.getImaginary());
+
   }
 }

@@ -1,11 +1,11 @@
 package transformations;
 
-import math.transformations.JuliaTransform;
+import modul.math.transformations.JuliaTransform;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import math.vectors.Complex;
-import math.vectors.Vector2D;
+import modul.math.vectors.Complex;
+import modul.math.vectors.Vector2D;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
