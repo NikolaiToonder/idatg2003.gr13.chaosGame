@@ -9,6 +9,7 @@ import math.vectors.Vector2D;
  * where 1 represents a pixel and 0 represents no pixel.
  *
  * @version 1.0
+ * @author Nikolai Engelsen Tønder
  */
 public class ChaosCanvas {
 

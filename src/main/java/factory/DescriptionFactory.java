@@ -4,6 +4,9 @@ import chaosgameclasses.ChaosGameDescription;
 
 /**
  * Factory class to create different transformations.
+ *
+ * @version 1.0
+ * @Author Nikolai Engelsen Tønder
  */
 public class DescriptionFactory {
 

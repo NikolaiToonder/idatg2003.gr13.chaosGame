@@ -11,6 +11,7 @@ import utilities.UserInput;
  * Class responsible for running the chaos game.
  *
  * @version 1.0
+ * @author Nikolai Engelsen Tønder, Mustafa Kesen
  */
 public class ChaosGame {
 

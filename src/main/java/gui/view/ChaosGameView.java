@@ -9,9 +9,23 @@ import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import math.matrix.Matrix2x2;
 import math.vectors.Complex;
@@ -58,6 +72,7 @@ public class ChaosGameView {
   private final ChaosGameController controller = new ChaosGameController(this);
 
   private final Separator separator = new Separator();
+
   /**
    * Method will create, initialize, prepare and send the content back to MainApp.
    *
@@ -417,6 +432,8 @@ public class ChaosGameView {
 
   /**
    * Create a text field. Applies a formatter so the user can only type in numbers.
+   *
+   * @param labelText The text to show as a prompt.
    */
   private TextField createTextField(String labelText) {
     TextField textField = new TextField();
@@ -429,6 +446,9 @@ public class ChaosGameView {
 
   /**
    * Method to apply a text formatter to a text field.
+   * Method along with the filter parameter is made with ChatGPT.
+   *
+   * @param textField The text field to apply the formatter to.
    */
   private static void applyTextFormatter(TextField textField, UnaryOperator<Change> filter) {
     textField.setTextFormatter(new TextFormatter<>(filter));

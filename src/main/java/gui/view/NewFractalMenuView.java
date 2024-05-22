@@ -349,6 +349,7 @@ public class NewFractalMenuView {
 
   /**
    * Method to apply a text formatter to a text field.
+   * Method was written with ChatGPT, along with the filter parameter.
    *
    * @param textField The text field to apply the text formatter to.
    * @param filter    The filter to apply to the text field.

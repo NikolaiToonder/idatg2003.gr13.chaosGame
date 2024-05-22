@@ -11,6 +11,9 @@ import javafx.scene.layout.GridPane;
 /**
  * Controller class for the NewFractalMenuView. Handles all the events in the program, and calls
  * appropriate methods.
+ *
+ * @author Nikolai Engelsen Tønder
+ * @version 1.0
  */
 public class NewFractalMenuController {
 

@@ -2,6 +2,9 @@ package utilities;
 
 /**
  * Used to get input from the console. Will only be used when CLI is used.
+ *
+ * @version 1.0
+ * @author Nikolai Engelsen Tønder
  */
 public class IsValidInput {
 

@@ -5,6 +5,9 @@ import math.vectors.Vector2D;
 
 /**
  * Class for printing to the terminal.
+ *
+ * @version 1.0
+ * @author Nikolai Engelsen Tønder
  */
 public class Printer {
 

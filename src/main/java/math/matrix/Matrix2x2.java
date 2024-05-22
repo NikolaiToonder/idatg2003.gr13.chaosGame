@@ -5,13 +5,16 @@ import math.vectors.Vector2D;
 /**
  * Class representing a 2x2 matrix. Has the functionality to multiply a 2D vector with a
  * 2x2-matrix.
+ *
+ * @version 1.2
+ * @author Nikolai Engelsen Tønder
  */
 public class Matrix2x2 {
 
-  private double a00;
-  private double a01;
-  private double a10;
-  private double a11;
+  private final double a00;
+  private final double a01;
+  private final double a10;
+  private final double a11;
 
 
   /**

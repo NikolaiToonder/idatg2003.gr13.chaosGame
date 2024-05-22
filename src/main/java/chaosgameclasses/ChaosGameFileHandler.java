@@ -13,11 +13,13 @@ import java.util.List;
  * Class responsible for reading and writing to files.
  *
  * @version 1.0
+ * @author Nikolai Engelsen Tønder
  */
 public class ChaosGameFileHandler {
 
   /**
    * Reads the description of the chaos game from a file.
+   * Some regex values is written by ChatGPT.
    *
    * @param path The path to the file containing the description.
    * @return A list of strings containing the description of the chaos game.
@@ -44,6 +46,7 @@ public class ChaosGameFileHandler {
   /**
    * Reads the description of the chaos game from a file, specifically for Julia transformation. The
    * file should contain information about canvas coordinates and transforms.
+   * Some regex values is written by ChatGPT.
    *
    * @param reader    The reader to read the file.
    * @param transform The type of transform to be used.
@@ -69,6 +72,7 @@ public class ChaosGameFileHandler {
   /**
    * Reads the description of the chaos game from a file, specifically for Affine transformation.
    * The file should contain information about canvas coordinates and transforms.
+   * Some regex values is written by ChatGPT.
    *
    * @param reader    The reader to read the file.
    * @param transform The type of transform to be used.
@@ -108,7 +112,7 @@ public class ChaosGameFileHandler {
    * @param values The canvas to be written to a file.
    */
   public static void writeToFile(int[][] values) {
-    try (BufferedWriter writer = Files.newBufferedWriter(Path.of("src/resources/out.txt"))) {
+    try (BufferedWriter writer = Files.newBufferedWriter(Path.of("src/main/resources/out.txt"))) {
       for (int[] row : values) {
         for (int column : row) {
           if (column == 1) {
@@ -127,6 +131,7 @@ public class ChaosGameFileHandler {
 
   /**
    * Changes a line in a file. The line is changed to the values in the list.
+   * Some regex values is written by ChatGPT.
    *
    * @param path           The path to the file.
    * @param valuesToChange The values to change the line to.

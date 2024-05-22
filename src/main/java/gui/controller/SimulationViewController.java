@@ -10,6 +10,9 @@ import javafx.scene.input.ScrollEvent;
 
 /**
  * Controller class for the SimulationView. Handles all events that happen in simulationView.
+ *
+ * @author Nikolai Engelsen Tønder
+ * @version 1.0
  */
 public class SimulationViewController {
 

@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 
 /**
  * Startup page for the ChaosGame gui.
+ *
+ * @author Mustafa Kesen
  */
 public class StartupPage {
 

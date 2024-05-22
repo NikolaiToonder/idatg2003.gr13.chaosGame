@@ -6,6 +6,9 @@ import math.vectors.Vector2D;
 /**
  * Class representing an affine transformation in 2D. The transformation is represented by a 2x2
  * matrix and a 2D vector.
+ *
+ * @author Mustafa Kesen
+ * @version 1.0
  */
 
 public class AffineTransform2D implements Transform2D {

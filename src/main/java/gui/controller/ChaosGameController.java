@@ -10,8 +10,11 @@ import javafx.beans.value.ChangeListener;
 import math.vectors.Vector2D;
 
 /**
- * Controller class for the Chaos Game. Handles all the events in the program, and calls
- * appropriate methods.
+ * Controller class for the Chaos Game. Handles all the events in the program, and calls appropriate
+ * methods.
+ *
+ * @version 1.0
+ * @author Nikolai Engelsen Tønder
  */
 public class ChaosGameController {
 
@@ -89,8 +92,6 @@ public class ChaosGameController {
         view.getDisplayVectorValue(), textFieldsValues);
 
     updateChaosGameInstance(typeOfTransform);
-
-
   }
 
   /**
@@ -101,6 +102,11 @@ public class ChaosGameController {
     updateChaosGameInstance(view.getFractalChoiceBoxValue());
   }
 
+  /**
+   * Method to update the ChaosGame instance to the selected fractal.
+   *
+   * @param fractalType The type of fractal to update to.
+   */
   private void updateChaosGameInstance(String fractalType) {
     this.chaosGame = new ChaosGame(descriptionFactory.createAffine2D(fractalType), 600, 600,
         standardizedView);
@@ -141,8 +147,8 @@ public class ChaosGameController {
   }
 
   /**
-   * Method to handle a ChangeListener for the matrix choice box. It updates the
-   * text fields with the values of the selected transformation.
+   * Method to handle a ChangeListener for the matrix choice box. It updates the text fields with
+   * the values of the selected transformation.
    *
    * @return A ChangeListener for the matrix choice box.
    */
@@ -170,8 +176,8 @@ public class ChaosGameController {
   }
 
   /**
-   * Method to handle the popup button. It shows a popup menu where the
-   * user can input new values for the fractal.
+   * Method to handle the popup button. It shows a popup menu where the user can input new values
+   * for the fractal.
    */
   public void handlePopupButton() {
     NewFractalMenuView fractalMenuView = new NewFractalMenuView();

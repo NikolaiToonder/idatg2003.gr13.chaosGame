@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 /**
  * The main stage of the program. Will always be displayed, only contents change depending on what
  * class is initialized into this main stage.
+ *
+ * @author Mustafa Kesen
  */
 public class MainApp extends Application {
 

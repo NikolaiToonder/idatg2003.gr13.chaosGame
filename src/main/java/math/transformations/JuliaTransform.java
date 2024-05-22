@@ -8,6 +8,7 @@ import math.vectors.Vector2D;
  * number and a sign.
  *
  * @version 1.0
+ * @author Nikolai Engelsen Tønder
  */
 
 

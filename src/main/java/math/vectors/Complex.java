@@ -3,6 +3,9 @@ package math.vectors;
 /**
  * Class to represent a complex number, used in this case to also respresent a complex number in the
  * julia transformation.
+ *
+ * @version 1.0
+ * @author Nikolai Engelsen Tønder
  */
 public class Complex extends Vector2D {
 

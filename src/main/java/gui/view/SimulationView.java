@@ -12,6 +12,8 @@ import math.vectors.Vector2D;
 /**
  * JavaFX class for the actual simulation view. Will be used with ChaosGameView to view the chaos
  * game.
+ *
+ * @author Nikolai Engelsen Tønder
  */
 public class SimulationView extends Pane {
 
